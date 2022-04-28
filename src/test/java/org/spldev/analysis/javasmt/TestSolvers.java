@@ -20,7 +20,7 @@
  * See <https://github.com/skrieter/formula-analysis-javasmt> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.formula.analysis.javasmt;
+package org.spldev.analysis.javasmt;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,7 +32,7 @@ import org.sosy_lab.java_smt.*;
 import org.sosy_lab.java_smt.SolverContextFactory.*;
 import org.sosy_lab.java_smt.api.*;
 import org.spldev.util.logging.*;
-import org.spldev.util.os.OperatingSystem;
+import org.spldev.util.os.*;
 
 public class TestSolvers {
 

@@ -20,7 +20,7 @@
  * See <https://github.com/skrieter/formula-analysis-javasmt> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.formula.analysis.javasmt;
+package org.spldev.analysis.javasmt;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,11 +30,11 @@ import java.util.*;
 
 import org.junit.jupiter.api.*;
 import org.spldev.formula.*;
-import org.spldev.formula.expression.*;
-import org.spldev.formula.expression.atomic.literal.*;
-import org.spldev.formula.expression.compound.*;
-import org.spldev.formula.expression.term.bool.*;
-import org.spldev.util.data.Result;
+import org.spldev.formula.structure.*;
+import org.spldev.formula.structure.atomic.literal.*;
+import org.spldev.formula.structure.compound.*;
+import org.spldev.formula.structure.term.bool.*;
+import org.spldev.util.data.*;
 import org.spldev.util.extension.*;
 import org.spldev.util.logging.*;
 

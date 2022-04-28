@@ -20,11 +20,10 @@
  * See <https://github.com/skrieter/formula-analysis-javasmt> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.formula.analysis.javasmt;
+package org.spldev.analysis.javasmt;
 
-import java.math.*;
-
-import org.spldev.formula.solver.javasmt.*;
+import org.spldev.analysis.javasmt.solver.*;
+import org.spldev.analysis.solver.SatSolver.*;
 import org.spldev.util.data.*;
 import org.spldev.util.job.*;
 
@@ -33,18 +32,18 @@ import org.spldev.util.job.*;
  * 
  * @author Sebastian Krieter
  */
-public class CountSolutionsAnalysis extends JavaSmtSolverAnalysis<BigInteger> {
+public class HasSolutionsAnalysis extends JavaSmtSolverAnalysis<SatResult> {
 
-	public static final Identifier<BigInteger> identifier = new Identifier<>();
+	public static final Identifier<SatResult> identifier = new Identifier<>();
 
 	@Override
-	public Identifier<BigInteger> getIdentifier() {
+	public Identifier<SatResult> getIdentifier() {
 		return identifier;
 	}
 
 	@Override
-	protected BigInteger analyze(JavaSmtSolver solver, InternalMonitor monitor) throws Exception {
-		return solver.countSolutions();
+	protected SatResult analyze(JavaSmtSolver solver, InternalMonitor monitor) throws Exception {
+		return solver.hasSolution();
 	}
 
 }

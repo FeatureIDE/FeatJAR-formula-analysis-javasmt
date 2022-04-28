@@ -1,24 +1,42 @@
-package org.spldev.formula.solver.javasmt;
+/* -----------------------------------------------------------------------------
+ * Formula-Analysis-JavaSMT Lib - Library to analyze propositional formulas with JavaSMT.
+ * Copyright (C) 2021  Sebastian Krieter
+ * 
+ * This file is part of Formula-Analysis-JavaSMT Lib.
+ * 
+ * Formula-Analysis-JavaSMT Lib is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version.
+ * 
+ * Formula-Analysis-JavaSMT Lib is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Formula-Analysis-JavaSMT Lib.  If not, see <https://www.gnu.org/licenses/>.
+ * 
+ * See <https://github.com/skrieter/formula-analysis-javasmt> for further information.
+ * -----------------------------------------------------------------------------
+ */
+package org.spldev.analysis.javasmt.solver;
 
-import org.sosy_lab.common.ShutdownManager;
-import org.sosy_lab.common.configuration.Configuration;
-import org.sosy_lab.common.configuration.InvalidConfigurationException;
-import org.sosy_lab.common.log.BasicLogManager;
-import org.sosy_lab.common.log.LogManager;
-import org.sosy_lab.java_smt.SolverContextFactory;
+import java.util.*;
+import java.util.stream.*;
+
+import org.sosy_lab.common.*;
+import org.sosy_lab.common.configuration.*;
+import org.sosy_lab.common.log.*;
+import org.sosy_lab.java_smt.*;
 import org.sosy_lab.java_smt.api.*;
-import org.spldev.formula.expression.Formula;
-import org.spldev.formula.expression.atomic.literal.LiteralPredicate;
-import org.spldev.formula.expression.atomic.literal.VariableMap;
-import org.spldev.formula.expression.compound.And;
-import org.spldev.formula.expression.compound.Or;
-import org.spldev.formula.expression.term.Variable;
-import org.spldev.formula.expression.term.bool.BoolVariable;
-import org.spldev.formula.expression.transform.Transformer;
-import org.spldev.util.job.InternalMonitor;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.spldev.formula.structure.Formula;
+import org.spldev.formula.structure.atomic.literal.*;
+import org.spldev.formula.structure.compound.*;
+import org.spldev.formula.structure.term.*;
+import org.spldev.formula.structure.term.bool.*;
+import org.spldev.formula.structure.transform.*;
+import org.spldev.util.job.*;
 
 /**
  * Transforms a formula into CNF using the Tseitin transformation implemented in

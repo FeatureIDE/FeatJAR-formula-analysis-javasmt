@@ -20,12 +20,12 @@
  * See <https://github.com/skrieter/formula-analysis-javasmt> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.formula.analysis.javasmt;
+package org.spldev.analysis.javasmt;
 
 import org.sosy_lab.java_smt.SolverContextFactory.*;
-import org.spldev.formula.analysis.*;
-import org.spldev.formula.expression.*;
-import org.spldev.formula.solver.javasmt.*;
+import org.spldev.analysis.*;
+import org.spldev.analysis.javasmt.solver.*;
+import org.spldev.formula.structure.*;
 
 /**
  * Base class for analyses using a {@link JavaSmtSolver}.

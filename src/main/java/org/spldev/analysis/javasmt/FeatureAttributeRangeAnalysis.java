@@ -20,11 +20,11 @@
  * See <https://github.com/skrieter/formula-analysis-javasmt> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.formula.analysis.javasmt;
+package org.spldev.analysis.javasmt;
 
 import org.sosy_lab.java_smt.api.*;
-import org.spldev.formula.expression.atomic.literal.*;
-import org.spldev.formula.solver.javasmt.*;
+import org.spldev.analysis.javasmt.solver.*;
+import org.spldev.formula.structure.atomic.literal.*;
 import org.spldev.util.data.*;
 import org.spldev.util.job.*;
 

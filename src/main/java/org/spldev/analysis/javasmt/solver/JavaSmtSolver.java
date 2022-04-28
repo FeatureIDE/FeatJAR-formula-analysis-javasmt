@@ -20,7 +20,7 @@
  * See <https://github.com/skrieter/formula-analysis-javasmt> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.formula.solver.javasmt;
+package org.spldev.analysis.javasmt.solver;
 
 import java.math.*;
 import java.util.*;
@@ -38,10 +38,10 @@ import org.sosy_lab.java_smt.api.BasicProverEnvironment.*;
 import org.sosy_lab.java_smt.api.Model.*;
 import org.sosy_lab.java_smt.api.OptimizationProverEnvironment.*;
 import org.sosy_lab.java_smt.api.SolverContext.*;
-import org.spldev.formula.expression.atomic.*;
-import org.spldev.formula.expression.atomic.literal.*;
-import org.spldev.formula.expression.term.*;
-import org.spldev.formula.solver.*;
+import org.spldev.analysis.solver.*;
+import org.spldev.formula.structure.atomic.*;
+import org.spldev.formula.structure.atomic.literal.*;
+import org.spldev.formula.structure.term.*;
 import org.spldev.util.logging.*;
 
 /**
@@ -67,7 +67,7 @@ public class JavaSmtSolver
 	 */
 	public SolverContext context;
 
-	public JavaSmtSolver(org.spldev.formula.expression.Formula formula, Solvers solver) {
+	public JavaSmtSolver(org.spldev.formula.structure.Formula formula, Solvers solver) {
 		try {
 			final Configuration config = Configuration.defaultConfiguration();
 			final LogManager logManager = BasicLogManager.create(config);

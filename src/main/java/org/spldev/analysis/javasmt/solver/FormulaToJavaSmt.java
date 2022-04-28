@@ -20,7 +20,7 @@
  * See <https://github.com/skrieter/formula-analysis-javasmt> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.formula.solver.javasmt;
+package org.spldev.analysis.javasmt.solver;
 
 import java.util.*;
 import java.util.stream.*;
@@ -29,11 +29,11 @@ import org.sosy_lab.java_smt.SolverContextFactory.*;
 import org.sosy_lab.java_smt.api.*;
 import org.sosy_lab.java_smt.api.Formula;
 import org.sosy_lab.java_smt.api.NumeralFormula.*;
-import org.spldev.formula.expression.*;
-import org.spldev.formula.expression.atomic.literal.*;
-import org.spldev.formula.expression.atomic.predicate.*;
-import org.spldev.formula.expression.compound.*;
-import org.spldev.formula.expression.term.*;
+import org.spldev.formula.structure.*;
+import org.spldev.formula.structure.atomic.literal.*;
+import org.spldev.formula.structure.atomic.predicate.*;
+import org.spldev.formula.structure.compound.*;
+import org.spldev.formula.structure.term.*;
 
 /**
  * Class containing functions that are used to translate formulas to java smt.

@@ -20,10 +20,9 @@
  * See <https://github.com/skrieter/formula-analysis-javasmt> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.formula.analysis.javasmt;
+package org.spldev.analysis.javasmt;
 
-import org.spldev.formula.solver.SatSolver.*;
-import org.spldev.formula.solver.javasmt.*;
+import org.spldev.analysis.javasmt.solver.*;
 import org.spldev.util.data.*;
 import org.spldev.util.job.*;
 
@@ -32,18 +31,18 @@ import org.spldev.util.job.*;
  * 
  * @author Sebastian Krieter
  */
-public class HasSolutionsAnalysis extends JavaSmtSolverAnalysis<SatResult> {
+public class FindSolutionsAnalysis extends JavaSmtSolverAnalysis<Object[]> {
 
-	public static final Identifier<SatResult> identifier = new Identifier<>();
+	public static final Identifier<Object[]> identifier = new Identifier<>();
 
 	@Override
-	public Identifier<SatResult> getIdentifier() {
+	public Identifier<Object[]> getIdentifier() {
 		return identifier;
 	}
 
 	@Override
-	protected SatResult analyze(JavaSmtSolver solver, InternalMonitor monitor) throws Exception {
-		return solver.hasSolution();
+	protected Object[] analyze(JavaSmtSolver solver, InternalMonitor monitor) throws Exception {
+		return solver.findSolution();
 	}
 
 }
