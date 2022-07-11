@@ -2,18 +2,32 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<name>formula-analysis-javasmt</name>
+	<description>Analysis of first-order formulas using JavaSMT</description>
+	<url>https://github.com/FeatJAR/formula-analysis-javasmt</url>
+	<inceptionYear>2021</inceptionYear>
+	<developers>
+		<developer>
+			<name>Sebastian Krieter</name>
+		</developer>
+	</developers>
+	<licenses>
+		<license>
+			<name>LGPL-3.0-or-later</name>
+			<url>https://www.gnu.org/licenses/lgpl-3.0.html</url>
+			<distribution>repo</distribution>
+			<comments>lgpl30</comments>
+		</license>
+	</licenses>
+
+	<artifactId>formula-analysis-javasmt</artifactId>
+	<packaging>jar</packaging>
+
 	<parent>
 		<groupId>org.spldev</groupId>
 		<artifactId>spldev</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-
-	<artifactId>formula-analysis-javasmt</artifactId>
-	<packaging>jar</packaging>
-
-	<name>Formula-Analysis-JavaSMT Lib</name>
-	<description>Library to analyze propositional formulas with JavaSMT</description>
-	<url>https://github.com/skrieter/formula-analysis-javasmt</url>
 
 	<properties>
 		<project.dependency.relativepath>libs</project.dependency.relativepath>
