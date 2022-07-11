@@ -91,7 +91,7 @@
 				<executions>
 					<execution>
 						<id>unpack-dependency</id>
-						<phase>validate</phase>
+						<phase>process-resources</phase>
 						<goals>
 							<goal>unpack</goal>
 						</goals>
@@ -100,7 +100,7 @@
 							<artifactItems>
 								<artifactItem>
 									<groupId>de.featjar</groupId>
-									<artifactId>javasmt-native</artifactId>
+									<artifactId>native-javasmt</artifactId>
 									<classifier>native-dependencies</classifier>
 									<type>tar.gz</type>
 								</artifactItem>
