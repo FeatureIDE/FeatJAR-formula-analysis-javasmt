@@ -20,7 +20,7 @@
  * See <https://github.com/FeatJAR/formula-analysis-javasmt> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.analysis.javasmt;
+package de.featjar.analysis.javasmt;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,15 +28,27 @@ import java.math.*;
 import java.nio.file.*;
 import java.util.*;
 
+import de.featjar.formula.ModelRepresentation;
+import de.featjar.formula.structure.Formula;
+import de.featjar.formula.structure.Formulas;
+import de.featjar.formula.structure.atomic.literal.Literal;
+import de.featjar.formula.structure.atomic.literal.VariableMap;
+import de.featjar.formula.structure.compound.And;
+import de.featjar.formula.structure.compound.Biimplies;
+import de.featjar.formula.structure.compound.Implies;
+import de.featjar.formula.structure.compound.Or;
+import de.featjar.util.data.Result;
+import de.featjar.util.extension.ExtensionLoader;
+import de.featjar.util.logging.Logger;
 import org.junit.jupiter.api.*;
-import org.spldev.formula.*;
-import org.spldev.formula.structure.*;
-import org.spldev.formula.structure.atomic.literal.*;
-import org.spldev.formula.structure.compound.*;
-import org.spldev.formula.structure.term.bool.*;
-import org.spldev.util.data.*;
-import org.spldev.util.extension.*;
-import org.spldev.util.logging.*;
+import de.featjar.formula.*;
+import de.featjar.formula.structure.*;
+import de.featjar.formula.structure.atomic.literal.*;
+import de.featjar.formula.structure.compound.*;
+import de.featjar.formula.structure.term.bool.*;
+import de.featjar.util.data.*;
+import de.featjar.util.extension.*;
+import de.featjar.util.logging.*;
 
 public class CountSolutionAnalysisTest {
 

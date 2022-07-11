@@ -20,13 +20,17 @@
  * See <https://github.com/FeatJAR/formula-analysis-javasmt> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.analysis.javasmt;
+package de.featjar.analysis.javasmt;
 
+import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
+import de.featjar.formula.structure.atomic.literal.Literal;
+import de.featjar.util.data.Identifier;
+import de.featjar.util.job.InternalMonitor;
 import org.sosy_lab.java_smt.api.*;
-import org.spldev.analysis.javasmt.solver.*;
-import org.spldev.formula.structure.atomic.literal.*;
-import org.spldev.util.data.*;
-import org.spldev.util.job.*;
+import de.featjar.analysis.javasmt.solver.*;
+import de.featjar.formula.structure.atomic.literal.*;
+import de.featjar.util.data.*;
+import de.featjar.util.job.*;
 
 /**
  * Finds the minimum and maximum value of a Term. As example we have the

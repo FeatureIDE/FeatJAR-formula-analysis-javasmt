@@ -20,23 +20,28 @@
  * See <https://github.com/FeatJAR/formula-analysis-javasmt> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.analysis.javasmt.solver;
+package de.featjar.analysis.javasmt.solver;
 
 import java.util.*;
 import java.util.stream.*;
 
+import de.featjar.formula.structure.atomic.literal.VariableMap;
+import de.featjar.formula.structure.compound.And;
+import de.featjar.formula.structure.compound.Or;
+import de.featjar.formula.structure.transform.Transformer;
+import de.featjar.util.job.InternalMonitor;
 import org.sosy_lab.common.*;
 import org.sosy_lab.common.configuration.*;
 import org.sosy_lab.common.log.*;
 import org.sosy_lab.java_smt.*;
 import org.sosy_lab.java_smt.api.*;
-import org.spldev.formula.structure.Formula;
-import org.spldev.formula.structure.atomic.literal.*;
-import org.spldev.formula.structure.compound.*;
-import org.spldev.formula.structure.term.*;
-import org.spldev.formula.structure.term.bool.*;
-import org.spldev.formula.structure.transform.*;
-import org.spldev.util.job.*;
+import de.featjar.formula.structure.Formula;
+import de.featjar.formula.structure.atomic.literal.*;
+import de.featjar.formula.structure.compound.*;
+import de.featjar.formula.structure.term.*;
+import de.featjar.formula.structure.term.bool.*;
+import de.featjar.formula.structure.transform.*;
+import de.featjar.util.job.*;
 
 /**
  * Transforms a formula into CNF using the Tseitin transformation implemented in

@@ -20,17 +20,21 @@
  * See <https://github.com/FeatJAR/formula-analysis-javasmt> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.analysis.javasmt.solver;
+package de.featjar.analysis.javasmt.solver;
 
 import java.util.*;
 import java.util.stream.*;
 
+import de.featjar.analysis.solver.AbstractDynamicFormula;
+import de.featjar.analysis.solver.RuntimeContradictionException;
+import de.featjar.formula.structure.atomic.literal.VariableMap;
+import de.featjar.formula.structure.compound.And;
 import org.sosy_lab.java_smt.api.*;
 import org.sosy_lab.java_smt.api.Formula;
-import org.spldev.analysis.solver.*;
-import org.spldev.formula.structure.*;
-import org.spldev.formula.structure.atomic.literal.*;
-import org.spldev.formula.structure.compound.*;
+import de.featjar.analysis.solver.*;
+import de.featjar.formula.structure.*;
+import de.featjar.formula.structure.atomic.literal.*;
+import de.featjar.formula.structure.compound.*;
 
 /**
  * Formula for {@link JavaSmtSolver}.
@@ -42,11 +46,11 @@ public class JavaSmtFormula extends AbstractDynamicFormula<BooleanFormula> {
 	private final ArrayList<Formula> variables;
 	private final FormulaToJavaSmt translator;
 
-	public JavaSmtFormula(SolverContext solverContext, org.spldev.formula.structure.Formula originalFormula) {
+	public JavaSmtFormula(SolverContext solverContext, de.featjar.formula.structure.Formula originalFormula) {
 		this(solverContext, VariableMap.fromExpression(originalFormula));
 		if (originalFormula instanceof And) {
 			for (final Expression clause : originalFormula.getChildren()) {
-				push((org.spldev.formula.structure.Formula) clause);
+				push((de.featjar.formula.structure.Formula) clause);
 			}
 		}
 	}
@@ -71,7 +75,7 @@ public class JavaSmtFormula extends AbstractDynamicFormula<BooleanFormula> {
 	}
 
 	@Override
-	public List<BooleanFormula> push(org.spldev.formula.structure.Formula clause)
+	public List<BooleanFormula> push(de.featjar.formula.structure.Formula clause)
 		throws RuntimeContradictionException {
 		final BooleanFormula constraint = translator.nodeToFormula(clause);
 		constraints.add(constraint);

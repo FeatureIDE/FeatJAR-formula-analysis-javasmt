@@ -20,20 +20,28 @@
  * See <https://github.com/FeatJAR/formula-analysis-javasmt> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.analysis.javasmt.solver;
+package de.featjar.analysis.javasmt.solver;
 
 import java.util.*;
 import java.util.stream.*;
 
+import de.featjar.formula.structure.atomic.literal.Literal;
+import de.featjar.formula.structure.atomic.literal.VariableMap;
+import de.featjar.formula.structure.atomic.predicate.*;
+import de.featjar.formula.structure.compound.*;
+import de.featjar.formula.structure.term.Add;
+import de.featjar.formula.structure.term.Function;
+import de.featjar.formula.structure.term.Multiply;
+import de.featjar.formula.structure.term.Term;
 import org.sosy_lab.java_smt.SolverContextFactory.*;
 import org.sosy_lab.java_smt.api.*;
 import org.sosy_lab.java_smt.api.Formula;
 import org.sosy_lab.java_smt.api.NumeralFormula.*;
-import org.spldev.formula.structure.*;
-import org.spldev.formula.structure.atomic.literal.*;
-import org.spldev.formula.structure.atomic.predicate.*;
-import org.spldev.formula.structure.compound.*;
-import org.spldev.formula.structure.term.*;
+import de.featjar.formula.structure.*;
+import de.featjar.formula.structure.atomic.literal.*;
+import de.featjar.formula.structure.atomic.predicate.*;
+import de.featjar.formula.structure.compound.*;
+import de.featjar.formula.structure.term.*;
 
 /**
  * Class containing functions that are used to translate formulas to java smt.

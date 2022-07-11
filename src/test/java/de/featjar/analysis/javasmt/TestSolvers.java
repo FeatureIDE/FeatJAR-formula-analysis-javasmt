@@ -20,10 +20,12 @@
  * See <https://github.com/FeatJAR/formula-analysis-javasmt> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.analysis.javasmt;
+package de.featjar.analysis.javasmt;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import de.featjar.util.logging.Logger;
+import de.featjar.util.os.OperatingSystem;
 import org.junit.jupiter.api.*;
 import org.sosy_lab.common.*;
 import org.sosy_lab.common.configuration.*;
@@ -31,8 +33,8 @@ import org.sosy_lab.common.log.*;
 import org.sosy_lab.java_smt.*;
 import org.sosy_lab.java_smt.SolverContextFactory.*;
 import org.sosy_lab.java_smt.api.*;
-import org.spldev.util.logging.*;
-import org.spldev.util.os.*;
+import de.featjar.util.logging.*;
+import de.featjar.util.os.*;
 
 public class TestSolvers {
 

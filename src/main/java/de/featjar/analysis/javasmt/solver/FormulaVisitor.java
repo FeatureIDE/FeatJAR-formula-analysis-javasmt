@@ -20,14 +20,16 @@
  * See <https://github.com/FeatJAR/formula-analysis-javasmt> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.analysis.javasmt.solver;
+package de.featjar.analysis.javasmt.solver;
 
 import java.util.*;
 
+import de.featjar.formula.structure.atomic.literal.ErrorLiteral;
+import de.featjar.formula.structure.atomic.literal.VariableMap;
 import org.sosy_lab.java_smt.api.*;
 import org.sosy_lab.java_smt.api.visitors.*;
-import org.spldev.formula.structure.Formula;
-import org.spldev.formula.structure.atomic.literal.*;
+import de.featjar.formula.structure.Formula;
+import de.featjar.formula.structure.atomic.literal.*;
 
 public abstract class FormulaVisitor implements BooleanFormulaVisitor<Formula> {
 	protected final BooleanFormulaManager booleanFormulaManager;

@@ -20,13 +20,21 @@
  * See <https://github.com/FeatJAR/formula-analysis-javasmt> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.analysis.javasmt.solver;
+package de.featjar.analysis.javasmt.solver;
 
 import java.math.*;
 import java.util.*;
 import java.util.Map.*;
 import java.util.stream.*;
 
+import de.featjar.analysis.solver.MusSolver;
+import de.featjar.analysis.solver.OptSolver;
+import de.featjar.analysis.solver.SharpSatSolver;
+import de.featjar.analysis.solver.SolutionSolver;
+import de.featjar.formula.structure.atomic.Assignment;
+import de.featjar.formula.structure.atomic.VariableAssignment;
+import de.featjar.formula.structure.atomic.literal.VariableMap;
+import de.featjar.util.logging.Logger;
 import org.sosy_lab.common.*;
 import org.sosy_lab.common.configuration.*;
 import org.sosy_lab.common.log.*;
@@ -38,11 +46,11 @@ import org.sosy_lab.java_smt.api.BasicProverEnvironment.*;
 import org.sosy_lab.java_smt.api.Model.*;
 import org.sosy_lab.java_smt.api.OptimizationProverEnvironment.*;
 import org.sosy_lab.java_smt.api.SolverContext.*;
-import org.spldev.analysis.solver.*;
-import org.spldev.formula.structure.atomic.*;
-import org.spldev.formula.structure.atomic.literal.*;
-import org.spldev.formula.structure.term.*;
-import org.spldev.util.logging.*;
+import de.featjar.analysis.solver.*;
+import de.featjar.formula.structure.atomic.*;
+import de.featjar.formula.structure.atomic.literal.*;
+import de.featjar.formula.structure.term.*;
+import de.featjar.util.logging.*;
 
 /**
  * SMT solver using JavaSMT.
@@ -67,7 +75,7 @@ public class JavaSmtSolver
 	 */
 	public SolverContext context;
 
-	public JavaSmtSolver(org.spldev.formula.structure.Formula formula, Solvers solver) {
+	public JavaSmtSolver(de.featjar.formula.structure.Formula formula, Solvers solver) {
 		try {
 			final Configuration config = Configuration.defaultConfiguration();
 			final LogManager logManager = BasicLogManager.create(config);

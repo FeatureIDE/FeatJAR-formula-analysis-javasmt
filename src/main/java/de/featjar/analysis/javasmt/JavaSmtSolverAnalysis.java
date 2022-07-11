@@ -20,12 +20,16 @@
  * See <https://github.com/FeatJAR/formula-analysis-javasmt> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.analysis.javasmt;
+package de.featjar.analysis.javasmt;
 
+import de.featjar.analysis.AbstractAnalysis;
+import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
+import de.featjar.formula.structure.Formula;
+import de.featjar.formula.structure.FormulaProvider;
 import org.sosy_lab.java_smt.SolverContextFactory.*;
-import org.spldev.analysis.*;
-import org.spldev.analysis.javasmt.solver.*;
-import org.spldev.formula.structure.*;
+import de.featjar.analysis.*;
+import de.featjar.analysis.javasmt.solver.*;
+import de.featjar.formula.structure.*;
 
 /**
  * Base class for analyses using a {@link JavaSmtSolver}.

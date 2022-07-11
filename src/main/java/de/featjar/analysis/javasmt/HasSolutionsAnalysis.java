@@ -20,12 +20,15 @@
  * See <https://github.com/FeatJAR/formula-analysis-javasmt> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.analysis.javasmt;
+package de.featjar.analysis.javasmt;
 
-import org.spldev.analysis.javasmt.solver.*;
-import org.spldev.analysis.solver.SatSolver.*;
-import org.spldev.util.data.*;
-import org.spldev.util.job.*;
+import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
+import de.featjar.util.data.Identifier;
+import de.featjar.util.job.InternalMonitor;
+import de.featjar.analysis.javasmt.solver.*;
+import de.featjar.analysis.solver.SatSolver.*;
+import de.featjar.util.data.*;
+import de.featjar.util.job.*;
 
 /**
  * Counts the number of valid solutions to a formula.
