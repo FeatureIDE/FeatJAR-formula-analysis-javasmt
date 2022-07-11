@@ -22,26 +22,42 @@
  */
 package de.featjar.analysis.javasmt.solver;
 
-import java.util.*;
-import java.util.stream.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
+import org.sosy_lab.java_smt.api.BooleanFormula;
+import org.sosy_lab.java_smt.api.BooleanFormulaManager;
+import org.sosy_lab.java_smt.api.Formula;
+import org.sosy_lab.java_smt.api.FormulaManager;
+import org.sosy_lab.java_smt.api.IntegerFormulaManager;
+import org.sosy_lab.java_smt.api.NumeralFormula;
+import org.sosy_lab.java_smt.api.NumeralFormula.IntegerFormula;
+import org.sosy_lab.java_smt.api.NumeralFormula.RationalFormula;
+import org.sosy_lab.java_smt.api.RationalFormulaManager;
+import org.sosy_lab.java_smt.api.SolverContext;
+
+//import de.featjar.formula.structure.Formula;
 import de.featjar.formula.structure.atomic.literal.Literal;
 import de.featjar.formula.structure.atomic.literal.VariableMap;
-import de.featjar.formula.structure.atomic.predicate.*;
-import de.featjar.formula.structure.compound.*;
+import de.featjar.formula.structure.atomic.literal.VariableMap.Constant;
+import de.featjar.formula.structure.atomic.literal.VariableMap.Variable;
+import de.featjar.formula.structure.atomic.predicate.Equals;
+import de.featjar.formula.structure.atomic.predicate.GreaterEqual;
+import de.featjar.formula.structure.atomic.predicate.GreaterThan;
+import de.featjar.formula.structure.atomic.predicate.LessEqual;
+import de.featjar.formula.structure.atomic.predicate.LessThan;
+import de.featjar.formula.structure.compound.And;
+import de.featjar.formula.structure.compound.Biimplies;
+import de.featjar.formula.structure.compound.Implies;
+import de.featjar.formula.structure.compound.Not;
+import de.featjar.formula.structure.compound.Or;
 import de.featjar.formula.structure.term.Add;
 import de.featjar.formula.structure.term.Function;
 import de.featjar.formula.structure.term.Multiply;
 import de.featjar.formula.structure.term.Term;
-import org.sosy_lab.java_smt.SolverContextFactory.*;
-import org.sosy_lab.java_smt.api.*;
-import org.sosy_lab.java_smt.api.Formula;
-import org.sosy_lab.java_smt.api.NumeralFormula.*;
-import de.featjar.formula.structure.*;
-import de.featjar.formula.structure.atomic.literal.*;
-import de.featjar.formula.structure.atomic.predicate.*;
-import de.featjar.formula.structure.compound.*;
-import de.featjar.formula.structure.term.*;
 
 /**
  * Class containing functions that are used to translate formulas to java smt.
@@ -59,13 +75,13 @@ public class FormulaToJavaSmt {
 	private boolean createVariables = true;
 
 	private VariableMap variableMapping;
-	private ArrayList<Formula> variables = new ArrayList<>();
+	private ArrayList<org.sosy_lab.java_smt.api.Formula> variables = new ArrayList<>();
 
 	public FormulaToJavaSmt(SolverContext context, VariableMap variableMapping) {
 		setContext(context);
 		this.variableMapping = variableMapping;
-		variables = new ArrayList<>(variableMapping.size() + 1);
-		for (int i = 0; i < (variableMapping.size() + 1); i++) {
+		variables = new ArrayList<>(variableMapping.getVariableCount() + 1);
+		for (int i = 0; i < (variableMapping.getVariableCount() + 1); i++) {
 			variables.add(null);
 		}
 	}
@@ -82,7 +98,7 @@ public class FormulaToJavaSmt {
 		}
 	}
 
-	public BooleanFormula nodeToFormula(Expression node) {
+	public BooleanFormula nodeToFormula(de.featjar.formula.structure.Formula node) {
 		if (node instanceof Not) {
 			return createNot(nodeToFormula(node.getChildren().get(0)));
 		} else if (node instanceof Or) {
@@ -96,21 +112,21 @@ public class FormulaToJavaSmt {
 		} else if (node instanceof Literal) {
 			return handleLiteralNode((Literal) node);
 		} else if (node instanceof LessThan) {
-			return handleLessThanNode((LessThan<?>) node);
+			return handleLessThanNode((LessThan) node);
 		} else if (node instanceof GreaterThan) {
-			return handleGreaterThanNode((GreaterThan<?>) node);
+			return handleGreaterThanNode((GreaterThan) node);
 		} else if (node instanceof LessEqual) {
-			return handleLessEqualNode((LessEqual<?>) node);
+			return handleLessEqualNode((LessEqual) node);
 		} else if (node instanceof GreaterEqual) {
-			return handleGreaterEqualNode((GreaterEqual<?>) node);
+			return handleGreaterEqualNode((GreaterEqual) node);
 		} else if (node instanceof Equals) {
-			return handleEqualNode((Equals<?>) node);
+			return handleEqualNode((Equals) node);
 		} else {
 			throw new RuntimeException("The nodes of type: " + node.getClass() + " are not supported by JavaSmt.");
 		}
 	}
 
-	private List<BooleanFormula> getChildren(Expression node) {
+	private List<BooleanFormula> getChildren(de.featjar.formula.structure.Formula node) {
 		return node.getChildren().stream() //
 			.map(this::nodeToFormula) //
 			.collect(Collectors.toList());
@@ -136,7 +152,7 @@ public class FormulaToJavaSmt {
 		return currentBooleanFormulaManager.not(childFormula);
 	}
 
-	private BooleanFormula handleEqualNode(Equals<?> node) {
+	private BooleanFormula handleEqualNode(Equals node) {
 		final NumeralFormula leftTerm = termToFormula(node.getChildren().get(0));
 		final NumeralFormula rightTerm = termToFormula(node.getChildren().get(1));
 		return createEqual(leftTerm, rightTerm);
@@ -150,7 +166,7 @@ public class FormulaToJavaSmt {
 		}
 	}
 
-	private BooleanFormula handleGreaterEqualNode(GreaterEqual<?> node) {
+	private BooleanFormula handleGreaterEqualNode(GreaterEqual node) {
 		final NumeralFormula leftTerm = termToFormula(node.getChildren().get(0));
 		final NumeralFormula rightTerm = termToFormula(node.getChildren().get(1));
 		return createGreaterEqual(leftTerm, rightTerm);
@@ -164,7 +180,7 @@ public class FormulaToJavaSmt {
 		}
 	}
 
-	private BooleanFormula handleLessEqualNode(LessEqual<?> node) {
+	private BooleanFormula handleLessEqualNode(LessEqual node) {
 		final NumeralFormula leftTerm = termToFormula(node.getChildren().get(0));
 		final NumeralFormula rightTerm = termToFormula(node.getChildren().get(1));
 		return createLessEqual(leftTerm, rightTerm);
@@ -178,7 +194,7 @@ public class FormulaToJavaSmt {
 		}
 	}
 
-	private BooleanFormula handleGreaterThanNode(GreaterThan<?> node) {
+	private BooleanFormula handleGreaterThanNode(GreaterThan node) {
 		final NumeralFormula leftTerm = termToFormula(node.getChildren().get(0));
 		final NumeralFormula rightTerm = termToFormula(node.getChildren().get(1));
 		return createGreaterThan(leftTerm, rightTerm);
@@ -192,7 +208,7 @@ public class FormulaToJavaSmt {
 		}
 	}
 
-	private BooleanFormula handleLessThanNode(LessThan<?> node) {
+	private BooleanFormula handleLessThanNode(LessThan node) {
 		final NumeralFormula leftTerm = termToFormula(node.getChildren().get(0));
 		final NumeralFormula rightTerm = termToFormula(node.getChildren().get(1));
 		return createLessThan(leftTerm, rightTerm);
@@ -206,24 +222,24 @@ public class FormulaToJavaSmt {
 		}
 	}
 
-	private NumeralFormula termToFormula(Term<?> term) {
-		if (term instanceof Constant<?>) {
-			return createConstant(((Constant<?>) term).getValue());
-		} else if (term instanceof Variable<?>) {
-			final Variable<?> variable = (Variable<?>) term;
+	private NumeralFormula termToFormula(Term term) {
+		if (term instanceof Constant) {
+			return createConstant(((Constant) term).getValue());
+		} else if (term instanceof Variable) {
+			final Variable variable = (Variable) term;
 			return handleVariable(variable);
 		} else if (term instanceof Function) {
-			return handleFunction((Function<?, ?>) term);
+			return handleFunction((Function) term);
 		} else {
 			throw new RuntimeException("The given term is not supported by JavaSMT: " + term.getClass());
 		}
 
 	}
 
-	private NumeralFormula handleFunction(Function<?, ?> function) {
+	private NumeralFormula handleFunction(Function function) {
 		final NumeralFormula[] children = new NumeralFormula[function.getChildren().size()];
 		int index = 0;
-		for (final Term<?> term : function.getChildren()) {
+		for (final Term term : function.getChildren()) {
 			children[index++] = termToFormula(term);
 		}
 		if (function.getType() == Double.class) {
@@ -266,9 +282,9 @@ public class FormulaToJavaSmt {
 		}
 	}
 
-	private NumeralFormula handleVariable(Variable<?> variable) {
+	private NumeralFormula handleVariable(Variable variable) {
 		final String name = variable.getName();
-		final Optional<Formula> map = variableMapping.getIndex(name).map(variables::get);
+		final Optional<Formula> map = variableMapping.getVariableIndex(name).map(variables::get);
 		if (variable.getType() == Double.class) {
 			if (isPrincess) {
 				throw new UnsupportedOperationException("Princess does not support variables from type: Double");
@@ -288,16 +304,16 @@ public class FormulaToJavaSmt {
 			return currentBooleanFormulaManager.makeFalse();
 		} else {
 			final String name = literal.getName();
-			final BooleanFormula variable = (BooleanFormula) variableMapping.getIndex(name).map(variables::get)
+			final BooleanFormula variable = (BooleanFormula) variableMapping.getVariableIndex(name).map(variables::get)
 				.orElseGet(() -> newVariable(name, currentBooleanFormulaManager::makeVariable));
 			return literal.isPositive() ? variable : createNot(variable);
 		}
 	}
 
-	private <T extends Formula> T newVariable(final String name,
+	private <T extends org.sosy_lab.java_smt.api.Formula> T newVariable(final String name,
 		java.util.function.Function<String, T> variableCreator) {
 		if (createVariables) {
-			final Integer index = variableMapping.getIndex(name).orElseThrow(RuntimeException::new);
+			final Integer index = variableMapping.getVariableIndex(name).orElseThrow(RuntimeException::new);
 			final T newVariable = variableCreator.apply(name);
 			while (variables.size() <= index) {
 				variables.add(null);
@@ -317,7 +333,7 @@ public class FormulaToJavaSmt {
 		this.variableMapping = variableMapping;
 	}
 
-	public ArrayList<Formula> getVariables() {
+	public ArrayList<org.sosy_lab.java_smt.api.Formula> getVariables() {
 		return variables;
 	}
 

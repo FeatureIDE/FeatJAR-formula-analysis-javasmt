@@ -22,14 +22,11 @@
  */
 package de.featjar.analysis.javasmt;
 
-import java.math.*;
+import java.math.BigInteger;
 
 import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
 import de.featjar.util.data.Identifier;
 import de.featjar.util.job.InternalMonitor;
-import de.featjar.analysis.javasmt.solver.*;
-import de.featjar.util.data.*;
-import de.featjar.util.job.*;
 
 /**
  * Counts the number of valid solutions to a formula.

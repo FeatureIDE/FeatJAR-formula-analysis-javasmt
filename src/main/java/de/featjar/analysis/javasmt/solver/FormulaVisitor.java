@@ -22,14 +22,17 @@
  */
 package de.featjar.analysis.javasmt.solver;
 
-import java.util.*;
+import java.util.List;
 
+import org.sosy_lab.java_smt.api.BooleanFormula;
+import org.sosy_lab.java_smt.api.BooleanFormulaManager;
+import org.sosy_lab.java_smt.api.FunctionDeclaration;
+import org.sosy_lab.java_smt.api.QuantifiedFormulaManager;
+import org.sosy_lab.java_smt.api.visitors.BooleanFormulaVisitor;
+
+import de.featjar.formula.structure.Formula;
 import de.featjar.formula.structure.atomic.literal.ErrorLiteral;
 import de.featjar.formula.structure.atomic.literal.VariableMap;
-import org.sosy_lab.java_smt.api.*;
-import org.sosy_lab.java_smt.api.visitors.*;
-import de.featjar.formula.structure.Formula;
-import de.featjar.formula.structure.atomic.literal.*;
 
 public abstract class FormulaVisitor implements BooleanFormulaVisitor<Formula> {
 	protected final BooleanFormulaManager booleanFormulaManager;

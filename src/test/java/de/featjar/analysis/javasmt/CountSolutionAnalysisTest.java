@@ -22,11 +22,16 @@
  */
 package de.featjar.analysis.javasmt;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.math.*;
-import java.nio.file.*;
-import java.util.*;
+import java.math.BigInteger;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
 
 import de.featjar.formula.ModelRepresentation;
 import de.featjar.formula.structure.Formula;
@@ -40,15 +45,6 @@ import de.featjar.formula.structure.compound.Or;
 import de.featjar.util.data.Result;
 import de.featjar.util.extension.ExtensionLoader;
 import de.featjar.util.logging.Logger;
-import org.junit.jupiter.api.*;
-import de.featjar.formula.*;
-import de.featjar.formula.structure.*;
-import de.featjar.formula.structure.atomic.literal.*;
-import de.featjar.formula.structure.compound.*;
-import de.featjar.formula.structure.term.bool.*;
-import de.featjar.util.data.*;
-import de.featjar.util.extension.*;
-import de.featjar.util.logging.*;
 
 public class CountSolutionAnalysisTest {
 
@@ -63,7 +59,7 @@ public class CountSolutionAnalysisTest {
 
 	private static ModelRepresentation load(final Path modelFile) {
 		return ModelRepresentation.load(modelFile) //
-			.orElseThrow(p -> new IllegalArgumentException(p.isEmpty() ? null : p.get(0).getError().get()));
+			.orElseThrow(p -> new IllegalArgumentException(p.isEmpty() ? null : p.get(0).toException()));
 	}
 
 	static {
@@ -72,10 +68,10 @@ public class CountSolutionAnalysisTest {
 
 	@Test
 	public void count() {
-		final VariableMap variables = VariableMap.fromNames(Arrays.asList("a", "b", "c"));
-		final Literal a = new LiteralPredicate((BoolVariable) variables.getVariable("a").get(), true);
-		final Literal b = new LiteralPredicate((BoolVariable) variables.getVariable("b").get(), true);
-		final Literal c = new LiteralPredicate((BoolVariable) variables.getVariable("c").get(), true);
+		final VariableMap variables = new VariableMap();
+		final Literal a = variables.createLiteral("a");
+		final Literal b = variables.createLiteral("b");
+		final Literal c = variables.createLiteral("c");
 
 		final Implies implies1 = new Implies(a, b);
 		final Or or = new Or(implies1, c);

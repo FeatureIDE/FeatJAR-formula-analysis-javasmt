@@ -22,19 +22,20 @@
  */
 package de.featjar.analysis.javasmt;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import org.junit.jupiter.api.Test;
+import org.sosy_lab.common.ShutdownNotifier;
+import org.sosy_lab.common.configuration.Configuration;
+import org.sosy_lab.common.configuration.InvalidConfigurationException;
+import org.sosy_lab.common.log.LogManager;
+import org.sosy_lab.java_smt.SolverContextFactory;
+import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
+import org.sosy_lab.java_smt.api.SolverContext;
 
 import de.featjar.util.logging.Logger;
 import de.featjar.util.os.OperatingSystem;
-import org.junit.jupiter.api.*;
-import org.sosy_lab.common.*;
-import org.sosy_lab.common.configuration.*;
-import org.sosy_lab.common.log.*;
-import org.sosy_lab.java_smt.*;
-import org.sosy_lab.java_smt.SolverContextFactory.*;
-import org.sosy_lab.java_smt.api.*;
-import de.featjar.util.logging.*;
-import de.featjar.util.os.*;
 
 public class TestSolvers {
 

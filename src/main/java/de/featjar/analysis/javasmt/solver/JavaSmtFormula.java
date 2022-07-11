@@ -22,19 +22,19 @@
  */
 package de.featjar.analysis.javasmt.solver;
 
-import java.util.*;
-import java.util.stream.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.sosy_lab.java_smt.api.BooleanFormula;
+import org.sosy_lab.java_smt.api.Formula;
+import org.sosy_lab.java_smt.api.SolverContext;
 
 import de.featjar.analysis.solver.AbstractDynamicFormula;
 import de.featjar.analysis.solver.RuntimeContradictionException;
 import de.featjar.formula.structure.atomic.literal.VariableMap;
 import de.featjar.formula.structure.compound.And;
-import org.sosy_lab.java_smt.api.*;
-import org.sosy_lab.java_smt.api.Formula;
-import de.featjar.analysis.solver.*;
-import de.featjar.formula.structure.*;
-import de.featjar.formula.structure.atomic.literal.*;
-import de.featjar.formula.structure.compound.*;
 
 /**
  * Formula for {@link JavaSmtSolver}.
@@ -47,11 +47,9 @@ public class JavaSmtFormula extends AbstractDynamicFormula<BooleanFormula> {
 	private final FormulaToJavaSmt translator;
 
 	public JavaSmtFormula(SolverContext solverContext, de.featjar.formula.structure.Formula originalFormula) {
-		this(solverContext, VariableMap.fromExpression(originalFormula));
+		this(solverContext, originalFormula.getVariableMap().orElseGet(VariableMap::new));
 		if (originalFormula instanceof And) {
-			for (final Expression clause : originalFormula.getChildren()) {
-				push((de.featjar.formula.structure.Formula) clause);
-			}
+			originalFormula.getChildren().forEach(this::push);
 		}
 	}
 

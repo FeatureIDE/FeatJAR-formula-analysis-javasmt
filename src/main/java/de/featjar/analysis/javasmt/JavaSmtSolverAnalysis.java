@@ -22,14 +22,12 @@
  */
 package de.featjar.analysis.javasmt;
 
+import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
+
 import de.featjar.analysis.AbstractAnalysis;
 import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
 import de.featjar.formula.structure.Formula;
 import de.featjar.formula.structure.FormulaProvider;
-import org.sosy_lab.java_smt.SolverContextFactory.*;
-import de.featjar.analysis.*;
-import de.featjar.analysis.javasmt.solver.*;
-import de.featjar.formula.structure.*;
 
 /**
  * Base class for analyses using a {@link JavaSmtSolver}.

@@ -22,26 +22,29 @@
  */
 package de.featjar.analysis.javasmt.solver;
 
-import java.util.*;
-import java.util.stream.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.sosy_lab.common.ShutdownManager;
+import org.sosy_lab.common.configuration.Configuration;
+import org.sosy_lab.common.configuration.InvalidConfigurationException;
+import org.sosy_lab.common.log.BasicLogManager;
+import org.sosy_lab.common.log.LogManager;
+import org.sosy_lab.java_smt.SolverContextFactory;
+import org.sosy_lab.java_smt.api.BooleanFormula;
+import org.sosy_lab.java_smt.api.BooleanFormulaManager;
+import org.sosy_lab.java_smt.api.FormulaManager;
+import org.sosy_lab.java_smt.api.FunctionDeclaration;
+import org.sosy_lab.java_smt.api.SolverContext;
+import org.sosy_lab.java_smt.api.Tactic;
+
+import de.featjar.formula.structure.Formula;
+import de.featjar.formula.structure.atomic.literal.Literal;
 import de.featjar.formula.structure.atomic.literal.VariableMap;
 import de.featjar.formula.structure.compound.And;
 import de.featjar.formula.structure.compound.Or;
 import de.featjar.formula.structure.transform.Transformer;
 import de.featjar.util.job.InternalMonitor;
-import org.sosy_lab.common.*;
-import org.sosy_lab.common.configuration.*;
-import org.sosy_lab.common.log.*;
-import org.sosy_lab.java_smt.*;
-import org.sosy_lab.java_smt.api.*;
-import de.featjar.formula.structure.Formula;
-import de.featjar.formula.structure.atomic.literal.*;
-import de.featjar.formula.structure.compound.*;
-import de.featjar.formula.structure.term.*;
-import de.featjar.formula.structure.term.bool.*;
-import de.featjar.formula.structure.transform.*;
-import de.featjar.util.job.*;
 
 /**
  * Transforms a formula into CNF using the Tseitin transformation implemented in
@@ -72,7 +75,7 @@ public class CNFTseitinTransformer implements Transformer {
 
 	@Override
 	public Formula execute(Formula formula, InternalMonitor monitor) throws Exception {
-		VariableMap variableMap = VariableMap.fromExpression(formula);
+		VariableMap variableMap = formula.getVariableMap().orElseGet(VariableMap::new);
 		BooleanFormula booleanFormula = formulaManager.applyTactic(new FormulaToJavaSmt(context,
 			variableMap).nodeToFormula(formula), Tactic.TSEITIN_CNF);
 		return booleanFormulaManager.visit(booleanFormula, new CNFVisitor(booleanFormulaManager, variableMap));
@@ -134,15 +137,13 @@ public class CNFTseitinTransformer implements Transformer {
 
 		@Override
 		public Formula visitNot(BooleanFormula operand) {
-			LiteralPredicate literalPredicate = (LiteralPredicate) booleanFormulaManager.visit(operand, this);
+			Literal literalPredicate = (Literal) booleanFormulaManager.visit(operand, this);
 			return literalPredicate.flip();
 		}
 
 		@Override
 		public Formula visitAtom(BooleanFormula atom, FunctionDeclaration<BooleanFormula> funcDecl) {
-			Variable<?> variable = variableMap.getVariable(atom.toString()).orElseGet(() -> variableMap
-				.addBooleanVariable(atom.toString()).get());
-			return new LiteralPredicate((BoolVariable) variable, true);
+			return variableMap.createLiteral(atom.toString());
 		}
 	}
 }
