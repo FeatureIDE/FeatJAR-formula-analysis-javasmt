@@ -25,7 +25,10 @@ package de.featjar.analysis.javasmt;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import de.featjar.util.bin.Binary;
+import de.featjar.util.extension.ExtensionLoader;
 import org.junit.jupiter.api.Test;
+import org.sosy_lab.common.NativeLibraries;
 import org.sosy_lab.common.ShutdownNotifier;
 import org.sosy_lab.common.configuration.Configuration;
 import org.sosy_lab.common.configuration.InvalidConfigurationException;
@@ -35,34 +38,39 @@ import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 import org.sosy_lab.java_smt.api.SolverContext;
 
 import de.featjar.util.logging.Logger;
-import de.featjar.util.os.OperatingSystem;
+import de.featjar.util.bin.OperatingSystem;
 
-public class TestSolvers {
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
+import java.lang.reflect.Field;
+
+public class TestSolvers { // todo
 
 	private void solversWindows() {
 		testAvailability(Solvers.MATHSAT5);
 		testAvailability(Solvers.PRINCESS);
 		testAvailability(Solvers.SMTINTERPOL);
-		testAvailability(Solvers.Z3);
+		//testAvailability(Solvers.Z3);
 	}
 
 	private void solversUnix() {
-		testAvailability(Solvers.BOOLECTOR);
-		testAvailability(Solvers.CVC4);
+//		testAvailability(Solvers.BOOLECTOR);
+//		testAvailability(Solvers.CVC4);
 		testAvailability(Solvers.MATHSAT5);
 		testAvailability(Solvers.PRINCESS);
 		testAvailability(Solvers.SMTINTERPOL);
-		testAvailability(Solvers.Z3);
+		//testAvailability(Solvers.Z3);
 	}
 
 	private void solversMac() {
 		testAvailability(Solvers.PRINCESS);
 		testAvailability(Solvers.SMTINTERPOL);
-		testAvailability(Solvers.Z3);
+		//testAvailability(Solvers.Z3);
 	}
 
 	@Test
 	public void solvers() {
+		ExtensionLoader.load();
 		try {
 			if (OperatingSystem.IS_UNIX) {
 				solversUnix();
@@ -90,5 +98,4 @@ public class TestSolvers {
 			fail(solver + " not available!");
 		}
 	}
-
 }

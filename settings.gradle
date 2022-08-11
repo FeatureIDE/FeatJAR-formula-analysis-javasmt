@@ -1,0 +1,7 @@
+pluginManagement {
+    includeBuild '../gradle-plugins'
+}
+
+includeBuild '../util'
+includeBuild '../formula'
+includeBuild '../native-javasmt'

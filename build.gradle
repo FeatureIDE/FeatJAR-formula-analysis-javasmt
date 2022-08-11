@@ -1,0 +1,9 @@
+plugins {
+    id 'de.featjar.java-library'
+}
+
+dependencies {
+    implementation 'de.featjar:util'
+    implementation 'de.featjar:formula'
+    implementation 'de.featjar:native-javasmt'
+}
