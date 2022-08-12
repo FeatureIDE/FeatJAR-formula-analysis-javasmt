@@ -3,7 +3,6 @@ plugins {
 }
 
 dependencies {
-    implementation 'de.featjar:util'
-    implementation 'de.featjar:formula'
-    implementation 'de.featjar:bin-javasmt'
+    api 'de.featjar:formula'
+    api 'de.featjar:bin-javasmt'
 }
