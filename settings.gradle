@@ -4,4 +4,4 @@ pluginManagement {
 
 includeBuild '../util'
 includeBuild '../formula'
-includeBuild '../native-javasmt'
+includeBuild '../bin-javasmt'

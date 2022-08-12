@@ -34,7 +34,7 @@ import de.featjar.util.job.InternalMonitor;
  * following expression:<br>
  * <br>
  *
- * <code> (Price + 233) > -17</code><br>
+ * <code> (Price + 233) &gt; -17</code><br>
  * <br>
  *
  * If you want to evaluate the maximum and minimum value for the variable
@@ -74,7 +74,7 @@ public class FeatureAttributeRangeAnalysis extends JavaSmtSolverAnalysis<Object[
 	 * expression:<br>
 	 * <br>
 	 *
-	 * <code> (Price + 233) > -17</code><br>
+	 * <code> (Price + 233) &gt; -17</code><br>
 	 * <br>
 	 *
 	 * If you want to evaluate the maximum and minimum value for the variable
