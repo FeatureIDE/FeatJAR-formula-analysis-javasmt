@@ -20,19 +20,17 @@
  */
 package de.featjar.analysis.javasmt.solver;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.sosy_lab.java_smt.api.BooleanFormula;
-import org.sosy_lab.java_smt.api.Formula;
-import org.sosy_lab.java_smt.api.SolverContext;
-
 import de.featjar.analysis.solver.AbstractDynamicFormula;
 import de.featjar.analysis.solver.RuntimeContradictionException;
 import de.featjar.formula.structure.atomic.literal.VariableMap;
 import de.featjar.formula.structure.compound.And;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.sosy_lab.java_smt.api.BooleanFormula;
+import org.sosy_lab.java_smt.api.Formula;
+import org.sosy_lab.java_smt.api.SolverContext;
 
 /**
  * Formula for {@link JavaSmtSolver}.
@@ -41,46 +39,46 @@ import de.featjar.formula.structure.compound.And;
  */
 public class JavaSmtFormula extends AbstractDynamicFormula<BooleanFormula> {
 
-	private final ArrayList<Formula> variables;
-	private final FormulaToJavaSmt translator;
+    private final ArrayList<Formula> variables;
+    private final FormulaToJavaSmt translator;
 
-	public JavaSmtFormula(SolverContext solverContext, de.featjar.formula.structure.Formula originalFormula) {
-		this(solverContext, originalFormula.getVariableMap().orElseGet(VariableMap::new));
-		if (originalFormula instanceof And) {
-			originalFormula.getChildren().forEach(this::push);
-		}
-	}
+    public JavaSmtFormula(SolverContext solverContext, de.featjar.formula.structure.Formula originalFormula) {
+        this(solverContext, originalFormula.getVariableMap().orElseGet(VariableMap::new));
+        if (originalFormula instanceof And) {
+            originalFormula.getChildren().forEach(this::push);
+        }
+    }
 
-	public JavaSmtFormula(SolverContext solverContext, VariableMap variableMap) {
-		super(variableMap);
-		translator = new FormulaToJavaSmt(solverContext, variableMap);
-		variables = translator.getVariables();
-	}
+    public JavaSmtFormula(SolverContext solverContext, VariableMap variableMap) {
+        super(variableMap);
+        translator = new FormulaToJavaSmt(solverContext, variableMap);
+        variables = translator.getVariables();
+    }
 
-	public FormulaToJavaSmt getTranslator() {
-		return translator;
-	}
+    public FormulaToJavaSmt getTranslator() {
+        return translator;
+    }
 
-	public List<Formula> getVariables() {
-		return variables;
-	}
+    public List<Formula> getVariables() {
+        return variables;
+    }
 
-	public List<BooleanFormula> getBooleanVariables() {
-		return variables.stream().filter(f -> f instanceof BooleanFormula).map(f -> (BooleanFormula) f)
-			.collect(Collectors.toList());
-	}
+    public List<BooleanFormula> getBooleanVariables() {
+        return variables.stream()
+                .filter(f -> f instanceof BooleanFormula)
+                .map(f -> (BooleanFormula) f)
+                .collect(Collectors.toList());
+    }
 
-	@Override
-	public List<BooleanFormula> push(de.featjar.formula.structure.Formula clause)
-		throws RuntimeContradictionException {
-		final BooleanFormula constraint = translator.nodeToFormula(clause);
-		constraints.add(constraint);
-		return Arrays.asList(constraint);
-	}
+    @Override
+    public List<BooleanFormula> push(de.featjar.formula.structure.Formula clause) throws RuntimeContradictionException {
+        final BooleanFormula constraint = translator.nodeToFormula(clause);
+        constraints.add(constraint);
+        return Arrays.asList(constraint);
+    }
 
-	@Override
-	public void clear() {
-		constraints.clear();
-	}
-
+    @Override
+    public void clear() {
+        constraints.clear();
+    }
 }

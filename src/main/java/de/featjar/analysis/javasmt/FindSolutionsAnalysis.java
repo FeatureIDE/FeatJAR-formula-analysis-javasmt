@@ -26,21 +26,20 @@ import de.featjar.util.job.InternalMonitor;
 
 /**
  * Counts the number of valid solutions to a formula.
- * 
+ *
  * @author Sebastian Krieter
  */
 public class FindSolutionsAnalysis extends JavaSmtSolverAnalysis<Object[]> {
 
-	public static final Identifier<Object[]> identifier = new Identifier<>();
+    public static final Identifier<Object[]> identifier = new Identifier<>();
 
-	@Override
-	public Identifier<Object[]> getIdentifier() {
-		return identifier;
-	}
+    @Override
+    public Identifier<Object[]> getIdentifier() {
+        return identifier;
+    }
 
-	@Override
-	protected Object[] analyze(JavaSmtSolver solver, InternalMonitor monitor) throws Exception {
-		return solver.findSolution();
-	}
-
+    @Override
+    protected Object[] analyze(JavaSmtSolver solver, InternalMonitor monitor) throws Exception {
+        return solver.findSolution();
+    }
 }

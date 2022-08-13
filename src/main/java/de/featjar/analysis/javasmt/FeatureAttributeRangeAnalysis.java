@@ -20,12 +20,11 @@
  */
 package de.featjar.analysis.javasmt;
 
-import org.sosy_lab.java_smt.api.NumeralFormula;
-
 import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
 import de.featjar.formula.structure.atomic.literal.Literal;
 import de.featjar.util.data.Identifier;
 import de.featjar.util.job.InternalMonitor;
+import org.sosy_lab.java_smt.api.NumeralFormula;
 
 /**
  * Finds the minimum and maximum value of a Term. As example we have the
@@ -45,44 +44,43 @@ import de.featjar.util.job.InternalMonitor;
  */
 public class FeatureAttributeRangeAnalysis extends JavaSmtSolverAnalysis<Object[]> {
 
-	public static final Identifier<Object[]> identifier = new Identifier<>();
+    public static final Identifier<Object[]> identifier = new Identifier<>();
 
-	@Override
-	public Identifier<Object[]> getIdentifier() {
-		return identifier;
-	}
+    @Override
+    public Identifier<Object[]> getIdentifier() {
+        return identifier;
+    }
 
-	/** The variable of interest */
-	private NumeralFormula variable;
+    /** The variable of interest */
+    private NumeralFormula variable;
 
-	@Override
-	protected Object[] analyze(JavaSmtSolver solver, InternalMonitor monitor) throws Exception {
-		if (variable == null) {
-			return null;
-		}
-		final Object[] result = new Object[2];
-		solver.findSolution();
-		result[0] = solver.minimum(variable);
-		result[1] = solver.maximum(variable);
-		return result;
-	}
+    @Override
+    protected Object[] analyze(JavaSmtSolver solver, InternalMonitor monitor) throws Exception {
+        if (variable == null) {
+            return null;
+        }
+        final Object[] result = new Object[2];
+        solver.findSolution();
+        result[0] = solver.minimum(variable);
+        result[1] = solver.maximum(variable);
+        return result;
+    }
 
-	/**
-	 * Sets the variable of interest. As example we have the following
-	 * expression:<br>
-	 * <br>
-	 *
-	 * <code> (Price + 233) &gt; -17</code><br>
-	 * <br>
-	 *
-	 * If you want to evaluate the maximum and minimum value for the variable
-	 * <code>Price</code> you need to pass the Literal object for
-	 * <code>Price</code>.
-	 *
-	 * @param variable The variable to compute the maximum and minimum of.
-	 */
-	public void setVariable(NumeralFormula variable) {
-		this.variable = variable;
-	}
-
+    /**
+     * Sets the variable of interest. As example we have the following
+     * expression:<br>
+     * <br>
+     *
+     * <code> (Price + 233) &gt; -17</code><br>
+     * <br>
+     *
+     * If you want to evaluate the maximum and minimum value for the variable
+     * <code>Price</code> you need to pass the Literal object for
+     * <code>Price</code>.
+     *
+     * @param variable The variable to compute the maximum and minimum of.
+     */
+    public void setVariable(NumeralFormula variable) {
+        this.variable = variable;
+    }
 }
