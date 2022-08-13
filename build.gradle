@@ -6,3 +6,10 @@ dependencies {
     api 'de.featjar:formula'
     api 'de.featjar:bin-javasmt'
 }
+
+license {
+    ext {
+        author = 'Sebastian Krieter'
+        url = 'https://github.com/FeatJAR/formula-analysis-javasmt'
+    }
+}
