@@ -10,6 +10,6 @@ dependencies {
 license {
     ext {
         author = 'Sebastian Krieter'
-        url = 'https://github.com/FeatJAR/formula-analysis-javasmt'
+        url = 'https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt'
     }
 }

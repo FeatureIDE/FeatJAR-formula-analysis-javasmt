@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with formula-analysis-javasmt. If not, see <https://www.gnu.org/licenses/>.
  *
- * See <https://github.com/FeatJAR/formula-analysis-javasmt> for further information.
+ * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
  */
 package de.featjar.analysis.javasmt.solver;
 
