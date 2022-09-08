@@ -33,7 +33,7 @@ import de.featjar.formula.structure.compound.Biimplies;
 import de.featjar.formula.structure.compound.Implies;
 import de.featjar.formula.structure.compound.Or;
 import de.featjar.util.data.Result;
-import de.featjar.util.extension.ExtensionLoader;
+import de.featjar.util.extension.Extensions;
 import de.featjar.util.logging.Logger;
 import java.math.BigInteger;
 import java.nio.file.Path;
@@ -60,7 +60,7 @@ public class CountSolutionAnalysisTest {
     }
 
     static {
-        ExtensionLoader.load();
+        Extensions.install();
     }
 
     @Test
