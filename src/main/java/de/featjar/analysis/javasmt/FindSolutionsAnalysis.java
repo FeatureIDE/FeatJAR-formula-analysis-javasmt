@@ -22,7 +22,7 @@ package de.featjar.analysis.javasmt;
 
 import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
 import de.featjar.util.data.Identifier;
-import de.featjar.util.job.InternalMonitor;
+import de.featjar.util.task.Monitor;
 
 /**
  * Counts the number of valid solutions to a formula.
@@ -39,7 +39,7 @@ public class FindSolutionsAnalysis extends JavaSmtSolverAnalysis<Object[]> {
     }
 
     @Override
-    protected Object[] analyze(JavaSmtSolver solver, InternalMonitor monitor) throws Exception {
+    protected Object[] analyze(JavaSmtSolver solver, Monitor monitor) throws Exception {
         return solver.findSolution();
     }
 }

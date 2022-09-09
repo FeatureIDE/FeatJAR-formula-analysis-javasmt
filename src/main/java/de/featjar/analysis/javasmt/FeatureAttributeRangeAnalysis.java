@@ -23,7 +23,7 @@ package de.featjar.analysis.javasmt;
 import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
 import de.featjar.formula.structure.atomic.literal.Literal;
 import de.featjar.util.data.Identifier;
-import de.featjar.util.job.InternalMonitor;
+import de.featjar.util.task.Monitor;
 import org.sosy_lab.java_smt.api.NumeralFormula;
 
 /**
@@ -55,7 +55,7 @@ public class FeatureAttributeRangeAnalysis extends JavaSmtSolverAnalysis<Object[
     private NumeralFormula variable;
 
     @Override
-    protected Object[] analyze(JavaSmtSolver solver, InternalMonitor monitor) throws Exception {
+    protected Object[] analyze(JavaSmtSolver solver, Monitor monitor) throws Exception {
         if (variable == null) {
             return null;
         }

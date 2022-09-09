@@ -26,7 +26,7 @@ import de.featjar.formula.structure.atomic.literal.VariableMap;
 import de.featjar.formula.structure.compound.And;
 import de.featjar.formula.structure.compound.Or;
 import de.featjar.formula.structure.transform.Transformer;
-import de.featjar.util.job.InternalMonitor;
+import de.featjar.util.task.Monitor;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.sosy_lab.common.ShutdownManager;
@@ -70,7 +70,7 @@ public class CNFTseitinTransformer implements Transformer {
     }
 
     @Override
-    public Formula execute(Formula formula, InternalMonitor monitor) throws Exception {
+    public Formula execute(Formula formula, Monitor monitor) throws Exception {
         VariableMap variableMap = formula.getVariableMap().orElseGet(VariableMap::new);
         BooleanFormula booleanFormula = formulaManager.applyTactic(
                 new FormulaToJavaSmt(context, variableMap).nodeToFormula(formula), Tactic.TSEITIN_CNF);
