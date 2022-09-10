@@ -29,7 +29,7 @@ import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 /**
  * Base class for analyses using a {@link JavaSmtSolver}.
  *
- * @param <T> Type of the analysis result.
+ * @param <T> the type of the analysis result.
  *
  * @author Joshua Sprey
  * @author Sebastian Krieter
