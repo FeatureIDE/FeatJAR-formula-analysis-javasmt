@@ -21,7 +21,6 @@
 package de.featjar.analysis.javasmt;
 
 import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
-import de.featjar.util.data.Identifier;
 import de.featjar.util.task.Monitor;
 import java.math.BigInteger;
 
@@ -31,14 +30,6 @@ import java.math.BigInteger;
  * @author Sebastian Krieter
  */
 public class CountSolutionsAnalysis extends JavaSmtSolverAnalysis<BigInteger> {
-
-    public static final Identifier<BigInteger> identifier = new Identifier<>();
-
-    @Override
-    public Identifier<BigInteger> getIdentifier() {
-        return identifier;
-    }
-
     @Override
     protected BigInteger analyze(JavaSmtSolver solver, Monitor monitor) throws Exception {
         return solver.countSolutions();

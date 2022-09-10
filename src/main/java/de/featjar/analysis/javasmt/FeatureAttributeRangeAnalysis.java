@@ -22,7 +22,6 @@ package de.featjar.analysis.javasmt;
 
 import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
 import de.featjar.formula.structure.atomic.literal.Literal;
-import de.featjar.util.data.Identifier;
 import de.featjar.util.task.Monitor;
 import org.sosy_lab.java_smt.api.NumeralFormula;
 
@@ -43,14 +42,6 @@ import org.sosy_lab.java_smt.api.NumeralFormula;
  * @author Sebastian Krieter
  */
 public class FeatureAttributeRangeAnalysis extends JavaSmtSolverAnalysis<Object[]> {
-
-    public static final Identifier<Object[]> identifier = new Identifier<>();
-
-    @Override
-    public Identifier<Object[]> getIdentifier() {
-        return identifier;
-    }
-
     /** The variable of interest */
     private NumeralFormula variable;
 

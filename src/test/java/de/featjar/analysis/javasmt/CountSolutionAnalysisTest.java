@@ -34,7 +34,7 @@ import de.featjar.formula.structure.compound.Implies;
 import de.featjar.formula.structure.compound.Or;
 import de.featjar.util.data.Result;
 import de.featjar.util.extension.Extensions;
-import de.featjar.util.logging.Logger;
+import de.featjar.util.log.Logger;
 import java.math.BigInteger;
 import java.nio.file.Path;
 import java.nio.file.Paths;

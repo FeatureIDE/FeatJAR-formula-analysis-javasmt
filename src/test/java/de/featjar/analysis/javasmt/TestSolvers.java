@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import de.featjar.util.bin.OperatingSystem;
 import de.featjar.util.extension.Extensions;
-import de.featjar.util.logging.Logger;
+import de.featjar.util.log.Logger;
 import org.junit.jupiter.api.Test;
 import org.sosy_lab.common.ShutdownNotifier;
 import org.sosy_lab.common.configuration.Configuration;

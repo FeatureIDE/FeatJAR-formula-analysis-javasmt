@@ -21,7 +21,6 @@
 package de.featjar.analysis.javasmt;
 
 import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
-import de.featjar.util.data.Identifier;
 import de.featjar.util.task.Monitor;
 
 /**
@@ -30,14 +29,6 @@ import de.featjar.util.task.Monitor;
  * @author Sebastian Krieter
  */
 public class FindSolutionsAnalysis extends JavaSmtSolverAnalysis<Object[]> {
-
-    public static final Identifier<Object[]> identifier = new Identifier<>();
-
-    @Override
-    public Identifier<Object[]> getIdentifier() {
-        return identifier;
-    }
-
     @Override
     protected Object[] analyze(JavaSmtSolver solver, Monitor monitor) throws Exception {
         return solver.findSolution();

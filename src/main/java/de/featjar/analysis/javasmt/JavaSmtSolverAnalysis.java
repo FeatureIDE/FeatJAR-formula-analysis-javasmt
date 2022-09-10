@@ -23,7 +23,7 @@ package de.featjar.analysis.javasmt;
 import de.featjar.analysis.AbstractAnalysis;
 import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
 import de.featjar.formula.structure.Formula;
-import de.featjar.formula.structure.FormulaProvider;
+import de.featjar.formula.structure.FormulaComputation;
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 
 /**
@@ -38,7 +38,7 @@ public abstract class JavaSmtSolverAnalysis<T> extends AbstractAnalysis<T, JavaS
 
     public JavaSmtSolverAnalysis() {
         super();
-        solverInputProvider = FormulaProvider.empty();
+        solverInputComputation = FormulaComputation.empty();
     }
 
     @Override

@@ -22,7 +22,6 @@ package de.featjar.analysis.javasmt;
 
 import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
 import de.featjar.analysis.solver.SatSolver.SatResult;
-import de.featjar.util.data.Identifier;
 import de.featjar.util.task.Monitor;
 
 /**
@@ -31,14 +30,6 @@ import de.featjar.util.task.Monitor;
  * @author Sebastian Krieter
  */
 public class HasSolutionsAnalysis extends JavaSmtSolverAnalysis<SatResult> {
-
-    public static final Identifier<SatResult> identifier = new Identifier<>();
-
-    @Override
-    public Identifier<SatResult> getIdentifier() {
-        return identifier;
-    }
-
     @Override
     protected SatResult analyze(JavaSmtSolver solver, Monitor monitor) throws Exception {
         return solver.hasSolution();
