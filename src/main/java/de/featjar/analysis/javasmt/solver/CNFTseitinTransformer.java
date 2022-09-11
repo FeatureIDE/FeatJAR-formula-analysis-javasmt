@@ -26,7 +26,7 @@ import de.featjar.formula.structure.atomic.literal.VariableMap;
 import de.featjar.formula.structure.compound.And;
 import de.featjar.formula.structure.compound.Or;
 import de.featjar.formula.structure.transform.Transformer;
-import de.featjar.util.task.Monitor;
+import de.featjar.base.task.Monitor;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.sosy_lab.common.ShutdownManager;

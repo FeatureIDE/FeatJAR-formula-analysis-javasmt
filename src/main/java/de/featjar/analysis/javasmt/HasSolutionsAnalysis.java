@@ -22,7 +22,7 @@ package de.featjar.analysis.javasmt;
 
 import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
 import de.featjar.analysis.solver.SatSolver.SatResult;
-import de.featjar.util.task.Monitor;
+import de.featjar.base.task.Monitor;
 
 /**
  * Counts the number of valid solutions to a formula.

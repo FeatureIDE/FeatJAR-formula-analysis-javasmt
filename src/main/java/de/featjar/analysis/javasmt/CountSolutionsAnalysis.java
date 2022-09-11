@@ -21,7 +21,7 @@
 package de.featjar.analysis.javasmt;
 
 import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
-import de.featjar.util.task.Monitor;
+import de.featjar.base.task.Monitor;
 import java.math.BigInteger;
 
 /**

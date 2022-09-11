@@ -27,8 +27,8 @@ import de.featjar.analysis.solver.SolutionSolver;
 import de.featjar.formula.structure.atomic.Assignment;
 import de.featjar.formula.structure.atomic.VariableAssignment;
 import de.featjar.formula.structure.atomic.literal.VariableMap;
-import de.featjar.util.data.Pair;
-import de.featjar.util.log.Log;
+import de.featjar.base.data.Pair;
+
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Iterator;

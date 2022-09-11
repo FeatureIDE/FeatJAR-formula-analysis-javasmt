@@ -23,9 +23,8 @@ package de.featjar.analysis.javasmt;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import de.featjar.util.bin.OperatingSystem;
-import de.featjar.util.extension.ExtensionManager;
-import de.featjar.util.log.Log;
+import de.featjar.base.bin.OperatingSystem;
+import de.featjar.base.extension.ExtensionManager;
 import org.junit.jupiter.api.Test;
 import org.sosy_lab.common.ShutdownNotifier;
 import org.sosy_lab.common.configuration.Configuration;
