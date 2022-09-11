@@ -21,7 +21,7 @@
 package de.featjar.analysis.javasmt;
 
 import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
-import de.featjar.analysis.solver.SatSolver.SatResult;
+import de.featjar.formula.analysis.solver.SATSolver.SatResult;
 import de.featjar.base.task.Monitor;
 
 /**

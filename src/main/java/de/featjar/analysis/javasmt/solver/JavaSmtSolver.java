@@ -20,10 +20,10 @@
  */
 package de.featjar.analysis.javasmt.solver;
 
-import de.featjar.analysis.solver.MusSolver;
-import de.featjar.analysis.solver.OptSolver;
-import de.featjar.analysis.solver.SharpSatSolver;
-import de.featjar.analysis.solver.SolutionSolver;
+import de.featjar.formula.analysis.solver.MUSSolver;
+import de.featjar.formula.analysis.solver.OptSolver;
+import de.featjar.formula.analysis.solver.SharpSATSolver;
+import de.featjar.formula.analysis.solver.SolutionSolver;
 import de.featjar.formula.structure.atomic.Assignment;
 import de.featjar.formula.structure.atomic.VariableAssignment;
 import de.featjar.formula.structure.atomic.literal.VariableMap;
@@ -64,7 +64,7 @@ import org.sosy_lab.java_smt.api.SolverException;
  * @author Joshua Sprey
  */
 public class JavaSmtSolver
-        implements SharpSatSolver, SolutionSolver<Object[]>, OptSolver<Rational, Formula>, MusSolver<BooleanFormula> {
+        implements SharpSATSolver, SolutionSolver<Object[]>, OptSolver<Rational, Formula>, MUSSolver<BooleanFormula> {
 
     private JavaSmtFormula formula;
 

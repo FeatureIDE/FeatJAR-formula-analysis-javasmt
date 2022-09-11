@@ -20,10 +20,9 @@
  */
 package de.featjar.analysis.javasmt;
 
-import de.featjar.analysis.AbstractAnalysis;
+import de.featjar.formula.analysis.Analysis;
 import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
 import de.featjar.formula.structure.Formula;
-import de.featjar.formula.structure.FormulaComputation;
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 
 /**
@@ -34,7 +33,7 @@ import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
  * @author Joshua Sprey
  * @author Sebastian Krieter
  */
-public abstract class JavaSmtSolverAnalysis<T> extends AbstractAnalysis<T, JavaSmtSolver, Formula> {
+public abstract class JavaSmtSolverAnalysis<T> extends Analysis<T, JavaSmtSolver, Formula> {
 
     public JavaSmtSolverAnalysis() {
         super();
