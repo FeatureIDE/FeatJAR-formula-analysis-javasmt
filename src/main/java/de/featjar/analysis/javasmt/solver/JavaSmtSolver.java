@@ -28,7 +28,7 @@ import de.featjar.formula.structure.atomic.Assignment;
 import de.featjar.formula.structure.atomic.VariableAssignment;
 import de.featjar.formula.structure.atomic.literal.VariableMap;
 import de.featjar.util.data.Pair;
-import de.featjar.util.log.Logger;
+import de.featjar.util.log.Log;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Iterator;
@@ -91,7 +91,7 @@ public class JavaSmtSolver
             this.formula = new JavaSmtFormula(context, formula);
             assumptions = new VariableAssignment(formula.getVariableMap().orElseGet(VariableMap::new));
         } catch (final InvalidConfigurationException e) {
-            Logger.logError(e);
+            Feat.log().error(e);
         }
     }
 
@@ -118,7 +118,7 @@ public class JavaSmtSolver
                     },
                     formula.getBooleanVariables());
         } catch (final Exception e) {
-            Logger.logError(e);
+            Feat.log().error(e);
             return BigInteger.valueOf(-1);
         }
     }
@@ -188,7 +188,7 @@ public class JavaSmtSolver
             final Optional<Rational> lower = prover.lower(handleY, Rational.ofString("1/1000"));
             return lower.orElse(null);
         } catch (final Exception e) {
-            Logger.logError(e);
+            Feat.log().error(e);
             return null;
         }
     }
@@ -206,7 +206,7 @@ public class JavaSmtSolver
             final Optional<Rational> upper = prover.upper(handleX, Rational.ofString("1/1000"));
             return upper.orElse(null);
         } catch (final Exception e) {
-            Logger.logError(e);
+            Feat.log().error(e);
             return null;
         }
     }
@@ -239,7 +239,7 @@ public class JavaSmtSolver
             }
             return Collections.emptyList();
         } catch (final Exception e) {
-            Logger.logError(e);
+            Feat.log().error(e);
             return null;
         }
     }

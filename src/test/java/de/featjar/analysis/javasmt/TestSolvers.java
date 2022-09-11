@@ -24,8 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import de.featjar.util.bin.OperatingSystem;
-import de.featjar.util.extension.Extensions;
-import de.featjar.util.log.Logger;
+import de.featjar.util.extension.ExtensionManager;
+import de.featjar.util.log.Log;
 import org.junit.jupiter.api.Test;
 import org.sosy_lab.common.ShutdownNotifier;
 import org.sosy_lab.common.configuration.Configuration;
@@ -61,7 +61,7 @@ public class TestSolvers { // todo
 
     @Test
     public void solvers() {
-        Extensions.install();
+        ExtensionManager.install();
         try {
             if (OperatingSystem.IS_UNIX) {
                 solversUnix();
@@ -73,7 +73,7 @@ public class TestSolvers { // todo
                 solversWindows();
             }
         } catch (final Exception e) {
-            Logger.logError(e);
+            Feat.log().error(e);
             fail();
         }
     }
