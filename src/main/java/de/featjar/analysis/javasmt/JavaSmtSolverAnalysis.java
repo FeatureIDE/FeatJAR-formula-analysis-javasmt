@@ -36,7 +36,6 @@ import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 public abstract class JavaSmtSolverAnalysis<T> extends Analysis<T, JavaSmtSolver, Formula> {
 
     public JavaSmtSolverAnalysis() {
-        super();
         solverInputComputation = FormulaComputation.empty();
     }
 

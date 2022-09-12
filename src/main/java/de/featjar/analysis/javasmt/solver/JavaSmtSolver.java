@@ -24,9 +24,9 @@ import de.featjar.formula.analysis.solver.MUSSolver;
 import de.featjar.formula.analysis.solver.OptSolver;
 import de.featjar.formula.analysis.solver.SharpSATSolver;
 import de.featjar.formula.analysis.solver.SolutionSolver;
-import de.featjar.formula.structure.atomic.Assignment;
-import de.featjar.formula.structure.atomic.VariableAssignment;
-import de.featjar.formula.structure.atomic.literal.VariableMap;
+import de.featjar.formula.structure.assignment.Assignment;
+import de.featjar.formula.structure.assignment.VariableAssignment;
+import de.featjar.formula.structure.VariableMap;
 import de.featjar.base.data.Pair;
 
 import java.math.BigInteger;

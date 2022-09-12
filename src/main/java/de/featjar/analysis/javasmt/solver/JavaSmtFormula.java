@@ -22,8 +22,8 @@ package de.featjar.analysis.javasmt.solver;
 
 import de.featjar.formula.analysis.solver.AbstractDynamicFormula;
 import de.featjar.formula.analysis.solver.RuntimeContradictionException;
-import de.featjar.formula.structure.atomic.literal.VariableMap;
-import de.featjar.formula.structure.compound.And;
+import de.featjar.formula.structure.VariableMap;
+import de.featjar.formula.structure.connective.And;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

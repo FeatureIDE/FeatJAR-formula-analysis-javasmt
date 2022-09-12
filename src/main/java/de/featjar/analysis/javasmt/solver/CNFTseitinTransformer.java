@@ -22,10 +22,10 @@ package de.featjar.analysis.javasmt.solver;
 
 import de.featjar.formula.structure.Formula;
 import de.featjar.formula.structure.atomic.literal.Literal;
-import de.featjar.formula.structure.atomic.literal.VariableMap;
-import de.featjar.formula.structure.compound.And;
-import de.featjar.formula.structure.compound.Or;
-import de.featjar.formula.structure.transform.Transformer;
+import de.featjar.formula.structure.VariableMap;
+import de.featjar.formula.structure.connective.And;
+import de.featjar.formula.structure.connective.Or;
+import de.featjar.formula.transform.Transformer;
 import de.featjar.base.task.Monitor;
 import java.util.List;
 import java.util.stream.Collectors;

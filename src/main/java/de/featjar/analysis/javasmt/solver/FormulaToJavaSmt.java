@@ -21,19 +21,19 @@
 package de.featjar.analysis.javasmt.solver;
 
 import de.featjar.formula.structure.atomic.literal.Literal;
-import de.featjar.formula.structure.atomic.literal.VariableMap;
-import de.featjar.formula.structure.atomic.literal.VariableMap.Constant;
-import de.featjar.formula.structure.atomic.literal.VariableMap.Variable;
+import de.featjar.formula.structure.VariableMap;
+import de.featjar.formula.structure.VariableMap.Constant;
+import de.featjar.formula.structure.VariableMap.Variable;
 import de.featjar.formula.structure.atomic.predicate.Equals;
 import de.featjar.formula.structure.atomic.predicate.GreaterEqual;
 import de.featjar.formula.structure.atomic.predicate.GreaterThan;
 import de.featjar.formula.structure.atomic.predicate.LessEqual;
 import de.featjar.formula.structure.atomic.predicate.LessThan;
-import de.featjar.formula.structure.compound.And;
-import de.featjar.formula.structure.compound.Biimplies;
-import de.featjar.formula.structure.compound.Implies;
-import de.featjar.formula.structure.compound.Not;
-import de.featjar.formula.structure.compound.Or;
+import de.featjar.formula.structure.connective.And;
+import de.featjar.formula.structure.connective.BiImplies;
+import de.featjar.formula.structure.connective.Implies;
+import de.featjar.formula.structure.connective.Not;
+import de.featjar.formula.structure.connective.Or;
 import de.featjar.formula.structure.term.Add;
 import de.featjar.formula.structure.term.Function;
 import de.featjar.formula.structure.term.Multiply;
@@ -100,7 +100,7 @@ public class FormulaToJavaSmt {
             return createOr(getChildren(node));
         } else if (node instanceof And) {
             return createAnd(getChildren(node));
-        } else if (node instanceof Biimplies) {
+        } else if (node instanceof BiImplies) {
             return createBiimplies(
                     nodeToFormula(node.getChildren().get(0)),
                     nodeToFormula(node.getChildren().get(1)));
@@ -297,9 +297,9 @@ public class FormulaToJavaSmt {
     }
 
     private BooleanFormula handleLiteralNode(Literal literal) {
-        if (literal == Literal.True) {
+        if (literal == de.featjar.formula.structure.Formula.TRUE) {
             return currentBooleanFormulaManager.makeTrue();
-        } else if (literal == Literal.False) {
+        } else if (literal == de.featjar.formula.structure.Formula.FALSE) {
             return currentBooleanFormulaManager.makeFalse();
         } else {
             final String name = literal.getName();
