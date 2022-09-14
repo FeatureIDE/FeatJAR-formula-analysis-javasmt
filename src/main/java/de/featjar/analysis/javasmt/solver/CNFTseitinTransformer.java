@@ -20,8 +20,8 @@
  */
 package de.featjar.analysis.javasmt.solver;
 
-import de.featjar.formula.structure.Formula;
-import de.featjar.formula.structure.formula.literal.Literal;
+import de.featjar.formula.structure.Expression;
+import de.featjar.formula.structure.formula.predicate.Literal;
 import de.featjar.formula.tmp.TermMap;
 import de.featjar.formula.structure.formula.connective.And;
 import de.featjar.formula.structure.formula.connective.Or;
@@ -70,10 +70,10 @@ public class CNFTseitinTransformer implements Transformer {
     }
 
     @Override
-    public Formula execute(Formula formula, Monitor monitor) throws Exception {
-        TermMap termMap = formula.getTermMap().orElseGet(TermMap::new);
+    public Expression execute(Expression expression, Monitor monitor) throws Exception {
+        TermMap termMap = expression.getTermMap().orElseGet(TermMap::new);
         BooleanFormula booleanFormula = formulaManager.applyTactic(
-                new FormulaToJavaSmt(context, termMap).nodeToFormula(formula), Tactic.TSEITIN_CNF);
+                new FormulaToJavaSmt(context, termMap).nodeToFormula(expression), Tactic.TSEITIN_CNF);
         return booleanFormulaManager.visit(booleanFormula, new CNFVisitor(booleanFormulaManager, termMap));
     }
 
@@ -83,7 +83,7 @@ public class CNFTseitinTransformer implements Transformer {
         }
 
         @Override
-        public Formula visitAnd(List<BooleanFormula> operands) {
+        public Expression visitAnd(List<BooleanFormula> operands) {
             return new And(operands.stream()
                     .map(operand ->
                             booleanFormulaManager.visit(operand, new ClauseVisitor(booleanFormulaManager, termMap)))
@@ -91,17 +91,17 @@ public class CNFTseitinTransformer implements Transformer {
         }
 
         @Override
-        public Formula visitOr(List<BooleanFormula> operands) {
+        public Expression visitOr(List<BooleanFormula> operands) {
             return new And(new ClauseVisitor(booleanFormulaManager, termMap).visitOr(operands));
         }
 
         @Override
-        public Formula visitNot(BooleanFormula operand) {
+        public Expression visitNot(BooleanFormula operand) {
             return new And(new Or(new LiteralVisitor(booleanFormulaManager, termMap).visitNot(operand)));
         }
 
         @Override
-        public Formula visitAtom(BooleanFormula atom, FunctionDeclaration<BooleanFormula> funcDecl) {
+        public Expression visitAtom(BooleanFormula atom, FunctionDeclaration<BooleanFormula> funcDecl) {
             return new And(new Or(new LiteralVisitor(booleanFormulaManager, termMap).visitAtom(atom, funcDecl)));
         }
     }
@@ -112,7 +112,7 @@ public class CNFTseitinTransformer implements Transformer {
         }
 
         @Override
-        public Formula visitOr(List<BooleanFormula> operands) {
+        public Expression visitOr(List<BooleanFormula> operands) {
             return new Or(operands.stream()
                     .map(operand -> booleanFormulaManager.visit(
                             operand, new LiteralVisitor(booleanFormulaManager, termMap)))
@@ -120,12 +120,12 @@ public class CNFTseitinTransformer implements Transformer {
         }
 
         @Override
-        public Formula visitNot(BooleanFormula operand) {
+        public Expression visitNot(BooleanFormula operand) {
             return new Or(new LiteralVisitor(booleanFormulaManager, termMap).visitNot(operand));
         }
 
         @Override
-        public Formula visitAtom(BooleanFormula atom, FunctionDeclaration<BooleanFormula> funcDecl) {
+        public Expression visitAtom(BooleanFormula atom, FunctionDeclaration<BooleanFormula> funcDecl) {
             return new Or(new LiteralVisitor(booleanFormulaManager, termMap).visitAtom(atom, funcDecl));
         }
     }
@@ -136,13 +136,13 @@ public class CNFTseitinTransformer implements Transformer {
         }
 
         @Override
-        public Formula visitNot(BooleanFormula operand) {
+        public Expression visitNot(BooleanFormula operand) {
             Literal literalPredicate = (Literal) booleanFormulaManager.visit(operand, this);
             return literalPredicate.invert();
         }
 
         @Override
-        public Formula visitAtom(BooleanFormula atom, FunctionDeclaration<BooleanFormula> funcDecl) {
+        public Expression visitAtom(BooleanFormula atom, FunctionDeclaration<BooleanFormula> funcDecl) {
             return termMap.createLiteral(atom.toString());
         }
     }

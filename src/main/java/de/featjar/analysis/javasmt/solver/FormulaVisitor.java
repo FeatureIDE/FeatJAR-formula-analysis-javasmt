@@ -20,8 +20,8 @@
  */
 package de.featjar.analysis.javasmt.solver;
 
-import de.featjar.formula.structure.Formula;
-import de.featjar.formula.structure.formula.literal.ErrorLiteral;
+import de.featjar.formula.structure.Expression;
+import de.featjar.formula.structure.formula.predicate.Problem;
 import de.featjar.formula.tmp.TermMap;
 import java.util.List;
 import org.sosy_lab.java_smt.api.BooleanFormula;
@@ -30,7 +30,7 @@ import org.sosy_lab.java_smt.api.FunctionDeclaration;
 import org.sosy_lab.java_smt.api.QuantifiedFormulaManager;
 import org.sosy_lab.java_smt.api.visitors.BooleanFormulaVisitor;
 
-public abstract class FormulaVisitor implements BooleanFormulaVisitor<Formula> {
+public abstract class FormulaVisitor implements BooleanFormulaVisitor<Expression> {
     protected final BooleanFormulaManager booleanFormulaManager;
     protected final TermMap termMap;
 
@@ -40,61 +40,61 @@ public abstract class FormulaVisitor implements BooleanFormulaVisitor<Formula> {
     }
 
     @Override
-    public Formula visitConstant(boolean value) {
-        return new ErrorLiteral("unexpected constant");
+    public Expression visitConstant(boolean value) {
+        return new Problem("unexpected constant");
     }
 
     @Override
-    public Formula visitBoundVar(BooleanFormula var, int deBruijnIdx) {
-        return new ErrorLiteral("unexpected bound var");
+    public Expression visitBoundVar(BooleanFormula var, int deBruijnIdx) {
+        return new Problem("unexpected bound var");
     }
 
     @Override
-    public Formula visitNot(BooleanFormula operand) {
-        return new ErrorLiteral("unexpected not");
+    public Expression visitNot(BooleanFormula operand) {
+        return new Problem("unexpected not");
     }
 
     @Override
-    public Formula visitAnd(List<BooleanFormula> operands) {
-        return new ErrorLiteral("unexpected and");
+    public Expression visitAnd(List<BooleanFormula> operands) {
+        return new Problem("unexpected and");
     }
 
     @Override
-    public Formula visitOr(List<BooleanFormula> operands) {
-        return new ErrorLiteral("unexpected or");
+    public Expression visitOr(List<BooleanFormula> operands) {
+        return new Problem("unexpected or");
     }
 
     @Override
-    public Formula visitXor(BooleanFormula operand1, BooleanFormula operand2) {
-        return new ErrorLiteral("unexpected xor");
+    public Expression visitXor(BooleanFormula operand1, BooleanFormula operand2) {
+        return new Problem("unexpected xor");
     }
 
     @Override
-    public Formula visitEquivalence(BooleanFormula operand1, BooleanFormula operand2) {
-        return new ErrorLiteral("unexpected equivalence");
+    public Expression visitEquivalence(BooleanFormula operand1, BooleanFormula operand2) {
+        return new Problem("unexpected equivalence");
     }
 
     @Override
-    public Formula visitImplication(BooleanFormula operand1, BooleanFormula operand2) {
-        return new ErrorLiteral("unexpected implication");
+    public Expression visitImplication(BooleanFormula operand1, BooleanFormula operand2) {
+        return new Problem("unexpected implication");
     }
 
     @Override
-    public Formula visitIfThenElse(BooleanFormula condition, BooleanFormula thenFormula, BooleanFormula elseFormula) {
-        return new ErrorLiteral("unexpected if-then-else");
+    public Expression visitIfThenElse(BooleanFormula condition, BooleanFormula thenFormula, BooleanFormula elseFormula) {
+        return new Problem("unexpected if-then-else");
     }
 
     @Override
-    public Formula visitQuantifier(
+    public Expression visitQuantifier(
             QuantifiedFormulaManager.Quantifier quantifier,
             BooleanFormula quantifiedAST,
             List<org.sosy_lab.java_smt.api.Formula> boundVars,
             BooleanFormula body) {
-        return new ErrorLiteral("unexpected quantifier");
+        return new Problem("unexpected quantifier");
     }
 
     @Override
-    public Formula visitAtom(BooleanFormula atom, FunctionDeclaration<BooleanFormula> funcDecl) {
-        return new ErrorLiteral("unexpected atom");
+    public Expression visitAtom(BooleanFormula atom, FunctionDeclaration<BooleanFormula> funcDecl) {
+        return new Problem("unexpected atom");
     }
 }

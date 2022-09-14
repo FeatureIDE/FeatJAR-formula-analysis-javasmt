@@ -22,7 +22,7 @@ package de.featjar.analysis.javasmt.solver;
 
 import de.featjar.formula.analysis.solver.AbstractDynamicFormula;
 import de.featjar.formula.analysis.solver.RuntimeContradictionException;
-import de.featjar.formula.structure.Formula;
+import de.featjar.formula.structure.Expression;
 import de.featjar.formula.tmp.TermMap;
 import de.featjar.formula.structure.formula.connective.And;
 import java.util.ArrayList;
@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.sosy_lab.java_smt.api.BooleanFormula;
+import org.sosy_lab.java_smt.api.Formula;
 import org.sosy_lab.java_smt.api.SolverContext;
 
 /**
@@ -39,13 +40,13 @@ import org.sosy_lab.java_smt.api.SolverContext;
  */
 public class JavaSmtFormula extends AbstractDynamicFormula<BooleanFormula> {
 
-    private final ArrayList<org.sosy_lab.java_smt.api.Formula> variables;
+    private final ArrayList<Formula> variables;
     private final FormulaToJavaSmt translator;
 
-    public JavaSmtFormula(SolverContext solverContext, Formula originalFormula) {
-        this(solverContext, originalFormula.getTermMap().orElseGet(TermMap::new));
-        if (originalFormula instanceof And) {
-            originalFormula.getChildren().forEach(this::push);
+    public JavaSmtFormula(SolverContext solverContext, Expression originalExpression) {
+        this(solverContext, originalExpression.getTermMap().orElseGet(TermMap::new));
+        if (originalExpression instanceof And) {
+            originalExpression.getChildren().forEach(this::push);
         }
     }
 
@@ -59,7 +60,7 @@ public class JavaSmtFormula extends AbstractDynamicFormula<BooleanFormula> {
         return translator;
     }
 
-    public List<org.sosy_lab.java_smt.api.Formula> getVariables() {
+    public List<Formula> getVariables() {
         return variables;
     }
 
@@ -71,7 +72,7 @@ public class JavaSmtFormula extends AbstractDynamicFormula<BooleanFormula> {
     }
 
     @Override
-    public List<BooleanFormula> push(Formula clause) throws RuntimeContradictionException {
+    public List<BooleanFormula> push(Expression clause) throws RuntimeContradictionException {
         final BooleanFormula constraint = translator.nodeToFormula(clause);
         constraints.add(constraint);
         return Arrays.asList(constraint);

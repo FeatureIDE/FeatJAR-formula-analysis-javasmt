@@ -22,7 +22,7 @@ package de.featjar.analysis.javasmt;
 
 import de.featjar.formula.analysis.Analysis;
 import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
-import de.featjar.formula.structure.Formula;
+import de.featjar.formula.structure.Expression;
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 
 /**
@@ -33,14 +33,14 @@ import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
  * @author Joshua Sprey
  * @author Sebastian Krieter
  */
-public abstract class JavaSmtSolverAnalysis<T> extends Analysis<T, JavaSmtSolver, Formula> {
+public abstract class JavaSmtSolverAnalysis<T> extends Analysis<T, JavaSmtSolver, Expression> {
 
     public JavaSmtSolverAnalysis() {
         solverInputComputation = FormulaComputation.empty();
     }
 
     @Override
-    protected JavaSmtSolver createSolver(Formula input) {
+    protected JavaSmtSolver createSolver(Expression input) {
         return new JavaSmtSolver(input, Solvers.SMTINTERPOL);
     }
 }

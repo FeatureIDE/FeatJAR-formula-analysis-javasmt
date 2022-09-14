@@ -20,8 +20,8 @@
  */
 package de.featjar.analysis.javasmt.solver;
 
-import de.featjar.formula.structure.Formula;
-import de.featjar.formula.structure.formula.literal.Literal;
+import de.featjar.formula.structure.Expression;
+import de.featjar.formula.structure.formula.predicate.Literal;
 import de.featjar.formula.tmp.TermMap;
 import de.featjar.formula.tmp.TermMap.Constant;
 import de.featjar.formula.tmp.TermMap.Variable;
@@ -35,9 +35,9 @@ import de.featjar.formula.structure.formula.connective.BiImplies;
 import de.featjar.formula.structure.formula.connective.Implies;
 import de.featjar.formula.structure.formula.connective.Not;
 import de.featjar.formula.structure.formula.connective.Or;
-import de.featjar.formula.structure.term.Add;
-import de.featjar.formula.structure.term.Function;
-import de.featjar.formula.structure.term.Multiply;
+import de.featjar.formula.structure.term.function.Add;
+import de.featjar.formula.structure.term.function.Function;
+import de.featjar.formula.structure.term.function.Multiply;
 import de.featjar.formula.structure.term.Term;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +46,7 @@ import java.util.stream.Collectors;
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 import org.sosy_lab.java_smt.api.BooleanFormula;
 import org.sosy_lab.java_smt.api.BooleanFormulaManager;
+import org.sosy_lab.java_smt.api.Formula;
 import org.sosy_lab.java_smt.api.FormulaManager;
 import org.sosy_lab.java_smt.api.IntegerFormulaManager;
 import org.sosy_lab.java_smt.api.NumeralFormula;
@@ -93,40 +94,40 @@ public class FormulaToJavaSmt {
         }
     }
 
-    public BooleanFormula nodeToFormula(Formula formula) {
-        if (formula instanceof Not) {
-            return createNot(nodeToFormula(formula.getChildren().get(0)));
-        } else if (formula instanceof Or) {
-            return createOr(getChildren(formula));
-        } else if (formula instanceof And) {
-            return createAnd(getChildren(formula));
-        } else if (formula instanceof BiImplies) {
+    public BooleanFormula nodeToFormula(Expression expression) {
+        if (expression instanceof Not) {
+            return createNot(nodeToFormula(expression.getChildren().get(0)));
+        } else if (expression instanceof Or) {
+            return createOr(getChildren(expression));
+        } else if (expression instanceof And) {
+            return createAnd(getChildren(expression));
+        } else if (expression instanceof BiImplies) {
             return createBiimplies(
-                    nodeToFormula(formula.getChildren().get(0)),
-                    nodeToFormula(formula.getChildren().get(1)));
-        } else if (formula instanceof Implies) {
+                    nodeToFormula(expression.getChildren().get(0)),
+                    nodeToFormula(expression.getChildren().get(1)));
+        } else if (expression instanceof Implies) {
             return createImplies(
-                    nodeToFormula(formula.getChildren().get(0)),
-                    nodeToFormula(formula.getChildren().get(1)));
-        } else if (formula instanceof Literal) {
-            return handleLiteralNode((Literal) formula);
-        } else if (formula instanceof LessThan) {
-            return handleLessThanNode((LessThan) formula);
-        } else if (formula instanceof GreaterThan) {
-            return handleGreaterThanNode((GreaterThan) formula);
-        } else if (formula instanceof LessEqual) {
-            return handleLessEqualNode((LessEqual) formula);
-        } else if (formula instanceof GreaterEqual) {
-            return handleGreaterEqualNode((GreaterEqual) formula);
-        } else if (formula instanceof Equals) {
-            return handleEqualNode((Equals) formula);
+                    nodeToFormula(expression.getChildren().get(0)),
+                    nodeToFormula(expression.getChildren().get(1)));
+        } else if (expression instanceof Literal) {
+            return handleLiteralNode((Literal) expression);
+        } else if (expression instanceof LessThan) {
+            return handleLessThanNode((LessThan) expression);
+        } else if (expression instanceof GreaterThan) {
+            return handleGreaterThanNode((GreaterThan) expression);
+        } else if (expression instanceof LessEqual) {
+            return handleLessEqualNode((LessEqual) expression);
+        } else if (expression instanceof GreaterEqual) {
+            return handleGreaterEqualNode((GreaterEqual) expression);
+        } else if (expression instanceof Equals) {
+            return handleEqualNode((Equals) expression);
         } else {
-            throw new RuntimeException("The nodes of type: " + formula.getClass() + " are not supported by JavaSmt.");
+            throw new RuntimeException("The nodes of type: " + expression.getClass() + " are not supported by JavaSmt.");
         }
     }
 
-    private List<BooleanFormula> getChildren(Formula formula) {
-        return formula.getChildren().stream() //
+    private List<BooleanFormula> getChildren(Expression expression) {
+        return expression.getChildren().stream() //
                 .map(this::nodeToFormula) //
                 .collect(Collectors.toList());
     }
@@ -283,7 +284,7 @@ public class FormulaToJavaSmt {
 
     private NumeralFormula handleVariable(Variable variable) {
         final String name = variable.getName();
-        final Optional<org.sosy_lab.java_smt.api.Formula> map = termMap.getVariableIndex(name).map(variables::get);
+        final Optional<Formula> map = termMap.getVariableIndex(name).map(variables::get);
         if (variable.getType() == Double.class) {
             if (isPrincess) {
                 throw new UnsupportedOperationException("Princess does not support variables from type: Double");
@@ -297,9 +298,9 @@ public class FormulaToJavaSmt {
     }
 
     private BooleanFormula handleLiteralNode(Literal literal) {
-        if (literal == Formula.TRUE) {
+        if (literal == Expression.TRUE) {
             return currentBooleanFormulaManager.makeTrue();
-        } else if (literal == Formula.FALSE) {
+        } else if (literal == Expression.FALSE) {
             return currentBooleanFormulaManager.makeFalse();
         } else {
             final String name = literal.getName();

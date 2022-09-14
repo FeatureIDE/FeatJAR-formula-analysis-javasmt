@@ -24,7 +24,7 @@ import de.featjar.formula.analysis.solver.MUSSolver;
 import de.featjar.formula.analysis.solver.OptSolver;
 import de.featjar.formula.analysis.solver.SharpSATSolver;
 import de.featjar.formula.analysis.solver.SolutionSolver;
-import de.featjar.formula.structure.Formula;
+import de.featjar.formula.structure.Expression;
 import de.featjar.formula.structure.assignment.Assignment;
 import de.featjar.formula.structure.assignment.VariableAssignment;
 import de.featjar.formula.tmp.TermMap;
@@ -48,6 +48,7 @@ import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 import org.sosy_lab.java_smt.api.BasicProverEnvironment;
 import org.sosy_lab.java_smt.api.BasicProverEnvironment.AllSatCallback;
 import org.sosy_lab.java_smt.api.BooleanFormula;
+import org.sosy_lab.java_smt.api.Formula;
 import org.sosy_lab.java_smt.api.Model;
 import org.sosy_lab.java_smt.api.Model.ValueAssignment;
 import org.sosy_lab.java_smt.api.NumeralFormula;
@@ -64,7 +65,7 @@ import org.sosy_lab.java_smt.api.SolverException;
  * @author Joshua Sprey
  */
 public class JavaSmtSolver
-        implements SharpSATSolver, SolutionSolver<Object[]>, OptSolver<Rational, org.sosy_lab.java_smt.api.Formula>, MUSSolver<BooleanFormula> {
+        implements SharpSATSolver, SolutionSolver<Object[]>, OptSolver<Rational, Formula>, MUSSolver<BooleanFormula> {
 
     private JavaSmtFormula formula;
 
@@ -81,15 +82,15 @@ public class JavaSmtSolver
      */
     public SolverContext context;
 
-    public JavaSmtSolver(Formula formula, Solvers solver) {
+    public JavaSmtSolver(Expression expression, Solvers solver) {
         try {
             final Configuration config = Configuration.defaultConfiguration();
             final LogManager logManager = BasicLogManager.create(config);
             final ShutdownManager shutdownManager = ShutdownManager.create();
             context =
                     SolverContextFactory.createSolverContext(config, logManager, shutdownManager.getNotifier(), solver);
-            this.formula = new JavaSmtFormula(context, formula);
-            assumptions = new VariableAssignment(formula.getTermMap().orElseGet(TermMap::new));
+            this.formula = new JavaSmtFormula(context, expression);
+            assumptions = new VariableAssignment(expression.getTermMap().orElseGet(TermMap::new));
         } catch (final InvalidConfigurationException e) {
             Feat.log().error(e);
         }
@@ -125,9 +126,9 @@ public class JavaSmtSolver
 
     private void addAssumptions(BasicProverEnvironment<?> prover) throws InterruptedException {
         final FormulaToJavaSmt translator = formula.getTranslator();
-        final List<org.sosy_lab.java_smt.api.Formula> variables = formula.getVariables();
+        final List<Formula> variables = formula.getVariables();
         for (final Pair<Integer, Object> entry : assumptions.getAll()) {
-            final org.sosy_lab.java_smt.api.Formula variable = variables.get(entry.getKey());
+            final Formula variable = variables.get(entry.getKey());
             if (variable instanceof NumeralFormula) {
                 prover.addConstraint(
                         translator.createEqual((NumeralFormula) variable, translator.createConstant(entry.getValue())));
@@ -176,7 +177,7 @@ public class JavaSmtSolver
     }
 
     @Override
-    public Rational minimum(org.sosy_lab.java_smt.api.Formula formula) {
+    public Rational minimum(Formula formula) {
         try (OptimizationProverEnvironment prover = context.newOptimizationProverEnvironment()) {
             for (final BooleanFormula constraint : this.formula.getConstraints()) {
                 prover.addConstraint(constraint);
@@ -194,7 +195,7 @@ public class JavaSmtSolver
     }
 
     @Override
-    public Rational maximum(org.sosy_lab.java_smt.api.Formula formula) {
+    public Rational maximum(Formula formula) {
         try (OptimizationProverEnvironment prover = context.newOptimizationProverEnvironment()) {
             for (final BooleanFormula constraint : this.formula.getConstraints()) {
                 prover.addConstraint(constraint);
