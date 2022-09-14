@@ -20,20 +20,21 @@
  */
 package de.featjar.analysis.javasmt.solver;
 
-import de.featjar.formula.structure.atomic.literal.Literal;
-import de.featjar.formula.structure.TermMap;
-import de.featjar.formula.structure.TermMap.Constant;
-import de.featjar.formula.structure.TermMap.Variable;
-import de.featjar.formula.structure.atomic.predicate.Equals;
-import de.featjar.formula.structure.atomic.predicate.GreaterEqual;
-import de.featjar.formula.structure.atomic.predicate.GreaterThan;
-import de.featjar.formula.structure.atomic.predicate.LessEqual;
-import de.featjar.formula.structure.atomic.predicate.LessThan;
-import de.featjar.formula.structure.connective.And;
-import de.featjar.formula.structure.connective.BiImplies;
-import de.featjar.formula.structure.connective.Implies;
-import de.featjar.formula.structure.connective.Not;
-import de.featjar.formula.structure.connective.Or;
+import de.featjar.formula.structure.Formula;
+import de.featjar.formula.structure.formula.literal.Literal;
+import de.featjar.formula.tmp.TermMap;
+import de.featjar.formula.tmp.TermMap.Constant;
+import de.featjar.formula.tmp.TermMap.Variable;
+import de.featjar.formula.structure.formula.predicate.Equals;
+import de.featjar.formula.structure.formula.predicate.GreaterEqual;
+import de.featjar.formula.structure.formula.predicate.GreaterThan;
+import de.featjar.formula.structure.formula.predicate.LessEqual;
+import de.featjar.formula.structure.formula.predicate.LessThan;
+import de.featjar.formula.structure.formula.connective.And;
+import de.featjar.formula.structure.formula.connective.BiImplies;
+import de.featjar.formula.structure.formula.connective.Implies;
+import de.featjar.formula.structure.formula.connective.Not;
+import de.featjar.formula.structure.formula.connective.Or;
 import de.featjar.formula.structure.term.Add;
 import de.featjar.formula.structure.term.Function;
 import de.featjar.formula.structure.term.Multiply;
@@ -45,7 +46,6 @@ import java.util.stream.Collectors;
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 import org.sosy_lab.java_smt.api.BooleanFormula;
 import org.sosy_lab.java_smt.api.BooleanFormulaManager;
-import org.sosy_lab.java_smt.api.Formula;
 import org.sosy_lab.java_smt.api.FormulaManager;
 import org.sosy_lab.java_smt.api.IntegerFormulaManager;
 import org.sosy_lab.java_smt.api.NumeralFormula;
@@ -93,7 +93,7 @@ public class FormulaToJavaSmt {
         }
     }
 
-    public BooleanFormula nodeToFormula(de.featjar.formula.structure.Formula formula) {
+    public BooleanFormula nodeToFormula(Formula formula) {
         if (formula instanceof Not) {
             return createNot(nodeToFormula(formula.getChildren().get(0)));
         } else if (formula instanceof Or) {
@@ -125,7 +125,7 @@ public class FormulaToJavaSmt {
         }
     }
 
-    private List<BooleanFormula> getChildren(de.featjar.formula.structure.Formula formula) {
+    private List<BooleanFormula> getChildren(Formula formula) {
         return formula.getChildren().stream() //
                 .map(this::nodeToFormula) //
                 .collect(Collectors.toList());
@@ -283,7 +283,7 @@ public class FormulaToJavaSmt {
 
     private NumeralFormula handleVariable(Variable variable) {
         final String name = variable.getName();
-        final Optional<Formula> map = termMap.getVariableIndex(name).map(variables::get);
+        final Optional<org.sosy_lab.java_smt.api.Formula> map = termMap.getVariableIndex(name).map(variables::get);
         if (variable.getType() == Double.class) {
             if (isPrincess) {
                 throw new UnsupportedOperationException("Princess does not support variables from type: Double");
@@ -297,9 +297,9 @@ public class FormulaToJavaSmt {
     }
 
     private BooleanFormula handleLiteralNode(Literal literal) {
-        if (literal == de.featjar.formula.structure.Formula.TRUE) {
+        if (literal == Formula.TRUE) {
             return currentBooleanFormulaManager.makeTrue();
-        } else if (literal == de.featjar.formula.structure.Formula.FALSE) {
+        } else if (literal == Formula.FALSE) {
             return currentBooleanFormulaManager.makeFalse();
         } else {
             final String name = literal.getName();

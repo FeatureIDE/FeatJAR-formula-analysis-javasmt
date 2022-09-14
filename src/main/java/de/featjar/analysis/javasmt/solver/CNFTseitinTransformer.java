@@ -21,10 +21,10 @@
 package de.featjar.analysis.javasmt.solver;
 
 import de.featjar.formula.structure.Formula;
-import de.featjar.formula.structure.atomic.literal.Literal;
-import de.featjar.formula.structure.TermMap;
-import de.featjar.formula.structure.connective.And;
-import de.featjar.formula.structure.connective.Or;
+import de.featjar.formula.structure.formula.literal.Literal;
+import de.featjar.formula.tmp.TermMap;
+import de.featjar.formula.structure.formula.connective.And;
+import de.featjar.formula.structure.formula.connective.Or;
 import de.featjar.formula.transform.Transformer;
 import de.featjar.base.task.Monitor;
 import java.util.List;
@@ -138,7 +138,7 @@ public class CNFTseitinTransformer implements Transformer {
         @Override
         public Formula visitNot(BooleanFormula operand) {
             Literal literalPredicate = (Literal) booleanFormulaManager.visit(operand, this);
-            return literalPredicate.flip();
+            return literalPredicate.invert();
         }
 
         @Override
