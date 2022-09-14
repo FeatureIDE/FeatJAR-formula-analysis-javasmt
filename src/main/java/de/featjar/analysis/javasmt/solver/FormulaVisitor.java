@@ -22,7 +22,7 @@ package de.featjar.analysis.javasmt.solver;
 
 import de.featjar.formula.structure.Formula;
 import de.featjar.formula.structure.atomic.literal.ErrorLiteral;
-import de.featjar.formula.structure.VariableMap;
+import de.featjar.formula.structure.TermMap;
 import java.util.List;
 import org.sosy_lab.java_smt.api.BooleanFormula;
 import org.sosy_lab.java_smt.api.BooleanFormulaManager;
@@ -32,11 +32,11 @@ import org.sosy_lab.java_smt.api.visitors.BooleanFormulaVisitor;
 
 public abstract class FormulaVisitor implements BooleanFormulaVisitor<Formula> {
     protected final BooleanFormulaManager booleanFormulaManager;
-    protected final VariableMap variableMap;
+    protected final TermMap termMap;
 
-    public FormulaVisitor(BooleanFormulaManager booleanFormulaManager, VariableMap variableMap) {
+    public FormulaVisitor(BooleanFormulaManager booleanFormulaManager, TermMap termMap) {
         this.booleanFormulaManager = booleanFormulaManager;
-        this.variableMap = variableMap;
+        this.termMap = termMap;
     }
 
     @Override

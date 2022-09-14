@@ -26,7 +26,7 @@ import de.featjar.formula.analysis.solver.SharpSATSolver;
 import de.featjar.formula.analysis.solver.SolutionSolver;
 import de.featjar.formula.structure.assignment.Assignment;
 import de.featjar.formula.structure.assignment.VariableAssignment;
-import de.featjar.formula.structure.VariableMap;
+import de.featjar.formula.structure.TermMap;
 import de.featjar.base.data.Pair;
 
 import java.math.BigInteger;
@@ -89,7 +89,7 @@ public class JavaSmtSolver
             context =
                     SolverContextFactory.createSolverContext(config, logManager, shutdownManager.getNotifier(), solver);
             this.formula = new JavaSmtFormula(context, formula);
-            assumptions = new VariableAssignment(formula.getVariableMap().orElseGet(VariableMap::new));
+            assumptions = new VariableAssignment(formula.getTermMap().orElseGet(TermMap::new));
         } catch (final InvalidConfigurationException e) {
             Feat.log().error(e);
         }
@@ -255,7 +255,7 @@ public class JavaSmtSolver
     }
 
     @Override
-    public VariableMap getVariables() {
+    public TermMap getVariables() {
         return formula.getVariableMap();
     }
 }

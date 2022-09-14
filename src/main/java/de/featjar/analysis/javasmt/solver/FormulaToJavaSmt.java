@@ -21,9 +21,9 @@
 package de.featjar.analysis.javasmt.solver;
 
 import de.featjar.formula.structure.atomic.literal.Literal;
-import de.featjar.formula.structure.VariableMap;
-import de.featjar.formula.structure.VariableMap.Constant;
-import de.featjar.formula.structure.VariableMap.Variable;
+import de.featjar.formula.structure.TermMap;
+import de.featjar.formula.structure.TermMap.Constant;
+import de.featjar.formula.structure.TermMap.Variable;
 import de.featjar.formula.structure.atomic.predicate.Equals;
 import de.featjar.formula.structure.atomic.predicate.GreaterEqual;
 import de.featjar.formula.structure.atomic.predicate.GreaterThan;
@@ -69,14 +69,14 @@ public class FormulaToJavaSmt {
     private boolean isPrincess = false;
     private boolean createVariables = true;
 
-    private VariableMap variableMapping;
+    private TermMap termMap;
     private ArrayList<org.sosy_lab.java_smt.api.Formula> variables = new ArrayList<>();
 
-    public FormulaToJavaSmt(SolverContext context, VariableMap variableMapping) {
+    public FormulaToJavaSmt(SolverContext context, TermMap termMap) {
         setContext(context);
-        this.variableMapping = variableMapping;
-        variables = new ArrayList<>(variableMapping.getVariableCount() + 1);
-        for (int i = 0; i < (variableMapping.getVariableCount() + 1); i++) {
+        this.termMap = termMap;
+        variables = new ArrayList<>(termMap.getVariableCount() + 1);
+        for (int i = 0; i < (termMap.getVariableCount() + 1); i++) {
             variables.add(null);
         }
     }
@@ -93,40 +93,40 @@ public class FormulaToJavaSmt {
         }
     }
 
-    public BooleanFormula nodeToFormula(de.featjar.formula.structure.Formula node) {
-        if (node instanceof Not) {
-            return createNot(nodeToFormula(node.getChildren().get(0)));
-        } else if (node instanceof Or) {
-            return createOr(getChildren(node));
-        } else if (node instanceof And) {
-            return createAnd(getChildren(node));
-        } else if (node instanceof BiImplies) {
+    public BooleanFormula nodeToFormula(de.featjar.formula.structure.Formula formula) {
+        if (formula instanceof Not) {
+            return createNot(nodeToFormula(formula.getChildren().get(0)));
+        } else if (formula instanceof Or) {
+            return createOr(getChildren(formula));
+        } else if (formula instanceof And) {
+            return createAnd(getChildren(formula));
+        } else if (formula instanceof BiImplies) {
             return createBiimplies(
-                    nodeToFormula(node.getChildren().get(0)),
-                    nodeToFormula(node.getChildren().get(1)));
-        } else if (node instanceof Implies) {
+                    nodeToFormula(formula.getChildren().get(0)),
+                    nodeToFormula(formula.getChildren().get(1)));
+        } else if (formula instanceof Implies) {
             return createImplies(
-                    nodeToFormula(node.getChildren().get(0)),
-                    nodeToFormula(node.getChildren().get(1)));
-        } else if (node instanceof Literal) {
-            return handleLiteralNode((Literal) node);
-        } else if (node instanceof LessThan) {
-            return handleLessThanNode((LessThan) node);
-        } else if (node instanceof GreaterThan) {
-            return handleGreaterThanNode((GreaterThan) node);
-        } else if (node instanceof LessEqual) {
-            return handleLessEqualNode((LessEqual) node);
-        } else if (node instanceof GreaterEqual) {
-            return handleGreaterEqualNode((GreaterEqual) node);
-        } else if (node instanceof Equals) {
-            return handleEqualNode((Equals) node);
+                    nodeToFormula(formula.getChildren().get(0)),
+                    nodeToFormula(formula.getChildren().get(1)));
+        } else if (formula instanceof Literal) {
+            return handleLiteralNode((Literal) formula);
+        } else if (formula instanceof LessThan) {
+            return handleLessThanNode((LessThan) formula);
+        } else if (formula instanceof GreaterThan) {
+            return handleGreaterThanNode((GreaterThan) formula);
+        } else if (formula instanceof LessEqual) {
+            return handleLessEqualNode((LessEqual) formula);
+        } else if (formula instanceof GreaterEqual) {
+            return handleGreaterEqualNode((GreaterEqual) formula);
+        } else if (formula instanceof Equals) {
+            return handleEqualNode((Equals) formula);
         } else {
-            throw new RuntimeException("The nodes of type: " + node.getClass() + " are not supported by JavaSmt.");
+            throw new RuntimeException("The nodes of type: " + formula.getClass() + " are not supported by JavaSmt.");
         }
     }
 
-    private List<BooleanFormula> getChildren(de.featjar.formula.structure.Formula node) {
-        return node.getChildren().stream() //
+    private List<BooleanFormula> getChildren(de.featjar.formula.structure.Formula formula) {
+        return formula.getChildren().stream() //
                 .map(this::nodeToFormula) //
                 .collect(Collectors.toList());
     }
@@ -283,7 +283,7 @@ public class FormulaToJavaSmt {
 
     private NumeralFormula handleVariable(Variable variable) {
         final String name = variable.getName();
-        final Optional<Formula> map = variableMapping.getVariableIndex(name).map(variables::get);
+        final Optional<Formula> map = termMap.getVariableIndex(name).map(variables::get);
         if (variable.getType() == Double.class) {
             if (isPrincess) {
                 throw new UnsupportedOperationException("Princess does not support variables from type: Double");
@@ -303,7 +303,7 @@ public class FormulaToJavaSmt {
             return currentBooleanFormulaManager.makeFalse();
         } else {
             final String name = literal.getName();
-            final BooleanFormula variable = (BooleanFormula) variableMapping
+            final BooleanFormula variable = (BooleanFormula) termMap
                     .getVariableIndex(name)
                     .map(variables::get)
                     .orElseGet(() -> newVariable(name, currentBooleanFormulaManager::makeVariable));
@@ -314,7 +314,7 @@ public class FormulaToJavaSmt {
     private <T extends org.sosy_lab.java_smt.api.Formula> T newVariable(
             final String name, java.util.function.Function<String, T> variableCreator) {
         if (createVariables) {
-            final Integer index = variableMapping.getVariableIndex(name).orElseThrow(RuntimeException::new);
+            final Integer index = termMap.getVariableIndex(name).orElseThrow(RuntimeException::new);
             final T newVariable = variableCreator.apply(name);
             while (variables.size() <= index) {
                 variables.add(null);
@@ -326,12 +326,12 @@ public class FormulaToJavaSmt {
         }
     }
 
-    public VariableMap getVariableMapping() {
-        return variableMapping;
+    public TermMap getVariableMapping() {
+        return termMap;
     }
 
-    public void setVariableMapping(VariableMap variableMapping) {
-        this.variableMapping = variableMapping;
+    public void setVariableMapping(TermMap termMap) {
+        this.termMap = termMap;
     }
 
     public ArrayList<org.sosy_lab.java_smt.api.Formula> getVariables() {

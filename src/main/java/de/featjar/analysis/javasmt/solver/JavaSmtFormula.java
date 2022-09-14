@@ -22,7 +22,7 @@ package de.featjar.analysis.javasmt.solver;
 
 import de.featjar.formula.analysis.solver.AbstractDynamicFormula;
 import de.featjar.formula.analysis.solver.RuntimeContradictionException;
-import de.featjar.formula.structure.VariableMap;
+import de.featjar.formula.structure.TermMap;
 import de.featjar.formula.structure.connective.And;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,15 +43,15 @@ public class JavaSmtFormula extends AbstractDynamicFormula<BooleanFormula> {
     private final FormulaToJavaSmt translator;
 
     public JavaSmtFormula(SolverContext solverContext, de.featjar.formula.structure.Formula originalFormula) {
-        this(solverContext, originalFormula.getVariableMap().orElseGet(VariableMap::new));
+        this(solverContext, originalFormula.getTermMap().orElseGet(TermMap::new));
         if (originalFormula instanceof And) {
             originalFormula.getChildren().forEach(this::push);
         }
     }
 
-    public JavaSmtFormula(SolverContext solverContext, VariableMap variableMap) {
-        super(variableMap);
-        translator = new FormulaToJavaSmt(solverContext, variableMap);
+    public JavaSmtFormula(SolverContext solverContext, TermMap termMap) {
+        super(termMap);
+        translator = new FormulaToJavaSmt(solverContext, termMap);
         variables = translator.getVariables();
     }
 
