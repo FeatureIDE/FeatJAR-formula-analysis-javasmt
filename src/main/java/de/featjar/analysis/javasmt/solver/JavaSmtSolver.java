@@ -27,7 +27,7 @@ import de.featjar.formula.analysis.solver.SolutionSolver;
 import de.featjar.formula.structure.Expression;
 import de.featjar.formula.structure.assignment.Assignment;
 import de.featjar.formula.structure.assignment.VariableAssignment;
-import de.featjar.formula.tmp.TermMap;
+import de.featjar.formula.structure.map.TermMap;
 import de.featjar.base.data.Pair;
 
 import java.math.BigInteger;

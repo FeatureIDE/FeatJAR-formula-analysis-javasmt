@@ -23,7 +23,7 @@ package de.featjar.analysis.javasmt.solver;
 import de.featjar.formula.analysis.solver.AbstractDynamicFormula;
 import de.featjar.formula.analysis.solver.RuntimeContradictionException;
 import de.featjar.formula.structure.Expression;
-import de.featjar.formula.tmp.TermMap;
+import de.featjar.formula.structure.map.TermMap;
 import de.featjar.formula.structure.formula.connective.And;
 import java.util.ArrayList;
 import java.util.Arrays;

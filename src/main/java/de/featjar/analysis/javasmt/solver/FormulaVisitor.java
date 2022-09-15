@@ -22,7 +22,7 @@ package de.featjar.analysis.javasmt.solver;
 
 import de.featjar.formula.structure.Expression;
 import de.featjar.formula.structure.formula.predicate.Problem;
-import de.featjar.formula.tmp.TermMap;
+import de.featjar.formula.structure.map.TermMap;
 import java.util.List;
 import org.sosy_lab.java_smt.api.BooleanFormula;
 import org.sosy_lab.java_smt.api.BooleanFormulaManager;
