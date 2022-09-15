@@ -25,7 +25,7 @@ import de.featjar.formula.structure.formula.predicate.Literal;
 import de.featjar.formula.structure.map.TermMap;
 import de.featjar.formula.structure.formula.connective.And;
 import de.featjar.formula.structure.formula.connective.Or;
-import de.featjar.formula.transformer.Transformer;
+import de.featjar.formula.transformer.FormulaTransformer;
 import de.featjar.base.task.Monitor;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,7 +47,7 @@ import org.sosy_lab.java_smt.api.Tactic;
  * Z3. Requires Z3 to be installed and libz3/libz3java to be in Java's dynamic
  * linking path.
  */
-public class CNFTseitinTransformer implements Transformer {
+public class CNFTseitinTransformer implements FormulaTransformer {
     private static Configuration config;
     private static LogManager logManager;
     private static SolverContext context;
