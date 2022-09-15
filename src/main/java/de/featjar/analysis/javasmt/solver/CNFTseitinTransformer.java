@@ -25,7 +25,7 @@ import de.featjar.formula.structure.formula.predicate.Literal;
 import de.featjar.formula.structure.map.TermMap;
 import de.featjar.formula.structure.formula.connective.And;
 import de.featjar.formula.structure.formula.connective.Or;
-import de.featjar.formula.transform.Transformer;
+import de.featjar.formula.transformer.Transformer;
 import de.featjar.base.task.Monitor;
 import java.util.List;
 import java.util.stream.Collectors;
