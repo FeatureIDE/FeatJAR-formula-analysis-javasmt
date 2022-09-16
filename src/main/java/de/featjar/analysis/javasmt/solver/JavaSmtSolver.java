@@ -25,8 +25,8 @@ import de.featjar.formula.analysis.solver.OptSolver;
 import de.featjar.formula.analysis.solver.SharpSATSolver;
 import de.featjar.formula.analysis.solver.SolutionSolver;
 import de.featjar.formula.structure.Expression;
-import de.featjar.formula.structure.assignment.Assignment;
-import de.featjar.formula.structure.assignment.VariableAssignment;
+import de.featjar.formula.assignment.Assignment;
+import de.featjar.formula.assignment.NameAssignment;
 import de.featjar.formula.structure.map.TermMap;
 import de.featjar.base.data.Pair;
 
@@ -69,7 +69,7 @@ public class JavaSmtSolver
 
     private JavaSmtFormula formula;
 
-    private VariableAssignment assumptions;
+    private NameAssignment assumptions;
 
     @Override
     public Assignment getAssumptions() {
@@ -90,7 +90,7 @@ public class JavaSmtSolver
             context =
                     SolverContextFactory.createSolverContext(config, logManager, shutdownManager.getNotifier(), solver);
             this.formula = new JavaSmtFormula(context, expression);
-            assumptions = new VariableAssignment(expression.getTermMap().orElseGet(TermMap::new));
+            assumptions = new NameAssignment(expression.getTermMap().orElseGet(TermMap::new));
         } catch (final InvalidConfigurationException e) {
             Feat.log().error(e);
         }
@@ -127,7 +127,7 @@ public class JavaSmtSolver
     private void addAssumptions(BasicProverEnvironment<?> prover) throws InterruptedException {
         final FormulaToJavaSmt translator = formula.getTranslator();
         final List<Formula> variables = formula.getVariables();
-        for (final Pair<Integer, Object> entry : assumptions.getAll()) {
+        for (final Pair<Integer, Object> entry : assumptions.get()) {
             final Formula variable = variables.get(entry.getKey());
             if (variable instanceof NumeralFormula) {
                 prover.addConstraint(
