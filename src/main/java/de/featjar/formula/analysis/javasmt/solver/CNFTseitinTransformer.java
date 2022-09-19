@@ -18,7 +18,7 @@
  *
  * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
  */
-package de.featjar.analysis.javasmt.solver;
+package de.featjar.formula.analysis.javasmt.solver;
 
 import de.featjar.formula.structure.Expression;
 import de.featjar.formula.structure.formula.predicate.Literal;

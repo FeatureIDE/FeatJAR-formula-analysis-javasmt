@@ -18,9 +18,9 @@
  *
  * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
  */
-package de.featjar.analysis.javasmt;
+package de.featjar.formula.analysis.javasmt;
 
-import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
+import de.featjar.formula.analysis.javasmt.solver.JavaSmtSolver;
 import de.featjar.base.task.Monitor;
 
 /**

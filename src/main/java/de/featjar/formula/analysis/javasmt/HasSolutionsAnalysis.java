@@ -18,29 +18,20 @@
  *
  * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
  */
-package de.featjar.analysis.javasmt;
+package de.featjar.formula.analysis.javasmt;
 
-import de.featjar.formula.analysis.Analysis;
-import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
-import de.featjar.formula.structure.Expression;
-import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
+import de.featjar.formula.analysis.javasmt.solver.JavaSmtSolver;
+import de.featjar.formula.analysis.solver.SATSolver.SatResult;
+import de.featjar.base.task.Monitor;
 
 /**
- * Base class for analyses using a {@link JavaSmtSolver}.
+ * Counts the number of valid solutions to a formula.
  *
- * @param <T> the type of the analysis result.
- *
- * @author Joshua Sprey
  * @author Sebastian Krieter
  */
-public abstract class JavaSmtSolverAnalysis<T> extends Analysis<T, JavaSmtSolver, Expression> {
-
-    public JavaSmtSolverAnalysis() {
-        solverInputComputation = FormulaComputation.empty();
-    }
-
+public class HasSolutionsAnalysis extends JavaSmtSolverAnalysis<SatResult> {
     @Override
-    protected JavaSmtSolver createSolver(Expression input) {
-        return new JavaSmtSolver(input, Solvers.SMTINTERPOL);
+    protected SatResult analyze(JavaSmtSolver solver, Monitor monitor) throws Exception {
+        return solver.hasSolution();
     }
 }

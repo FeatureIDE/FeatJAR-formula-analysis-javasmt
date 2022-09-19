@@ -18,20 +18,21 @@
  *
  * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
  */
-package de.featjar.analysis.javasmt;
+package de.featjar.formula.analysis.javasmt;
 
-import de.featjar.analysis.javasmt.solver.JavaSmtSolver;
-import de.featjar.formula.analysis.solver.SATSolver.SatResult;
+import de.featjar.formula.analysis.javasmt.solver.JavaSmtSolver;
 import de.featjar.base.task.Monitor;
+
+import java.math.BigInteger;
 
 /**
  * Counts the number of valid solutions to a formula.
  *
  * @author Sebastian Krieter
  */
-public class HasSolutionsAnalysis extends JavaSmtSolverAnalysis<SatResult> {
+public class CountSolutionsAnalysis extends JavaSmtSolverAnalysis<BigInteger> {
     @Override
-    protected SatResult analyze(JavaSmtSolver solver, Monitor monitor) throws Exception {
-        return solver.hasSolution();
+    protected BigInteger analyze(JavaSmtSolver solver, Monitor monitor) throws Exception {
+        return solver.countSolutions();
     }
 }
