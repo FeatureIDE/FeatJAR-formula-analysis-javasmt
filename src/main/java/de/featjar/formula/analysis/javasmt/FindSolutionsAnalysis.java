@@ -20,7 +20,7 @@
  */
 package de.featjar.formula.analysis.javasmt;
 
-import de.featjar.formula.analysis.javasmt.solver.JavaSmtSolver;
+import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
 import de.featjar.base.task.Monitor;
 
 /**
@@ -30,7 +30,7 @@ import de.featjar.base.task.Monitor;
  */
 public class FindSolutionsAnalysis extends JavaSmtSolverAnalysis<Object[]> {
     @Override
-    protected Object[] analyze(JavaSmtSolver solver, Monitor monitor) throws Exception {
+    protected Object[] analyze(JavaSMTSolver solver, Monitor monitor) throws Exception {
         return solver.findSolution();
     }
 }

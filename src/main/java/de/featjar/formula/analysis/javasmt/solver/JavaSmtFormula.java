@@ -20,7 +20,7 @@
  */
 package de.featjar.formula.analysis.javasmt.solver;
 
-import de.featjar.formula.analysis.solver.AbstractDynamicFormula;
+import de.featjar.formula.analysis.solver.SolverFormula;
 import de.featjar.formula.analysis.solver.RuntimeContradictionException;
 import de.featjar.formula.structure.Expression;
 import de.featjar.formula.structure.map.TermMap;
@@ -34,11 +34,11 @@ import org.sosy_lab.java_smt.api.Formula;
 import org.sosy_lab.java_smt.api.SolverContext;
 
 /**
- * Formula for {@link JavaSmtSolver}.
+ * Formula for {@link JavaSMTSolver}.
  *
  * @author Sebastian Krieter
  */
-public class JavaSmtFormula extends AbstractDynamicFormula<BooleanFormula> {
+public class JavaSmtFormula extends SolverFormula<BooleanFormula> {
 
     private final ArrayList<Formula> variables;
     private final FormulaToJavaSmt translator;
@@ -74,12 +74,12 @@ public class JavaSmtFormula extends AbstractDynamicFormula<BooleanFormula> {
     @Override
     public List<BooleanFormula> push(Expression clause) throws RuntimeContradictionException {
         final BooleanFormula constraint = translator.nodeToFormula(clause);
-        constraints.add(constraint);
+        solverFormulas.add(constraint);
         return Arrays.asList(constraint);
     }
 
     @Override
     public void clear() {
-        constraints.clear();
+        solverFormulas.clear();
     }
 }

@@ -20,7 +20,7 @@
  */
 package de.featjar.formula.analysis.javasmt;
 
-import de.featjar.formula.analysis.javasmt.solver.JavaSmtSolver;
+import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
 import de.featjar.formula.structure.formula.predicate.Literal;
 import de.featjar.base.task.Monitor;
 import org.sosy_lab.java_smt.api.NumeralFormula;
@@ -46,14 +46,14 @@ public class FeatureAttributeRangeAnalysis extends JavaSmtSolverAnalysis<Object[
     private NumeralFormula variable;
 
     @Override
-    protected Object[] analyze(JavaSmtSolver solver, Monitor monitor) throws Exception {
+    protected Object[] analyze(JavaSMTSolver solver, Monitor monitor) throws Exception {
         if (variable == null) {
             return null;
         }
         final Object[] result = new Object[2];
         solver.findSolution();
-        result[0] = solver.minimum(variable);
-        result[1] = solver.maximum(variable);
+        result[0] = solver.minimize(variable);
+        result[1] = solver.maximize(variable);
         return result;
     }
 

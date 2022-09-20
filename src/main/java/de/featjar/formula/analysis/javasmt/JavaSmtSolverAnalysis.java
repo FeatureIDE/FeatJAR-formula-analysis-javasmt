@@ -21,26 +21,26 @@
 package de.featjar.formula.analysis.javasmt;
 
 import de.featjar.formula.analysis.Analysis;
-import de.featjar.formula.analysis.javasmt.solver.JavaSmtSolver;
+import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
 import de.featjar.formula.structure.Expression;
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 
 /**
- * Base class for analyses using a {@link JavaSmtSolver}.
+ * Base class for analyses using a {@link JavaSMTSolver}.
  *
  * @param <T> the type of the analysis result.
  *
  * @author Joshua Sprey
  * @author Sebastian Krieter
  */
-public abstract class JavaSmtSolverAnalysis<T> extends Analysis<T, JavaSmtSolver, Expression> {
+public abstract class JavaSmtSolverAnalysis<T> extends Analysis<T, JavaSMTSolver, Expression> {
 
     public JavaSmtSolverAnalysis() {
         solverInputComputation = FormulaComputation.empty();
     }
 
     @Override
-    protected JavaSmtSolver createSolver(Expression input) {
-        return new JavaSmtSolver(input, Solvers.SMTINTERPOL);
+    protected JavaSMTSolver createSolver(Expression input) {
+        return new JavaSMTSolver(input, Solvers.SMTINTERPOL);
     }
 }

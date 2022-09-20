@@ -20,8 +20,8 @@
  */
 package de.featjar.formula.analysis.javasmt;
 
-import de.featjar.formula.analysis.javasmt.solver.JavaSmtSolver;
-import de.featjar.formula.analysis.solver.SATSolver.SatResult;
+import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
+import de.featjar.formula.analysis.solver.SATSolver.SATResult;
 import de.featjar.base.task.Monitor;
 
 /**
@@ -29,9 +29,9 @@ import de.featjar.base.task.Monitor;
  *
  * @author Sebastian Krieter
  */
-public class HasSolutionsAnalysis extends JavaSmtSolverAnalysis<SatResult> {
+public class HasSolutionsAnalysis extends JavaSmtSolverAnalysis<SATResult> {
     @Override
-    protected SatResult analyze(JavaSmtSolver solver, Monitor monitor) throws Exception {
+    protected SATResult analyze(JavaSMTSolver solver, Monitor monitor) throws Exception {
         return solver.hasSolution();
     }
 }

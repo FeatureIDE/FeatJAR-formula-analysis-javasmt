@@ -20,8 +20,9 @@
  */
 package de.featjar.formula.analysis.javasmt.solver;
 
+import de.featjar.base.Feat;
 import de.featjar.formula.analysis.solver.MUSSolver;
-import de.featjar.formula.analysis.solver.OptSolver;
+import de.featjar.formula.analysis.solver.SMTSolver;
 import de.featjar.formula.analysis.solver.SharpSATSolver;
 import de.featjar.formula.analysis.solver.SolutionSolver;
 import de.featjar.formula.structure.Expression;
@@ -64,8 +65,8 @@ import org.sosy_lab.java_smt.api.SolverException;
  *
  * @author Joshua Sprey
  */
-public class JavaSmtSolver
-        implements SharpSATSolver, SolutionSolver<Object[]>, OptSolver<Rational, Formula>, MUSSolver<BooleanFormula> {
+public class JavaSMTSolver
+        implements SharpSATSolver, SolutionSolver<Object[]>, SMTSolver<Formula, Rational>, MUSSolver<BooleanFormula> {
 
     private JavaSmtFormula formula;
 
@@ -82,7 +83,7 @@ public class JavaSmtSolver
      */
     public SolverContext context;
 
-    public JavaSmtSolver(Expression expression, Solvers solver) {
+    public JavaSMTSolver(Expression expression, Solvers solver) {
         try {
             final Configuration config = Configuration.defaultConfiguration();
             final LogManager logManager = BasicLogManager.create(config);
@@ -99,7 +100,7 @@ public class JavaSmtSolver
     @Override
     public BigInteger countSolutions() {
         try (ProverEnvironment prover = context.newProverEnvironment(ProverOptions.GENERATE_ALL_SAT)) {
-            for (final BooleanFormula constraint : formula.getConstraints()) {
+            for (final BooleanFormula constraint : formula.get()) {
                 prover.addConstraint(constraint);
             }
             addAssumptions(prover);
@@ -145,7 +146,7 @@ public class JavaSmtSolver
     @Override
     public Object[] getSolution() {
         try (ProverEnvironment prover = context.newProverEnvironment()) {
-            for (final BooleanFormula constraint : formula.getConstraints()) {
+            for (final BooleanFormula constraint : formula.get()) {
                 prover.addConstraint(constraint);
             }
             addAssumptions(prover);
@@ -177,9 +178,9 @@ public class JavaSmtSolver
     }
 
     @Override
-    public Rational minimum(Formula formula) {
+    public Rational minimize(Formula formula) {
         try (OptimizationProverEnvironment prover = context.newOptimizationProverEnvironment()) {
-            for (final BooleanFormula constraint : this.formula.getConstraints()) {
+            for (final BooleanFormula constraint : this.formula.get()) {
                 prover.addConstraint(constraint);
             }
             addAssumptions(prover);
@@ -195,9 +196,9 @@ public class JavaSmtSolver
     }
 
     @Override
-    public Rational maximum(Formula formula) {
+    public Rational maximize(Formula formula) {
         try (OptimizationProverEnvironment prover = context.newOptimizationProverEnvironment()) {
-            for (final BooleanFormula constraint : this.formula.getConstraints()) {
+            for (final BooleanFormula constraint : this.formula.get()) {
                 prover.addConstraint(constraint);
             }
             addAssumptions(prover);
@@ -213,24 +214,24 @@ public class JavaSmtSolver
     }
 
     @Override
-    public SatResult hasSolution() {
+    public SATResult hasSolution() {
         try (ProverEnvironment prover = context.newProverEnvironment()) {
-            for (final BooleanFormula constraint : formula.getConstraints()) {
+            for (final BooleanFormula constraint : formula.get()) {
                 prover.addConstraint(constraint);
             }
             addAssumptions(prover);
-            return prover.isUnsat() ? SatResult.FALSE : SatResult.TRUE;
+            return prover.isUnsat() ? SATResult.FALSE : SATResult.TRUE;
         } catch (final SolverException e) {
-            return SatResult.TIMEOUT;
+            return SATResult.TIMEOUT;
         } catch (final InterruptedException e) {
-            return SatResult.TIMEOUT;
+            return SATResult.TIMEOUT;
         }
     }
 
     @Override
     public List<BooleanFormula> getMinimalUnsatisfiableSubset() throws IllegalStateException {
         try (ProverEnvironment prover = context.newProverEnvironment()) {
-            for (final BooleanFormula constraint : formula.getConstraints()) {
+            for (final BooleanFormula constraint : formula.get()) {
                 prover.addConstraint(constraint);
             }
             addAssumptions(prover);
@@ -251,12 +252,12 @@ public class JavaSmtSolver
     }
 
     @Override
-    public JavaSmtFormula getDynamicFormula() {
+    public JavaSmtFormula getSolverFormula() {
         return formula;
     }
 
     @Override
-    public TermMap getVariables() {
+    public TermMap getVariableMap() {
         return formula.getVariableMap();
     }
 }
