@@ -21,7 +21,7 @@
 package de.featjar.formula.analysis.javasmt.solver;
 
 import de.featjar.formula.analysis.solver.SolverFormula;
-import de.featjar.formula.analysis.solver.RuntimeContradictionException;
+import de.featjar.formula.analysis.solver.SolverContradictionException;
 import de.featjar.formula.structure.Expression;
 import de.featjar.formula.structure.map.TermMap;
 import de.featjar.formula.structure.formula.connective.And;
@@ -72,7 +72,7 @@ public class JavaSmtFormula extends SolverFormula<BooleanFormula> {
     }
 
     @Override
-    public List<BooleanFormula> push(Expression clause) throws RuntimeContradictionException {
+    public List<BooleanFormula> push(Expression clause) throws SolverContradictionException {
         final BooleanFormula constraint = translator.nodeToFormula(clause);
         solverFormulas.add(constraint);
         return Arrays.asList(constraint);
