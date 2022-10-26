@@ -21,7 +21,7 @@
 package de.featjar.formula.analysis.javasmt;
 
 import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
-import de.featjar.formula.analysis.solver.SATSolver.SATResult;
+import de.featjar.formula.analysis.solver.SATSolver.Result<Boolean>;
 import de.featjar.base.task.Monitor;
 
 /**
@@ -29,9 +29,9 @@ import de.featjar.base.task.Monitor;
  *
  * @author Sebastian Krieter
  */
-public class HasSolutionsAnalysis extends JavaSmtSolverAnalysis<SATResult> {
+public class HasSolutionsAnalysis extends JavaSmtSolverAnalysis<Result<Boolean>> {
     @Override
-    protected SATResult analyze(JavaSMTSolver solver, Monitor monitor) throws Exception {
+    protected Result<Boolean> analyze(JavaSMTSolver solver, Monitor monitor) throws Exception {
         return solver.hasSolution();
     }
 }

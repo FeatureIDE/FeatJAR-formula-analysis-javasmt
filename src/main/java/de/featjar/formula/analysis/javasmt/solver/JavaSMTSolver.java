@@ -214,17 +214,17 @@ public class JavaSMTSolver
     }
 
     @Override
-    public SATResult hasSolution() {
+    public Result<Boolean> hasSolution() {
         try (ProverEnvironment prover = context.newProverEnvironment()) {
             for (final BooleanFormula constraint : formula.get()) {
                 prover.addConstraint(constraint);
             }
             addAssumptions(prover);
-            return prover.isUnsat() ? SATResult.FALSE : SATResult.TRUE;
+            return prover.isUnsat() ? Result<Boolean>.FALSE : Result<Boolean>.TRUE;
         } catch (final SolverException e) {
-            return SATResult.TIMEOUT;
+            return Result<Boolean>.TIMEOUT;
         } catch (final InterruptedException e) {
-            return SATResult.TIMEOUT;
+            return Result<Boolean>.TIMEOUT;
         }
     }
 
