@@ -303,7 +303,7 @@ public class FormulaToJavaSmt {
         } else if (literal == Expression.FALSE) {
             return currentBooleanFormulaManager.makeFalse();
         } else {
-            final String name = literal.getName();
+            final String name = literal.getExpression().getName();
             final BooleanFormula variable = (BooleanFormula) termMap
                     .getVariableIndex(name)
                     .map(variables::get)
