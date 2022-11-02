@@ -56,19 +56,20 @@ public class CNFTseitinTransformer implements Computation<Formula, Formula> {
     private static FormulaManager formulaManager;
     private static BooleanFormulaManager booleanFormulaManager;
 
-    static {
-        try {
-            config = Configuration.defaultConfiguration();
-            logManager = BasicLogManager.create(config);
-            shutdownManager = ShutdownManager.create();
-            context = SolverContextFactory.createSolverContext(
-                    config, logManager, shutdownManager.getNotifier(), SolverContextFactory.Solvers.Z3);
-            formulaManager = context.getFormulaManager();
-            booleanFormulaManager = formulaManager.getBooleanFormulaManager();
-        } catch (InvalidConfigurationException e) {
-            e.printStackTrace();
-        }
-    }
+    //todo: do this inside the JavaSMTSolver constructor (ie. use extension loader)
+//    static {
+//        try {
+//            config = Configuration.defaultConfiguration();
+//            logManager = BasicLogManager.create(config);
+//            shutdownManager = ShutdownManager.create();
+//            context = SolverContextFactory.createSolverContext(
+//                    config, logManager, shutdownManager.getNotifier(), SolverContextFactory.Solvers.Z3);
+//            formulaManager = context.getFormulaManager();
+//            booleanFormulaManager = formulaManager.getBooleanFormulaManager();
+//        } catch (InvalidConfigurationException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     public Expression execute(Expression expression, Monitor monitor) throws Exception {
