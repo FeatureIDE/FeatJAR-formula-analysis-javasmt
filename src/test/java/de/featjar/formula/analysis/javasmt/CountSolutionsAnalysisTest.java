@@ -41,7 +41,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-public class CountSolutionAnalysisTest {
+public class CountSolutionsAnalysisTest {
 
     private static final Path modelDirectory = Paths.get("src/test/resources/testFeatureModels");
 

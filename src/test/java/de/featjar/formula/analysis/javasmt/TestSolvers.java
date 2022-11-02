@@ -23,7 +23,8 @@ package de.featjar.formula.analysis.javasmt;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import de.featjar.base.bin.OperatingSystem;
+import de.featjar.base.Feat;
+import de.featjar.base.bin.HostEnvironment;
 import de.featjar.base.extension.ExtensionManager;
 import org.junit.jupiter.api.Test;
 import org.sosy_lab.common.ShutdownNotifier;
@@ -62,14 +63,16 @@ public class TestSolvers { // todo
     public void solvers() {
         ExtensionManager.install();
         try {
-            if (OperatingSystem.IS_UNIX) {
-                solversUnix();
-            }
-            if (OperatingSystem.IS_MAC) {
-                solversMac();
-            }
-            if (OperatingSystem.IS_WINDOWS) {
-                solversWindows();
+            switch (HostEnvironment.OPERATING_SYSTEM) {
+                case LINUX:
+                    solversUnix();
+                    break;
+                case MAC_OS:
+                    solversMac();
+                    break;
+                case WINDOWS:
+                    solversWindows();
+                    break;
             }
         } catch (final Exception e) {
             Feat.log().error(e);
