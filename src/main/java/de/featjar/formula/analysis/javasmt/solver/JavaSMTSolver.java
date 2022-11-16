@@ -21,12 +21,7 @@
 package de.featjar.formula.analysis.javasmt.solver;
 
 import de.featjar.base.Feat;
-import de.featjar.formula.analysis.solver.MUSSolver;
-import de.featjar.formula.analysis.solver.SMTSolver;
-import de.featjar.formula.analysis.solver.SharpSATSolver;
-import de.featjar.formula.analysis.solver.SolutionSolver;
 import de.featjar.formula.analysis.solver.Assumable;
-import de.featjar.formula.analysis.Assignment;
 import de.featjar.formula.structure.Expression;
 import de.featjar.formula.structure.map.TermMap;
 import de.featjar.base.data.Pair;
