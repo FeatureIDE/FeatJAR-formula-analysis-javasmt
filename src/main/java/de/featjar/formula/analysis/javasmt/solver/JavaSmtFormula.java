@@ -20,8 +20,6 @@
  */
 package de.featjar.formula.analysis.javasmt.solver;
 
-import de.featjar.formula.analysis.solver.SolverFormula;
-import de.featjar.formula.analysis.solver.SolverContradictionException;
 import de.featjar.formula.structure.Expression;
 import de.featjar.formula.structure.map.TermMap;
 import de.featjar.formula.structure.formula.connective.And;
