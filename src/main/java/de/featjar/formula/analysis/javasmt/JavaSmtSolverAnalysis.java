@@ -39,8 +39,7 @@ public abstract class JavaSmtSolverAnalysis<T> extends Analysis<T, JavaSMTSolver
         solverInputComputation = FormulaComputation.empty();
     }
 
-    @Override
-    protected JavaSMTSolver createSolver(Expression input) {
+    protected JavaSMTSolver newSolver(Expression input) {
         return new JavaSMTSolver(input, Solvers.SMTINTERPOL);
     }
 }
