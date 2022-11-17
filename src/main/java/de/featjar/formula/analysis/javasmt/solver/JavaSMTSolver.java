@@ -25,9 +25,9 @@ import de.featjar.formula.analysis.solver.MUSSolver;
 import de.featjar.formula.analysis.solver.SMTSolver;
 import de.featjar.formula.analysis.solver.SharpSATSolver;
 import de.featjar.formula.analysis.solver.SolutionSolver;
+import de.featjar.formula.analysis.solver.Assumable;
+import de.featjar.formula.analysis.Assignment;
 import de.featjar.formula.structure.Expression;
-import de.featjar.formula.assignment.Assignment;
-import de.featjar.formula.assignment.VariableAssignment;
 import de.featjar.formula.structure.map.TermMap;
 import de.featjar.base.data.Pair;
 
@@ -70,10 +70,10 @@ public class JavaSMTSolver
 
     private JavaSmtFormula formula;
 
-    private VariableAssignment assumptions;
+    private Assignment assumptions;
 
     @Override
-    public Assignment getAssumptions() {
+    public Assumable getAssumptionList() {
         return assumptions;
     }
 
@@ -91,7 +91,7 @@ public class JavaSMTSolver
             context =
                     SolverContextFactory.createSolverContext(config, logManager, shutdownManager.getNotifier(), solver);
             this.formula = new JavaSmtFormula(context, expression);
-            assumptions = new VariableAssignment(expression.getTermMap().orElseGet(TermMap::new));
+            assumptions = new Assignment(expression.getTermMap().orElseGet(TermMap::new));
         } catch (final InvalidConfigurationException e) {
             Feat.log().error(e);
         }
