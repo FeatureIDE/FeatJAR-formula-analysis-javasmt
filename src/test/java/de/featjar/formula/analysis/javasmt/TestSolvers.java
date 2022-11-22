@@ -35,7 +35,7 @@ import org.sosy_lab.java_smt.SolverContextFactory;
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 import org.sosy_lab.java_smt.api.SolverContext;
 
-public class TestSolvers { // todo
+public class TestSolvers { // TODO
 
     private void solversWindows() {
         testAvailability(Solvers.MATHSAT5);

@@ -56,7 +56,7 @@ public class CNFTseitinTransformer implements Computation<Formula, Formula> {
     private static FormulaManager formulaManager;
     private static BooleanFormulaManager booleanFormulaManager;
 
-    //todo: do this inside the JavaSMTSolver constructor (ie. use extension loader)
+    //TODO: do this inside the JavaSMTSolver constructor (ie. use extension loader)
 //    static {
 //        try {
 //            config = Configuration.defaultConfiguration();
