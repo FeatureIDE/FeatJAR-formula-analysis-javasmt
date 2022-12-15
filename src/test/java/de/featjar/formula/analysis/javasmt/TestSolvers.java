@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import de.featjar.base.Feat;
-import de.featjar.base.bin.HostEnvironment;
+import de.featjar.base.env.HostEnvironment;
 import de.featjar.base.extension.ExtensionManager;
 import org.junit.jupiter.api.Test;
 import org.sosy_lab.common.ShutdownNotifier;
