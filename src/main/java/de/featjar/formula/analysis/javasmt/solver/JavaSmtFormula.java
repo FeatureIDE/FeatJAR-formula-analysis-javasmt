@@ -20,7 +20,7 @@
  */
 package de.featjar.formula.analysis.javasmt.solver;
 
-import de.featjar.formula.structure.Expression;
+import de.featjar.formula.structure.IExpression;
 import de.featjar.formula.structure.map.TermMap;
 import de.featjar.formula.structure.formula.connective.And;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class JavaSmtFormula extends SolverFormula<BooleanFormula> {
     private final ArrayList<Formula> variables;
     private final FormulaToJavaSmt translator;
 
-    public JavaSmtFormula(SolverContext solverContext, Expression originalExpression) {
+    public JavaSmtFormula(SolverContext solverContext, IExpression originalExpression) {
         this(solverContext, originalExpression.getTermMap().orElseGet(TermMap::new));
         if (originalExpression instanceof And) {
             originalExpression.getChildren().forEach(this::push);
@@ -70,7 +70,7 @@ public class JavaSmtFormula extends SolverFormula<BooleanFormula> {
     }
 
     @Override
-    public List<BooleanFormula> push(Expression clause) throws SolverContradictionException {
+    public List<BooleanFormula> push(IExpression clause) throws SolverContradictionException {
         final BooleanFormula constraint = translator.nodeToFormula(clause);
         solverFormulas.add(constraint);
         return Arrays.asList(constraint);

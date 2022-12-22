@@ -22,7 +22,7 @@ package de.featjar.formula.analysis.javasmt.solver;
 
 import de.featjar.base.Feat;
 import de.featjar.formula.analysis.solver.Assumable;
-import de.featjar.formula.structure.Expression;
+import de.featjar.formula.structure.IExpression;
 import de.featjar.formula.structure.map.TermMap;
 import de.featjar.base.data.Pair;
 
@@ -78,7 +78,7 @@ public class JavaSMTSolver
      */
     public SolverContext context;
 
-    public JavaSMTSolver(Expression expression, Solvers solver) {
+    public JavaSMTSolver(IExpression expression, Solvers solver) {
         try {
             final Configuration config = Configuration.defaultConfiguration();
             final LogManager logManager = BasicLogManager.create(config);

@@ -20,7 +20,7 @@
  */
 package de.featjar.formula.analysis.javasmt.solver;
 
-import de.featjar.formula.structure.Expression;
+import de.featjar.formula.structure.IExpression;
 import de.featjar.formula.structure.formula.predicate.Literal;
 import de.featjar.formula.structure.formula.predicate.Equals;
 import de.featjar.formula.structure.formula.predicate.GreaterEqual;
@@ -32,10 +32,10 @@ import de.featjar.formula.structure.formula.connective.BiImplies;
 import de.featjar.formula.structure.formula.connective.Implies;
 import de.featjar.formula.structure.formula.connective.Not;
 import de.featjar.formula.structure.formula.connective.Or;
-import de.featjar.formula.structure.term.function.Add;
-import de.featjar.formula.structure.term.function.Function;
-import de.featjar.formula.structure.term.function.Multiply;
-import de.featjar.formula.structure.term.Term;
+import de.featjar.formula.structure.term.function.AAdd;
+import de.featjar.formula.structure.term.function.IFunction;
+import de.featjar.formula.structure.term.function.AMultiply;
+import de.featjar.formula.structure.term.ITerm;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -91,7 +91,7 @@ public class FormulaToJavaSmt {
         }
     }
 
-    public BooleanFormula nodeToFormula(Expression expression) {
+    public BooleanFormula nodeToFormula(IExpression expression) {
         if (expression instanceof Not) {
             return createNot(nodeToFormula(expression.getChildren().get(0)));
         } else if (expression instanceof Or) {
@@ -123,7 +123,7 @@ public class FormulaToJavaSmt {
         }
     }
 
-    private List<BooleanFormula> getChildren(Expression expression) {
+    private List<BooleanFormula> getChildren(IExpression expression) {
         return expression.getChildren().stream() //
                 .map(this::nodeToFormula) //
                 .collect(Collectors.toList());
@@ -219,42 +219,42 @@ public class FormulaToJavaSmt {
         }
     }
 
-    private NumeralFormula termToFormula(Term term) {
+    private NumeralFormula termToFormula(ITerm term) {
         if (term instanceof Constant) {
             return createConstant(((Constant) term).getValue());
         } else if (term instanceof Variable) {
             final Variable variable = (Variable) term;
             return handleVariable(variable);
-        } else if (term instanceof Function) {
-            return handleFunction((Function) term);
+        } else if (term instanceof IFunction) {
+            return handleFunction((IFunction) term);
         } else {
             throw new RuntimeException("The given term is not supported by JavaSMT: " + term.getClass());
         }
     }
 
-    private NumeralFormula handleFunction(Function function) {
+    private NumeralFormula handleFunction(IFunction function) {
         final NumeralFormula[] children =
                 new NumeralFormula[function.getChildren().size()];
         int index = 0;
-        for (final Term term : function.getChildren()) {
+        for (final ITerm term : function.getChildren()) {
             children[index++] = termToFormula(term);
         }
         if (function.getType() == Double.class) {
             if (isPrincess) {
                 throw new UnsupportedOperationException("Princess does not support variables from type: Double");
             }
-            if (function instanceof Add) {
+            if (function instanceof AAdd) {
                 return currentRationalFormulaManager.add(children[0], children[1]);
-            } else if (function instanceof Multiply) {
+            } else if (function instanceof AMultiply) {
                 return currentRationalFormulaManager.multiply(children[0], children[1]);
             } else {
                 throw new RuntimeException(
                         "The given function is not supported by JavaSMT Rational Numbers: " + function.getClass());
             }
         } else if (function.getType() == Long.class) {
-            if (function instanceof Add) {
+            if (function instanceof AAdd) {
                 return currentIntegerFormulaManager.add((IntegerFormula) children[0], (IntegerFormula) children[1]);
-            } else if (function instanceof Multiply) {
+            } else if (function instanceof AMultiply) {
                 return currentIntegerFormulaManager.multiply(
                         (IntegerFormula) children[0], (IntegerFormula) children[1]);
             } else {
@@ -295,9 +295,9 @@ public class FormulaToJavaSmt {
     }
 
     private BooleanFormula handleLiteralNode(Literal literal) {
-        if (literal == Expression.TRUE) {
+        if (literal == IExpression.TRUE) {
             return currentBooleanFormulaManager.makeTrue();
-        } else if (literal == Expression.FALSE) {
+        } else if (literal == IExpression.FALSE) {
             return currentBooleanFormulaManager.makeFalse();
         } else {
             final String name = literal.getExpression().getName();

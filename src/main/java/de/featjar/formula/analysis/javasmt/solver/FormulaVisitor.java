@@ -20,7 +20,7 @@
  */
 package de.featjar.formula.analysis.javasmt.solver;
 
-import de.featjar.formula.structure.Expression;
+import de.featjar.formula.structure.IExpression;
 import de.featjar.formula.structure.formula.predicate.ProblemFormula;
 import de.featjar.formula.structure.map.TermMap;
 import java.util.List;
@@ -30,7 +30,7 @@ import org.sosy_lab.java_smt.api.FunctionDeclaration;
 import org.sosy_lab.java_smt.api.QuantifiedFormulaManager;
 import org.sosy_lab.java_smt.api.visitors.BooleanFormulaVisitor;
 
-public abstract class FormulaVisitor implements BooleanFormulaVisitor<Expression> {
+public abstract class FormulaVisitor implements BooleanFormulaVisitor<IExpression> {
     protected final BooleanFormulaManager booleanFormulaManager;
     protected final TermMap termMap;
 
@@ -40,52 +40,52 @@ public abstract class FormulaVisitor implements BooleanFormulaVisitor<Expression
     }
 
     @Override
-    public Expression visitConstant(boolean value) {
+    public IExpression visitConstant(boolean value) {
         return new ProblemFormula("unexpected constant");
     }
 
     @Override
-    public Expression visitBoundVar(BooleanFormula var, int deBruijnIdx) {
+    public IExpression visitBoundVar(BooleanFormula var, int deBruijnIdx) {
         return new ProblemFormula("unexpected bound var");
     }
 
     @Override
-    public Expression visitNot(BooleanFormula operand) {
+    public IExpression visitNot(BooleanFormula operand) {
         return new ProblemFormula("unexpected not");
     }
 
     @Override
-    public Expression visitAnd(List<BooleanFormula> operands) {
+    public IExpression visitAnd(List<BooleanFormula> operands) {
         return new ProblemFormula("unexpected and");
     }
 
     @Override
-    public Expression visitOr(List<BooleanFormula> operands) {
+    public IExpression visitOr(List<BooleanFormula> operands) {
         return new ProblemFormula("unexpected or");
     }
 
     @Override
-    public Expression visitXor(BooleanFormula operand1, BooleanFormula operand2) {
+    public IExpression visitXor(BooleanFormula operand1, BooleanFormula operand2) {
         return new ProblemFormula("unexpected xor");
     }
 
     @Override
-    public Expression visitEquivalence(BooleanFormula operand1, BooleanFormula operand2) {
+    public IExpression visitEquivalence(BooleanFormula operand1, BooleanFormula operand2) {
         return new ProblemFormula("unexpected equivalence");
     }
 
     @Override
-    public Expression visitImplication(BooleanFormula operand1, BooleanFormula operand2) {
+    public IExpression visitImplication(BooleanFormula operand1, BooleanFormula operand2) {
         return new ProblemFormula("unexpected implication");
     }
 
     @Override
-    public Expression visitIfThenElse(BooleanFormula condition, BooleanFormula thenFormula, BooleanFormula elseFormula) {
+    public IExpression visitIfThenElse(BooleanFormula condition, BooleanFormula thenFormula, BooleanFormula elseFormula) {
         return new ProblemFormula("unexpected if-then-else");
     }
 
     @Override
-    public Expression visitQuantifier(
+    public IExpression visitQuantifier(
             QuantifiedFormulaManager.Quantifier quantifier,
             BooleanFormula quantifiedAST,
             List<org.sosy_lab.java_smt.api.Formula> boundVars,
@@ -94,7 +94,7 @@ public abstract class FormulaVisitor implements BooleanFormulaVisitor<Expression
     }
 
     @Override
-    public Expression visitAtom(BooleanFormula atom, FunctionDeclaration<BooleanFormula> funcDecl) {
+    public IExpression visitAtom(BooleanFormula atom, FunctionDeclaration<BooleanFormula> funcDecl) {
         return new ProblemFormula("unexpected atom");
     }
 }

@@ -21,8 +21,8 @@
 package de.featjar.formula.analysis.javasmt.solver;
 
 import de.featjar.base.computation.IComputation;
-import de.featjar.formula.structure.Expression;
-import de.featjar.formula.structure.formula.Formula;
+import de.featjar.formula.structure.IExpression;
+import de.featjar.formula.structure.formula.IFormula;
 import de.featjar.formula.structure.formula.predicate.Literal;
 import de.featjar.formula.structure.map.TermMap;
 import de.featjar.formula.structure.formula.connective.And;
@@ -45,7 +45,7 @@ import org.sosy_lab.java_smt.api.Tactic;
  * Z3. Requires Z3 to be installed and libz3/libz3java to be in Java's dynamic
  * linking path.
  */
-public class CNFTseitinTransformer implements IComputation<Formula, Formula> {
+public class CNFTseitinTransformer implements IComputation<IFormula, IFormula> {
     private static Configuration config;
     private static LogManager logManager;
     private static SolverContext context;
@@ -69,7 +69,7 @@ public class CNFTseitinTransformer implements IComputation<Formula, Formula> {
 //    }
 
     @Override
-    public Expression execute(Expression expression, IMonitor monitor) throws Exception {
+    public IExpression execute(IExpression expression, IMonitor monitor) throws Exception {
         TermMap termMap = expression.getTermMap().orElseGet(TermMap::new);
         BooleanFormula booleanFormula = formulaManager.applyTactic(
                 new FormulaToJavaSmt(context, termMap).nodeToFormula(expression), Tactic.TSEITIN_CNF);
@@ -82,7 +82,7 @@ public class CNFTseitinTransformer implements IComputation<Formula, Formula> {
         }
 
         @Override
-        public Expression visitAnd(List<BooleanFormula> operands) {
+        public IExpression visitAnd(List<BooleanFormula> operands) {
             return new And(operands.stream()
                     .map(operand ->
                             booleanFormulaManager.visit(operand, new ClauseVisitor(booleanFormulaManager, termMap)))
@@ -90,17 +90,17 @@ public class CNFTseitinTransformer implements IComputation<Formula, Formula> {
         }
 
         @Override
-        public Expression visitOr(List<BooleanFormula> operands) {
+        public IExpression visitOr(List<BooleanFormula> operands) {
             return new And(new ClauseVisitor(booleanFormulaManager, termMap).visitOr(operands));
         }
 
         @Override
-        public Expression visitNot(BooleanFormula operand) {
+        public IExpression visitNot(BooleanFormula operand) {
             return new And(new Or(new LiteralVisitor(booleanFormulaManager, termMap).visitNot(operand)));
         }
 
         @Override
-        public Expression visitAtom(BooleanFormula atom, FunctionDeclaration<BooleanFormula> funcDecl) {
+        public IExpression visitAtom(BooleanFormula atom, FunctionDeclaration<BooleanFormula> funcDecl) {
             return new And(new Or(new LiteralVisitor(booleanFormulaManager, termMap).visitAtom(atom, funcDecl)));
         }
     }
@@ -111,7 +111,7 @@ public class CNFTseitinTransformer implements IComputation<Formula, Formula> {
         }
 
         @Override
-        public Expression visitOr(List<BooleanFormula> operands) {
+        public IExpression visitOr(List<BooleanFormula> operands) {
             return new Or(operands.stream()
                     .map(operand -> booleanFormulaManager.visit(
                             operand, new LiteralVisitor(booleanFormulaManager, termMap)))
@@ -119,12 +119,12 @@ public class CNFTseitinTransformer implements IComputation<Formula, Formula> {
         }
 
         @Override
-        public Expression visitNot(BooleanFormula operand) {
+        public IExpression visitNot(BooleanFormula operand) {
             return new Or(new LiteralVisitor(booleanFormulaManager, termMap).visitNot(operand));
         }
 
         @Override
-        public Expression visitAtom(BooleanFormula atom, FunctionDeclaration<BooleanFormula> funcDecl) {
+        public IExpression visitAtom(BooleanFormula atom, FunctionDeclaration<BooleanFormula> funcDecl) {
             return new Or(new LiteralVisitor(booleanFormulaManager, termMap).visitAtom(atom, funcDecl));
         }
     }
@@ -135,13 +135,13 @@ public class CNFTseitinTransformer implements IComputation<Formula, Formula> {
         }
 
         @Override
-        public Expression visitNot(BooleanFormula operand) {
+        public IExpression visitNot(BooleanFormula operand) {
             Literal literalPredicate = (Literal) booleanFormulaManager.visit(operand, this);
             return literalPredicate.invert();
         }
 
         @Override
-        public Expression visitAtom(BooleanFormula atom, FunctionDeclaration<BooleanFormula> funcDecl) {
+        public IExpression visitAtom(BooleanFormula atom, FunctionDeclaration<BooleanFormula> funcDecl) {
             return termMap.createLiteral(atom.toString());
         }
     }
