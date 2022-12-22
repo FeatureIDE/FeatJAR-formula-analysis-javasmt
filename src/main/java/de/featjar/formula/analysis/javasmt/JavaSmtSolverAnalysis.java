@@ -20,7 +20,6 @@
  */
 package de.featjar.formula.analysis.javasmt;
 
-import de.featjar.formula.analysis.IFormulaAnalysis;
 import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
 import de.featjar.formula.structure.IExpression;
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
@@ -33,7 +32,7 @@ import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
  * @author Joshua Sprey
  * @author Sebastian Krieter
  */
-public abstract class JavaSmtSolverAnalysis<T> extends IFormulaAnalysis<T, JavaSMTSolver, IExpression> {
+public abstract class JavaSmtSolverAnalysis<T> {
 
     public JavaSmtSolverAnalysis() {
         solverInputComputation = FormulaComputation.empty();
