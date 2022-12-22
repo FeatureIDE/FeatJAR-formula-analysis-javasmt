@@ -21,7 +21,7 @@
 package de.featjar.formula.analysis.javasmt;
 
 import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
-import de.featjar.base.task.Monitor;
+import de.featjar.base.task.IMonitor;
 
 import java.math.BigInteger;
 
@@ -32,7 +32,7 @@ import java.math.BigInteger;
  */
 public class CountSolutionsAnalysis extends JavaSmtSolverAnalysis<BigInteger> {
     @Override
-    protected BigInteger analyze(JavaSMTSolver solver, Monitor monitor) throws Exception {
+    protected BigInteger analyze(JavaSMTSolver solver, IMonitor monitor) throws Exception {
         return solver.countSolutions();
     }
 }

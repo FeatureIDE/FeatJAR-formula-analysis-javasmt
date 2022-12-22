@@ -27,7 +27,7 @@ import de.featjar.formula.structure.formula.predicate.Literal;
 import de.featjar.formula.structure.map.TermMap;
 import de.featjar.formula.structure.formula.connective.And;
 import de.featjar.formula.structure.formula.connective.Or;
-import de.featjar.base.task.Monitor;
+import de.featjar.base.task.IMonitor;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.sosy_lab.common.ShutdownManager;
@@ -69,7 +69,7 @@ public class CNFTseitinTransformer implements IComputation<Formula, Formula> {
 //    }
 
     @Override
-    public Expression execute(Expression expression, Monitor monitor) throws Exception {
+    public Expression execute(Expression expression, IMonitor monitor) throws Exception {
         TermMap termMap = expression.getTermMap().orElseGet(TermMap::new);
         BooleanFormula booleanFormula = formulaManager.applyTactic(
                 new FormulaToJavaSmt(context, termMap).nodeToFormula(expression), Tactic.TSEITIN_CNF);
