@@ -20,7 +20,7 @@
  */
 package de.featjar.formula.analysis.javasmt.solver;
 
-import de.featjar.base.computation.Computable;
+import de.featjar.base.computation.IComputation;
 import de.featjar.formula.structure.Expression;
 import de.featjar.formula.structure.formula.Formula;
 import de.featjar.formula.structure.formula.predicate.Literal;
@@ -45,7 +45,7 @@ import org.sosy_lab.java_smt.api.Tactic;
  * Z3. Requires Z3 to be installed and libz3/libz3java to be in Java's dynamic
  * linking path.
  */
-public class CNFTseitinTransformer implements Computable<Formula, Formula> {
+public class CNFTseitinTransformer implements IComputation<Formula, Formula> {
     private static Configuration config;
     private static LogManager logManager;
     private static SolverContext context;
