@@ -20,7 +20,7 @@
  */
 package de.featjar.formula.analysis.javasmt.solver;
 
-import de.featjar.base.data.Computation;
+import de.featjar.base.computation.Computable;
 import de.featjar.formula.structure.Expression;
 import de.featjar.formula.structure.formula.Formula;
 import de.featjar.formula.structure.formula.predicate.Literal;
@@ -32,10 +32,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.sosy_lab.common.ShutdownManager;
 import org.sosy_lab.common.configuration.Configuration;
-import org.sosy_lab.common.configuration.InvalidConfigurationException;
-import org.sosy_lab.common.log.BasicLogManager;
 import org.sosy_lab.common.log.LogManager;
-import org.sosy_lab.java_smt.SolverContextFactory;
 import org.sosy_lab.java_smt.api.BooleanFormula;
 import org.sosy_lab.java_smt.api.BooleanFormulaManager;
 import org.sosy_lab.java_smt.api.FormulaManager;
@@ -48,7 +45,7 @@ import org.sosy_lab.java_smt.api.Tactic;
  * Z3. Requires Z3 to be installed and libz3/libz3java to be in Java's dynamic
  * linking path.
  */
-public class CNFTseitinTransformer implements Computation<Formula, Formula> {
+public class CNFTseitinTransformer implements Computable<Formula, Formula> {
     private static Configuration config;
     private static LogManager logManager;
     private static SolverContext context;
