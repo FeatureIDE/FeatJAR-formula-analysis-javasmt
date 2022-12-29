@@ -80,7 +80,7 @@ public class CountSolutionsAnalysisTest {
 
         final CountSolutionsAnalysis analysis = new CountSolutionsAnalysis();
         final Result<?> result = rep.getResult(analysis);
-        result.orElse(Log::problems);
+        result.orElseGet(Log::problem);
         assertTrue(result.isPresent());
         assertEquals(BigInteger.valueOf(3), result.get());
     }
@@ -91,7 +91,7 @@ public class CountSolutionsAnalysisTest {
 
         final CountSolutionsAnalysis analysis = new CountSolutionsAnalysis();
         final Result<?> result = rep.getResult(analysis);
-        result.orElse(Log::problems);
+        result.orElseGet(Log::problem);
         assertTrue(result.isPresent());
         assertEquals(BigInteger.valueOf(960), result.get());
     }
