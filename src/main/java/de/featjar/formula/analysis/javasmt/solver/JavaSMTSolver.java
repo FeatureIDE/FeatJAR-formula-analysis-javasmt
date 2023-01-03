@@ -20,7 +20,6 @@
  */
 package de.featjar.formula.analysis.javasmt.solver;
 
-import de.featjar.base.Feat;
 import de.featjar.formula.analysis.solver.Assumable;
 import de.featjar.formula.structure.IExpression;
 import de.featjar.formula.structure.map.TermMap;
@@ -88,7 +87,7 @@ public class JavaSMTSolver
             this.formula = new JavaSmtFormula(context, expression);
             assumptions = new Assignment(expression.getTermMap().orElseGet(TermMap::new));
         } catch (final InvalidConfigurationException e) {
-            Feat.log().error(e);
+            FeatJAR.log().error(e);
         }
     }
 
@@ -115,7 +114,7 @@ public class JavaSMTSolver
                     },
                     formula.getBooleanVariables());
         } catch (final Exception e) {
-            Feat.log().error(e);
+            FeatJAR.log().error(e);
             return BigInteger.valueOf(-1);
         }
     }
@@ -185,7 +184,7 @@ public class JavaSMTSolver
             final Optional<Rational> lower = prover.lower(handleY, Rational.ofString("1/1000"));
             return lower.orElse(null);
         } catch (final Exception e) {
-            Feat.log().error(e);
+            FeatJAR.log().error(e);
             return null;
         }
     }
@@ -203,7 +202,7 @@ public class JavaSMTSolver
             final Optional<Rational> upper = prover.upper(handleX, Rational.ofString("1/1000"));
             return upper.orElse(null);
         } catch (final Exception e) {
-            Feat.log().error(e);
+            FeatJAR.log().error(e);
             return null;
         }
     }
@@ -236,7 +235,7 @@ public class JavaSMTSolver
             }
             return Collections.emptyList();
         } catch (final Exception e) {
-            Feat.log().error(e);
+            FeatJAR.log().error(e);
             return null;
         }
     }

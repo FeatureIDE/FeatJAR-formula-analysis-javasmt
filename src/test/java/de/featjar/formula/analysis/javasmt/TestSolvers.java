@@ -23,7 +23,6 @@ package de.featjar.formula.analysis.javasmt;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import de.featjar.base.Feat;
 import de.featjar.base.env.HostEnvironment;
 import de.featjar.base.extension.ExtensionManager;
 import org.junit.jupiter.api.Test;
@@ -75,7 +74,7 @@ public class TestSolvers { // TODO
                     break;
             }
         } catch (final Exception e) {
-            Feat.log().error(e);
+            FeatJAR.log().error(e);
             fail();
         }
     }
