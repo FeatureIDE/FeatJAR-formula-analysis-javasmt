@@ -21,7 +21,7 @@
 package de.featjar.formula.analysis.javasmt;
 
 import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
-import de.featjar.base.task.IMonitor;
+import de.featjar.base.computation.Progress;
 
 /**
  * Counts the number of valid solutions to a formula.
@@ -30,7 +30,7 @@ import de.featjar.base.task.IMonitor;
  */
 public class FindSolutionsAnalysis extends JavaSmtSolverAnalysis<Object[]> {
     @Override
-    protected Object[] analyze(JavaSMTSolver solver, IMonitor monitor) throws Exception {
+    protected Object[] analyze(JavaSMTSolver solver, Progress progress) throws Exception {
         return solver.findSolution();
     }
 }
