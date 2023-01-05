@@ -234,7 +234,7 @@ public class FormulaToJavaSmt {
 
     private NumeralFormula handleFunction(IFunction function) {
         final NumeralFormula[] children =
-                new NumeralFormula[function.getChildren().size()];
+                new NumeralFormula[function.getChildrenCount()];
         int index = 0;
         for (final ITerm term : function.getChildren()) {
             children[index++] = termToFormula(term);
