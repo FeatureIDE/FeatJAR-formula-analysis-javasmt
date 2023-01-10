@@ -67,7 +67,7 @@ public class JavaSMTSolver
     private Assignment assumptions;
 
     @Override
-    public Assumable getAssumptionList() {
+    public Assumable getAssignment() {
         return assumptions;
     }
 
