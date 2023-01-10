@@ -21,21 +21,21 @@
 package de.featjar.formula.analysis.javasmt.solver;
 
 import de.featjar.formula.structure.IExpression;
-import de.featjar.formula.structure.formula.predicate.Literal;
-import de.featjar.formula.structure.formula.predicate.Equals;
-import de.featjar.formula.structure.formula.predicate.GreaterEqual;
-import de.featjar.formula.structure.formula.predicate.GreaterThan;
-import de.featjar.formula.structure.formula.predicate.LessEqual;
-import de.featjar.formula.structure.formula.predicate.LessThan;
 import de.featjar.formula.structure.formula.connective.And;
 import de.featjar.formula.structure.formula.connective.BiImplies;
 import de.featjar.formula.structure.formula.connective.Implies;
 import de.featjar.formula.structure.formula.connective.Not;
 import de.featjar.formula.structure.formula.connective.Or;
-import de.featjar.formula.structure.term.function.AAdd;
-import de.featjar.formula.structure.term.function.IFunction;
-import de.featjar.formula.structure.term.function.AMultiply;
+import de.featjar.formula.structure.formula.predicate.Equals;
+import de.featjar.formula.structure.formula.predicate.GreaterEqual;
+import de.featjar.formula.structure.formula.predicate.GreaterThan;
+import de.featjar.formula.structure.formula.predicate.LessEqual;
+import de.featjar.formula.structure.formula.predicate.LessThan;
+import de.featjar.formula.structure.formula.predicate.Literal;
 import de.featjar.formula.structure.term.ITerm;
+import de.featjar.formula.structure.term.function.AAdd;
+import de.featjar.formula.structure.term.function.AMultiply;
+import de.featjar.formula.structure.term.function.IFunction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -119,7 +119,8 @@ public class FormulaToJavaSmt {
         } else if (expression instanceof Equals) {
             return handleEqualNode((Equals) expression);
         } else {
-            throw new RuntimeException("The nodes of type: " + expression.getClass() + " are not supported by JavaSmt.");
+            throw new RuntimeException(
+                    "The nodes of type: " + expression.getClass() + " are not supported by JavaSmt.");
         }
     }
 
@@ -233,8 +234,7 @@ public class FormulaToJavaSmt {
     }
 
     private NumeralFormula handleFunction(IFunction function) {
-        final NumeralFormula[] children =
-                new NumeralFormula[function.getChildrenCount()];
+        final NumeralFormula[] children = new NumeralFormula[function.getChildrenCount()];
         int index = 0;
         for (final ITerm term : function.getChildren()) {
             children[index++] = termToFormula(term);
@@ -301,8 +301,7 @@ public class FormulaToJavaSmt {
             return currentBooleanFormulaManager.makeFalse();
         } else {
             final String name = literal.getExpression().getName();
-            final BooleanFormula variable = (BooleanFormula) termMap
-                    .getVariableIndex(name)
+            final BooleanFormula variable = (BooleanFormula) termMap.getVariableIndex(name)
                     .map(variables::get)
                     .orElseGet(() -> newVariable(name, currentBooleanFormulaManager::makeVariable));
             return literal.isPositive() ? variable : createNot(variable);

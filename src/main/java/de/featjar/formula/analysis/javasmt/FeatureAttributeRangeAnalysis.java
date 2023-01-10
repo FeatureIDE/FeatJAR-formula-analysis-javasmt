@@ -20,9 +20,9 @@
  */
 package de.featjar.formula.analysis.javasmt;
 
+import de.featjar.base.computation.Progress;
 import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
 import de.featjar.formula.structure.formula.predicate.Literal;
-import de.featjar.base.computation.Progress;
 import org.sosy_lab.java_smt.api.NumeralFormula;
 
 /**

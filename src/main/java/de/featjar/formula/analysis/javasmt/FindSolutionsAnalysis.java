@@ -20,8 +20,8 @@
  */
 package de.featjar.formula.analysis.javasmt;
 
-import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
 import de.featjar.base.computation.Progress;
+import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
 
 /**
  * Counts the number of valid solutions to a formula.

@@ -80,7 +80,8 @@ public abstract class FormulaVisitor implements BooleanFormulaVisitor<IExpressio
     }
 
     @Override
-    public IExpression visitIfThenElse(BooleanFormula condition, BooleanFormula thenFormula, BooleanFormula elseFormula) {
+    public IExpression visitIfThenElse(
+            BooleanFormula condition, BooleanFormula thenFormula, BooleanFormula elseFormula) {
         return new ProblemFormula("unexpected if-then-else");
     }
 

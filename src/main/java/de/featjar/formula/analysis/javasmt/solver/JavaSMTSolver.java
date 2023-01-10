@@ -20,11 +20,10 @@
  */
 package de.featjar.formula.analysis.javasmt.solver;
 
+import de.featjar.base.data.Pair;
 import de.featjar.formula.analysis.solver.Assumable;
 import de.featjar.formula.structure.IExpression;
 import de.featjar.formula.structure.map.TermMap;
-import de.featjar.base.data.Pair;
-
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Iterator;
@@ -214,11 +213,11 @@ public class JavaSMTSolver
                 prover.addConstraint(constraint);
             }
             addAssumptions(prover);
-            return prover.isUnsat() ? Result<Boolean>.FALSE : Result<Boolean>.TRUE;
+            return prover.isUnsat() ? Result.FALSE : Result.TRUE;
         } catch (final SolverException e) {
-            return Result<Boolean>.TIMEOUT;
+            return Result.TIMEOUT;
         } catch (final InterruptedException e) {
-            return Result<Boolean>.TIMEOUT;
+            return Result.TIMEOUT;
         }
     }
 

@@ -21,13 +21,13 @@
 package de.featjar.formula.analysis.javasmt.solver;
 
 import de.featjar.base.computation.IComputation;
+import de.featjar.base.computation.Progress;
 import de.featjar.formula.structure.IExpression;
 import de.featjar.formula.structure.formula.IFormula;
-import de.featjar.formula.structure.formula.predicate.Literal;
-import de.featjar.formula.structure.map.TermMap;
 import de.featjar.formula.structure.formula.connective.And;
 import de.featjar.formula.structure.formula.connective.Or;
-import de.featjar.base.computation.Progress;
+import de.featjar.formula.structure.formula.predicate.Literal;
+import de.featjar.formula.structure.map.TermMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.sosy_lab.common.ShutdownManager;
@@ -53,20 +53,20 @@ public class CNFTseitinTransformer implements IComputation<IFormula, IFormula> {
     private static FormulaManager formulaManager;
     private static BooleanFormulaManager booleanFormulaManager;
 
-    //TODO: do this inside the JavaSMTSolver constructor (ie. use extension loader)
-//    static {
-//        try {
-//            config = Configuration.defaultConfiguration();
-//            logManager = BasicLogManager.create(config);
-//            shutdownManager = ShutdownManager.create();
-//            context = SolverContextFactory.createSolverContext(
-//                    config, logManager, shutdownManager.getNotifier(), SolverContextFactory.Solvers.Z3);
-//            formulaManager = context.getFormulaManager();
-//            booleanFormulaManager = formulaManager.getBooleanFormulaManager();
-//        } catch (InvalidConfigurationException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    // TODO: do this inside the JavaSMTSolver constructor (ie. use extension loader)
+    //    static {
+    //        try {
+    //            config = Configuration.defaultConfiguration();
+    //            logManager = BasicLogManager.create(config);
+    //            shutdownManager = ShutdownManager.create();
+    //            context = SolverContextFactory.createSolverContext(
+    //                    config, logManager, shutdownManager.getNotifier(), SolverContextFactory.Solvers.Z3);
+    //            formulaManager = context.getFormulaManager();
+    //            booleanFormulaManager = formulaManager.getBooleanFormulaManager();
+    //        } catch (InvalidConfigurationException e) {
+    //            e.printStackTrace();
+    //        }
+    //    }
 
     @Override
     public IExpression execute(IExpression expression, Progress progress) throws Exception {
@@ -113,8 +113,8 @@ public class CNFTseitinTransformer implements IComputation<IFormula, IFormula> {
         @Override
         public IExpression visitOr(List<BooleanFormula> operands) {
             return new Or(operands.stream()
-                    .map(operand -> booleanFormulaManager.visit(
-                            operand, new LiteralVisitor(booleanFormulaManager, termMap)))
+                    .map(operand ->
+                            booleanFormulaManager.visit(operand, new LiteralVisitor(booleanFormulaManager, termMap)))
                     .collect(Collectors.toList()));
         }
 
