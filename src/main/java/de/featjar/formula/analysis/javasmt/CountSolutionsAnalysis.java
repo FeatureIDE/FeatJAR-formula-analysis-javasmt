@@ -30,8 +30,8 @@ import java.math.BigInteger;
  * @author Sebastian Krieter
  */
 public class CountSolutionsAnalysis extends JavaSmtSolverAnalysis<BigInteger> {
-    @Override
-    protected BigInteger analyze(JavaSMTSolver solver, Progress progress) throws Exception {
-        return solver.countSolutions();
-    }
+//    @Override
+//    protected BigInteger analyze(JavaSMTSolver solver, Progress progress) throws Exception {
+//        return solver.countSolutions();
+//    }
 }

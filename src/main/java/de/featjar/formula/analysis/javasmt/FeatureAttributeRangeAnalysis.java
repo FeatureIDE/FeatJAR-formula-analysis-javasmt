@@ -42,36 +42,36 @@ import org.sosy_lab.java_smt.api.NumeralFormula;
  * @author Sebastian Krieter
  */
 public class FeatureAttributeRangeAnalysis extends JavaSmtSolverAnalysis<Object[]> {
-    /** The variable of interest */
-    private NumeralFormula variable;
-
-    @Override
-    protected Object[] analyze(JavaSMTSolver solver, Progress progress) throws Exception {
-        if (variable == null) {
-            return null;
-        }
-        final Object[] result = new Object[2];
-        solver.findSolution();
-        result[0] = solver.minimize(variable);
-        result[1] = solver.maximize(variable);
-        return result;
-    }
-
-    /**
-     * Sets the variable of interest. As example we have the following
-     * expression:<br>
-     * <br>
-     *
-     * <code> (Price + 233) &gt; -17</code><br>
-     * <br>
-     *
-     * If you want to evaluate the maximum and minimum value for the variable
-     * <code>Price</code> you need to pass the Literal object for
-     * <code>Price</code>.
-     *
-     * @param variable The variable to compute the maximum and minimum of.
-     */
-    public void setVariable(NumeralFormula variable) {
-        this.variable = variable;
-    }
+//    /** The variable of interest */
+//    private NumeralFormula variable;
+//
+//    @Override
+//    protected Object[] analyze(JavaSMTSolver solver, Progress progress) throws Exception {
+//        if (variable == null) {
+//            return null;
+//        }
+//        final Object[] result = new Object[2];
+//        solver.findSolution();
+//        result[0] = solver.minimize(variable);
+//        result[1] = solver.maximize(variable);
+//        return result;
+//    }
+//
+//    /**
+//     * Sets the variable of interest. As example we have the following
+//     * expression:<br>
+//     * <br>
+//     *
+//     * <code> (Price + 233) &gt; -17</code><br>
+//     * <br>
+//     *
+//     * If you want to evaluate the maximum and minimum value for the variable
+//     * <code>Price</code> you need to pass the Literal object for
+//     * <code>Price</code>.
+//     *
+//     * @param variable The variable to compute the maximum and minimum of.
+//     */
+//    public void setVariable(NumeralFormula variable) {
+//        this.variable = variable;
+//    }
 }

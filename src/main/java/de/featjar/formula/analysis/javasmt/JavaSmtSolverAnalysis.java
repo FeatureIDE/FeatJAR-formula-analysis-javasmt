@@ -34,11 +34,11 @@ import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
  */
 public abstract class JavaSmtSolverAnalysis<T> {
 
-    public JavaSmtSolverAnalysis() {
-        solverInputComputation = FormulaComputation.empty();
-    }
-
-    protected JavaSMTSolver newSolver(IExpression input) {
-        return new JavaSMTSolver(input, Solvers.SMTINTERPOL);
-    }
+//    public JavaSmtSolverAnalysis() {
+//        solverInputComputation = FormulaComputation.empty();
+//    }
+//
+//    protected JavaSMTSolver newSolver(IExpression input) {
+//        return new JavaSMTSolver(input, Solvers.SMTINTERPOL);
+//    }
 }

@@ -28,9 +28,9 @@ import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
  *
  * @author Sebastian Krieter
  */
-public class HasSolutionsAnalysis extends JavaSmtSolverAnalysis<Result<Boolean>> {
-    @Override
-    protected Result<Boolean> analyze(JavaSMTSolver solver, Progress progress) throws Exception {
-        return solver.hasSolution();
-    }
+public class HasSolutionsAnalysis { //extends JavaSmtSolverAnalysis<Result<Boolean>> {
+//    @Override
+//    protected Result<Boolean> analyze(JavaSMTSolver solver, Progress progress) throws Exception {
+//        return solver.hasSolution();
+//    }
 }

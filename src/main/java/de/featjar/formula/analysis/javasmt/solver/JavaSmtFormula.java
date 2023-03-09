@@ -20,37 +20,25 @@
  */
 package de.featjar.formula.analysis.javasmt.solver;
 
-import de.featjar.formula.structure.IExpression;
-import de.featjar.formula.structure.formula.connective.And;
-import de.featjar.formula.structure.map.TermMap;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.sosy_lab.java_smt.api.BooleanFormula;
 import org.sosy_lab.java_smt.api.Formula;
 import org.sosy_lab.java_smt.api.SolverContext;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Formula for {@link JavaSMTSolver}.
  *
  * @author Sebastian Krieter
  */
-public class JavaSmtFormula extends SolverFormula<BooleanFormula> {
+public class JavaSmtFormula {
 
-    private final ArrayList<Formula> variables;
+    private final List<Formula> variables;
     private final FormulaToJavaSmt translator;
 
-    public JavaSmtFormula(SolverContext solverContext, IExpression originalExpression) {
-        this(solverContext, originalExpression.getTermMap().orElseGet(TermMap::new));
-        if (originalExpression instanceof And) {
-            originalExpression.getChildren().forEach(this::push);
-        }
-    }
-
-    public JavaSmtFormula(SolverContext solverContext, TermMap termMap) {
-        super(termMap);
-        translator = new FormulaToJavaSmt(solverContext, termMap);
+    public JavaSmtFormula(SolverContext solverContext) {
+        translator = new FormulaToJavaSmt(solverContext);
         variables = translator.getVariables();
     }
 
@@ -67,17 +55,5 @@ public class JavaSmtFormula extends SolverFormula<BooleanFormula> {
                 .filter(f -> f instanceof BooleanFormula)
                 .map(f -> (BooleanFormula) f)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<BooleanFormula> push(IExpression clause) throws SolverContradictionException {
-        final BooleanFormula constraint = translator.nodeToFormula(clause);
-        solverFormulas.add(constraint);
-        return Arrays.asList(constraint);
-    }
-
-    @Override
-    public void clear() {
-        solverFormulas.clear();
     }
 }

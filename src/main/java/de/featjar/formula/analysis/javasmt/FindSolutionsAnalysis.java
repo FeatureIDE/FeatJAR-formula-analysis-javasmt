@@ -28,9 +28,9 @@ import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
  *
  * @author Sebastian Krieter
  */
-public class FindSolutionsAnalysis extends JavaSmtSolverAnalysis<Object[]> {
-    @Override
-    protected Object[] analyze(JavaSMTSolver solver, Progress progress) throws Exception {
-        return solver.findSolution();
-    }
+public class FindSolutionsAnalysis { //extends JavaSmtSolverAnalysis<Object[]> {
+//    @Override
+//    protected Object[] analyze(JavaSMTSolver solver, Progress progress) throws Exception {
+//        return solver.findSolution();
+//    }
 }
