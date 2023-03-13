@@ -35,14 +35,14 @@ import java.util.stream.Collectors;
 public class JavaSmtFormula {
 
     private final List<Formula> variables;
-    private final FormulaToJavaSmt translator;
+    private final FormulaToJavaSMT translator;
 
     public JavaSmtFormula(SolverContext solverContext) {
-        translator = new FormulaToJavaSmt(solverContext);
+        translator = new FormulaToJavaSMT(solverContext);
         variables = translator.getVariables();
     }
 
-    public FormulaToJavaSmt getTranslator() {
+    public FormulaToJavaSMT getTranslator() {
         return translator;
     }
 

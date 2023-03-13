@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * @author Joshua Sprey
  * @author Sebastian Krieter
  */
-public class FormulaToJavaSmt {
+public class FormulaToJavaSMT {
 
     private FormulaManager currentFormulaManager;
     private BooleanFormulaManager currentBooleanFormulaManager;
@@ -58,7 +58,7 @@ public class FormulaToJavaSmt {
 
     private final Map<Variable, Formula> variableMap = Maps.empty();
 
-    public FormulaToJavaSmt(SolverContext context) {
+    public FormulaToJavaSMT(SolverContext context) {
         setContext(context);
     }
 
