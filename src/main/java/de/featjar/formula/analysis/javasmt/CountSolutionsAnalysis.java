@@ -20,9 +20,14 @@
  */
 package de.featjar.formula.analysis.javasmt;
 
+import de.featjar.base.computation.IComputation;
 import de.featjar.base.computation.Progress;
+import de.featjar.base.data.Result;
 import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
+import de.featjar.formula.structure.IExpression;
+
 import java.math.BigInteger;
+import java.util.List;
 
 /**
  * Counts the number of valid solutions to a formula.
@@ -30,8 +35,15 @@ import java.math.BigInteger;
  * @author Sebastian Krieter
  */
 public class CountSolutionsAnalysis extends JavaSmtSolverAnalysis<BigInteger> {
-//    @Override
-//    protected BigInteger analyze(JavaSMTSolver solver, Progress progress) throws Exception {
-//        return solver.countSolutions();
-//    }
+
+	public CountSolutionsAnalysis(IComputation<? extends IExpression> formula) {
+		super(formula);
+	}
+
+	@Override
+	public Result<BigInteger> compute(List<Object> dependencyList, Progress progress) {
+		JavaSMTSolver solver = initializeSolver(dependencyList);
+		return solver.countSolutions();
+	}
+
 }

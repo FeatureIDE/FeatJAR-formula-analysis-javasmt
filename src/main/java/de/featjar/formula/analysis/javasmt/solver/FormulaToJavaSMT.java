@@ -298,7 +298,12 @@ public class FormulaToJavaSMT {
         }
     }
 
-    public List<org.sosy_lab.java_smt.api.Formula> getVariables() {
+    public List<org.sosy_lab.java_smt.api.Formula> getVariableFormulas() {
         return new ArrayList<>(variableMap.values());
     }
+    
+    public List<Variable> getVariables() {
+        return new ArrayList<>(variableMap.keySet());
+    }
+    
 }

@@ -20,9 +20,17 @@
  */
 package de.featjar.formula.analysis.javasmt;
 
+import de.featjar.base.FeatJAR;
+import de.featjar.base.computation.AComputation;
+import de.featjar.base.computation.Dependency;
+import de.featjar.base.computation.IComputation;
 import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
 import de.featjar.formula.structure.IExpression;
+
+import java.util.List;
+
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
+
 
 /**
  * Base class for analyses using a {@link JavaSMTSolver}.
@@ -32,13 +40,35 @@ import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
  * @author Joshua Sprey
  * @author Sebastian Krieter
  */
-public abstract class JavaSmtSolverAnalysis<T> {
+public abstract class JavaSmtSolverAnalysis<T> extends AComputation<T> {
+	
+    public static final Dependency<IExpression> FORMULA =
+            Dependency.newDependency(IExpression.class);
 
-//    public JavaSmtSolverAnalysis() {
-//        solverInputComputation = FormulaComputation.empty();
-//    }
-//
-//    protected JavaSMTSolver newSolver(IExpression input) {
-//        return new JavaSMTSolver(input, Solvers.SMTINTERPOL);
-//    }
+    public JavaSmtSolverAnalysis(IComputation<? extends IExpression> formula, Object... computations) {
+        super(
+        		formula,
+                computations);
+    }
+
+    protected JavaSmtSolverAnalysis(JavaSmtSolverAnalysis<T> other) {
+        super(other);
+    }
+
+    protected JavaSMTSolver newSolver(IExpression formula) {
+    	 return new JavaSMTSolver(formula, Solvers.SMTINTERPOL);
+    }
+
+    public JavaSMTSolver initializeSolver(List<Object> dependencyList, boolean empty) {
+        IExpression formula = FORMULA.get(dependencyList);
+        FeatJAR.log().debug("initializing SAT4J");
+        FeatJAR.log().debug(formula);
+        JavaSMTSolver solver = newSolver(formula);
+        return solver;
+    }
+
+    public JavaSMTSolver initializeSolver(List<Object> dependencyList) {
+        return initializeSolver(dependencyList, false);
+    }
+
 }

@@ -23,8 +23,8 @@ package de.featjar.formula.analysis.javasmt;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import de.featjar.base.FeatJAR;
 import de.featjar.base.env.HostEnvironment;
-import de.featjar.base.extension.ExtensionManager;
 import org.junit.jupiter.api.Test;
 import org.sosy_lab.common.ShutdownNotifier;
 import org.sosy_lab.common.configuration.Configuration;
@@ -44,8 +44,8 @@ public class TestSolvers { // TODO
     }
 
     private void solversUnix() {
-        //		testAvailability(Solvers.BOOLECTOR);
-        //		testAvailability(Solvers.CVC4);
+        // testAvailability(Solvers.BOOLECTOR);
+        // testAvailability(Solvers.CVC4);
         testAvailability(Solvers.MATHSAT5);
         testAvailability(Solvers.PRINCESS);
         testAvailability(Solvers.SMTINTERPOL);
@@ -60,7 +60,6 @@ public class TestSolvers { // TODO
 
     @Test
     public void solvers() {
-        ExtensionManager.install();
         try {
             switch (HostEnvironment.OPERATING_SYSTEM) {
                 case LINUX:
@@ -71,6 +70,12 @@ public class TestSolvers { // TODO
                     break;
                 case WINDOWS:
                     solversWindows();
+                    break;
+                case UNKNOWN:
+                    fail();
+                    break;
+                default:
+                    fail();
                     break;
             }
         } catch (final Exception e) {

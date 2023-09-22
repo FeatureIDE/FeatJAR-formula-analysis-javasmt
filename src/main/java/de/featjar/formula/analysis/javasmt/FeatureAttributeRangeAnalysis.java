@@ -20,9 +20,14 @@
  */
 package de.featjar.formula.analysis.javasmt;
 
+import de.featjar.base.computation.IComputation;
 import de.featjar.base.computation.Progress;
-import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
+import de.featjar.base.data.Result;
+import de.featjar.formula.structure.IExpression;
 import de.featjar.formula.structure.formula.predicate.Literal;
+
+import java.util.List;
+
 import org.sosy_lab.java_smt.api.NumeralFormula;
 
 /**
@@ -42,6 +47,20 @@ import org.sosy_lab.java_smt.api.NumeralFormula;
  * @author Sebastian Krieter
  */
 public class FeatureAttributeRangeAnalysis extends JavaSmtSolverAnalysis<Object[]> {
+	
+	public FeatureAttributeRangeAnalysis(IComputation<? extends IExpression> formula) {
+		super(formula);
+	}
+
+	protected FeatureAttributeRangeAnalysis(JavaSmtSolverAnalysis<Object[]> other) {
+		super(other);
+	}
+
+	@Override
+	public Result<Object[]> compute(List<Object> dependencyList, Progress progress) {
+		throw new UnsupportedOperationException();
+	}
+	
 //    /** The variable of interest */
 //    private NumeralFormula variable;
 //

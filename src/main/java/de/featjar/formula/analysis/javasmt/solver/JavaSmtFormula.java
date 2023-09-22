@@ -24,6 +24,8 @@ import org.sosy_lab.java_smt.api.BooleanFormula;
 import org.sosy_lab.java_smt.api.Formula;
 import org.sosy_lab.java_smt.api.SolverContext;
 
+import de.featjar.formula.structure.IExpression;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,16 +36,22 @@ import java.util.stream.Collectors;
  */
 public class JavaSmtFormula {
 
+	private final BooleanFormula formula;
     private final List<Formula> variables;
     private final FormulaToJavaSMT translator;
 
-    public JavaSmtFormula(SolverContext solverContext) {
+    public JavaSmtFormula(SolverContext solverContext, IExpression expression) {
         translator = new FormulaToJavaSMT(solverContext);
-        variables = translator.getVariables();
+        formula = translator.nodeToFormula(expression);
+        variables = translator.getVariableFormulas();
     }
 
     public FormulaToJavaSMT getTranslator() {
         return translator;
+    }
+
+    public BooleanFormula getFormula() {
+        return formula;
     }
 
     public List<Formula> getVariables() {
