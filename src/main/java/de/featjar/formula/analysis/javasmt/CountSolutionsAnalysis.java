@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Sebastian Krieter
+ * Copyright (C) 2023 FeatJAR-Development-Team
  *
  * This file is part of FeatJAR-formula-analysis-javasmt.
  *
@@ -16,16 +16,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with formula-analysis-javasmt. If not, see <https://www.gnu.org/licenses/>.
  *
- * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
+ * See <https://github.com/FeatJAR> for further information.
  */
 package de.featjar.formula.analysis.javasmt;
 
 import de.featjar.base.computation.IComputation;
 import de.featjar.base.computation.Progress;
 import de.featjar.base.data.Result;
-import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
 import de.featjar.formula.structure.IExpression;
-
 import java.math.BigInteger;
 import java.util.List;
 
@@ -34,16 +32,14 @@ import java.util.List;
  *
  * @author Sebastian Krieter
  */
-public class CountSolutionsAnalysis extends JavaSmtSolverAnalysis<BigInteger> {
+public class CountSolutionsAnalysis extends JavaSMTSolverAnalysis<BigInteger> {
 
-	public CountSolutionsAnalysis(IComputation<? extends IExpression> formula) {
-		super(formula);
-	}
+    public CountSolutionsAnalysis(IComputation<? extends IExpression> formula) {
+        super(formula);
+    }
 
-	@Override
-	public Result<BigInteger> compute(List<Object> dependencyList, Progress progress) {
-		JavaSMTSolver solver = initializeSolver(dependencyList);
-		return solver.countSolutions();
-	}
-
+    @Override
+    public Result<BigInteger> compute(List<Object> dependencyList, Progress progress) {
+        return initializeSolver(dependencyList).countSolutions();
+    }
 }

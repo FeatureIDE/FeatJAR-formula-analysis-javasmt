@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Sebastian Krieter
+ * Copyright (C) 2023 FeatJAR-Development-Team
  *
  * This file is part of FeatJAR-formula-analysis-javasmt.
  *
@@ -16,14 +16,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with formula-analysis-javasmt. If not, see <https://www.gnu.org/licenses/>.
  *
- * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
+ * See <https://github.com/FeatJAR> for further information.
  */
 package de.featjar.formula.analysis.javasmt.solver;
 
 import de.featjar.base.FeatJAR;
 import de.featjar.base.data.Result;
 import de.featjar.formula.structure.IExpression;
-
+import de.featjar.formula.structure.term.value.Variable;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
@@ -41,11 +41,13 @@ import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 import org.sosy_lab.java_smt.api.BasicProverEnvironment.AllSatCallback;
 import org.sosy_lab.java_smt.api.BooleanFormula;
 import org.sosy_lab.java_smt.api.Formula;
+import org.sosy_lab.java_smt.api.Model.ValueAssignment;
 import org.sosy_lab.java_smt.api.OptimizationProverEnvironment;
 import org.sosy_lab.java_smt.api.OptimizationProverEnvironment.OptStatus;
 import org.sosy_lab.java_smt.api.ProverEnvironment;
 import org.sosy_lab.java_smt.api.SolverContext;
 import org.sosy_lab.java_smt.api.SolverContext.ProverOptions;
+import org.sosy_lab.java_smt.api.SolverException;
 
 /**
  * SMT solver using JavaSMT.
@@ -54,7 +56,7 @@ import org.sosy_lab.java_smt.api.SolverContext.ProverOptions;
  */
 public class JavaSMTSolver {
 
-    private JavaSmtFormula formula;
+    private JavaSMTFormula formula;
 
     /**
      * The current context of the solver. Used by the translator to translate prop4J
@@ -69,8 +71,7 @@ public class JavaSMTSolver {
             final ShutdownManager shutdownManager = ShutdownManager.create();
             context =
                     SolverContextFactory.createSolverContext(config, logManager, shutdownManager.getNotifier(), solver);
-            this.formula = new JavaSmtFormula(context, expression);
-            expression.getVariables();
+            this.formula = new JavaSMTFormula(context, expression);
         } catch (final InvalidConfigurationException e) {
             FeatJAR.log().error(e);
         }
@@ -85,7 +86,9 @@ public class JavaSMTSolver {
 
                         @Override
                         public void apply(List<BooleanFormula> model) {
-                            count = count.add(BigInteger.ONE);
+                            if (!model.isEmpty()) {
+                                count = count.add(BigInteger.ONE);
+                            }
                         }
 
                         @Override
@@ -99,34 +102,33 @@ public class JavaSMTSolver {
         }
     }
 
-//    public Object[] getSolution() {
-//        try (ProverEnvironment prover = context.newProverEnvironment()) {
-//            prover.addConstraint(formula.getFormula());
-//            if (!prover.isUnsat()) {
-//                final Model model = prover.getModel();
-//                final Iterator<ValueAssignment> iterator = model.iterator();
-//                final Object[] solution = new Object[formula.getVariables().size() + 1];
-//                while (iterator.hasNext()) {
-//                    final ValueAssignment assignment = iterator.next();
-//                    final int index = formula.getVariables()
-//                            .getVariableIndex(assignment.getName())
-//                            .orElseThrow();
-//                    solution[index] = assignment.getValue();
-//                }
-//                return solution;
-//            } else {
-//                return null;
-//            }
-//        } catch (final SolverException e) {
-//            return null;
-//        } catch (final InterruptedException e) {
-//            return null;
-//        }
-//    }
-//
-//    public Object[] findSolution() {
-//        return getSolution();
-//    }
+    public Object[] getSolution() {
+        try (ProverEnvironment prover = context.newProverEnvironment()) {
+            prover.addConstraint(formula.getFormula());
+            if (!prover.isUnsat()) {
+                List<Variable> variables = formula.getTranslator().getVariables();
+                final Object[] solution = new Object[variables.size() + 1];
+                for (ValueAssignment assignment : prover.getModel()) {
+                    solution[
+                                    formula.getTranslator()
+                                            .getVariableIndex(assignment.getName())
+                                            .get()] =
+                            assignment.getValue();
+                }
+                return solution;
+            } else {
+                return null;
+            }
+        } catch (final SolverException e) {
+            return null;
+        } catch (final InterruptedException e) {
+            return null;
+        }
+    }
+
+    public Result<Object[]> findSolution() {
+        return Result.ofNullable(getSolution());
+    }
 
     public Rational minimize(Formula formula) {
         try (OptimizationProverEnvironment prover = context.newOptimizationProverEnvironment()) {
@@ -183,8 +185,7 @@ public class JavaSMTSolver {
         return Collections.singletonList(getMinimalUnsatisfiableSubset());
     }
 
-    public JavaSmtFormula getSolverFormula() {
+    public JavaSMTFormula getSolverFormula() {
         return formula;
     }
-
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Sebastian Krieter
+ * Copyright (C) 2023 FeatJAR-Development-Team
  *
  * This file is part of FeatJAR-formula-analysis-javasmt.
  *
@@ -16,21 +16,33 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with formula-analysis-javasmt. If not, see <https://www.gnu.org/licenses/>.
  *
- * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
+ * See <https://github.com/FeatJAR> for further information.
  */
 package de.featjar.formula.analysis.javasmt;
 
+import de.featjar.base.computation.IComputation;
 import de.featjar.base.computation.Progress;
-import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
+import de.featjar.base.data.Result;
+import de.featjar.formula.structure.IExpression;
+import java.util.List;
 
 /**
  * Counts the number of valid solutions to a formula.
  *
  * @author Sebastian Krieter
  */
-public class HasSolutionsAnalysis { //extends JavaSmtSolverAnalysis<Result<Boolean>> {
-//    @Override
-//    protected Result<Boolean> analyze(JavaSMTSolver solver, Progress progress) throws Exception {
-//        return solver.hasSolution();
-//    }
+public class HasSolutionsAnalysis extends JavaSMTSolverAnalysis<Boolean> {
+
+    public HasSolutionsAnalysis(IComputation<? extends IExpression> formula) {
+        super(formula);
+    }
+
+    protected HasSolutionsAnalysis(HasSolutionsAnalysis other) {
+        super(other);
+    }
+
+    @Override
+    public Result<Boolean> compute(List<Object> dependencyList, Progress progress) {
+        return initializeSolver(dependencyList).hasSolution();
+    }
 }

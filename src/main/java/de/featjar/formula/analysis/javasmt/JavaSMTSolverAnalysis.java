@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Sebastian Krieter
+ * Copyright (C) 2023 FeatJAR-Development-Team
  *
  * This file is part of FeatJAR-formula-analysis-javasmt.
  *
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with formula-analysis-javasmt. If not, see <https://www.gnu.org/licenses/>.
  *
- * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
+ * See <https://github.com/FeatJAR> for further information.
  */
 package de.featjar.formula.analysis.javasmt;
 
@@ -26,11 +26,8 @@ import de.featjar.base.computation.Dependency;
 import de.featjar.base.computation.IComputation;
 import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
 import de.featjar.formula.structure.IExpression;
-
 import java.util.List;
-
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
-
 
 /**
  * Base class for analyses using a {@link JavaSMTSolver}.
@@ -40,35 +37,30 @@ import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
  * @author Joshua Sprey
  * @author Sebastian Krieter
  */
-public abstract class JavaSmtSolverAnalysis<T> extends AComputation<T> {
-	
-    public static final Dependency<IExpression> FORMULA =
-            Dependency.newDependency(IExpression.class);
+public abstract class JavaSMTSolverAnalysis<T> extends AComputation<T> {
 
-    public JavaSmtSolverAnalysis(IComputation<? extends IExpression> formula, Object... computations) {
-        super(
-        		formula,
-                computations);
+    public static final Dependency<IExpression> FORMULA = Dependency.newDependency(IExpression.class);
+
+    public JavaSMTSolverAnalysis(IComputation<? extends IExpression> formula, Object... computations) {
+        super(formula, computations);
     }
 
-    protected JavaSmtSolverAnalysis(JavaSmtSolverAnalysis<T> other) {
+    protected JavaSMTSolverAnalysis(JavaSMTSolverAnalysis<T> other) {
         super(other);
     }
 
     protected JavaSMTSolver newSolver(IExpression formula) {
-    	 return new JavaSMTSolver(formula, Solvers.SMTINTERPOL);
+        return new JavaSMTSolver(formula, Solvers.SMTINTERPOL);
     }
 
     public JavaSMTSolver initializeSolver(List<Object> dependencyList, boolean empty) {
         IExpression formula = FORMULA.get(dependencyList);
-        FeatJAR.log().debug("initializing SAT4J");
+        FeatJAR.log().debug("initializing JavaSmt");
         FeatJAR.log().debug(formula);
-        JavaSMTSolver solver = newSolver(formula);
-        return solver;
+        return newSolver(formula);
     }
 
     public JavaSMTSolver initializeSolver(List<Object> dependencyList) {
         return initializeSolver(dependencyList, false);
     }
-
 }

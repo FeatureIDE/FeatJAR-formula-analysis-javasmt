@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Sebastian Krieter
+ * Copyright (C) 2023 FeatJAR-Development-Team
  *
  * This file is part of FeatJAR-formula-analysis-javasmt.
  *
@@ -16,30 +16,47 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with formula-analysis-javasmt. If not, see <https://www.gnu.org/licenses/>.
  *
- * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
+ * See <https://github.com/FeatJAR> for further information.
  */
 package de.featjar.formula.analysis.javasmt.solver;
 
-import de.featjar.base.data.Maps;
 import de.featjar.formula.structure.IExpression;
-import de.featjar.formula.structure.formula.connective.*;
-import de.featjar.formula.structure.formula.predicate.*;
+import de.featjar.formula.structure.formula.connective.And;
+import de.featjar.formula.structure.formula.connective.BiImplies;
+import de.featjar.formula.structure.formula.connective.Implies;
+import de.featjar.formula.structure.formula.connective.Not;
+import de.featjar.formula.structure.formula.connective.Or;
+import de.featjar.formula.structure.formula.connective.Reference;
+import de.featjar.formula.structure.formula.predicate.Equals;
+import de.featjar.formula.structure.formula.predicate.False;
+import de.featjar.formula.structure.formula.predicate.GreaterEqual;
+import de.featjar.formula.structure.formula.predicate.GreaterThan;
+import de.featjar.formula.structure.formula.predicate.LessEqual;
+import de.featjar.formula.structure.formula.predicate.LessThan;
+import de.featjar.formula.structure.formula.predicate.Literal;
+import de.featjar.formula.structure.formula.predicate.True;
 import de.featjar.formula.structure.term.ITerm;
 import de.featjar.formula.structure.term.function.AAdd;
 import de.featjar.formula.structure.term.function.AMultiply;
 import de.featjar.formula.structure.term.function.IFunction;
 import de.featjar.formula.structure.term.value.Constant;
 import de.featjar.formula.structure.term.value.Variable;
-import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
-import org.sosy_lab.java_smt.api.*;
-import org.sosy_lab.java_smt.api.NumeralFormula.IntegerFormula;
-import org.sosy_lab.java_smt.api.NumeralFormula.RationalFormula;
-
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
+import org.sosy_lab.java_smt.api.BooleanFormula;
+import org.sosy_lab.java_smt.api.BooleanFormulaManager;
+import org.sosy_lab.java_smt.api.Formula;
+import org.sosy_lab.java_smt.api.FormulaManager;
+import org.sosy_lab.java_smt.api.IntegerFormulaManager;
+import org.sosy_lab.java_smt.api.NumeralFormula;
+import org.sosy_lab.java_smt.api.NumeralFormula.IntegerFormula;
+import org.sosy_lab.java_smt.api.NumeralFormula.RationalFormula;
+import org.sosy_lab.java_smt.api.RationalFormulaManager;
+import org.sosy_lab.java_smt.api.SolverContext;
 
 /**
  * Class containing functions that are used to translate formulas to java smt.
@@ -56,7 +73,13 @@ public class FormulaToJavaSMT {
     private boolean isPrincess = false;
     private boolean createVariables = true;
 
-    private final Map<Variable, Formula> variableMap = Maps.empty();
+    private final Map<String, VariableReference> variableMap = new LinkedHashMap<>();
+
+    private static class VariableReference {
+        private int index;
+        private Variable variable;
+        private Formula javaSmtVariable;
+    }
 
     public FormulaToJavaSMT(SolverContext context) {
         setContext(context);
@@ -75,7 +98,9 @@ public class FormulaToJavaSMT {
     }
 
     public BooleanFormula nodeToFormula(IExpression expression) {
-        if (expression instanceof True) {
+        if (expression instanceof Reference) {
+            return nodeToFormula(expression.getChildren().get(0));
+        } else if (expression instanceof True) {
             return currentBooleanFormulaManager.makeTrue();
         } else if (expression instanceof False) {
             return currentBooleanFormulaManager.makeFalse();
@@ -267,43 +292,63 @@ public class FormulaToJavaSMT {
     }
 
     private NumeralFormula handleVariable(Variable variable) {
-        final String name = variable.getName();
-        final Optional<Formula> formula = Optional.ofNullable(variableMap.get(variable));
+        final Optional<Formula> formula =
+                Optional.ofNullable(variableMap.get(variable.getName())).map(r -> r.javaSmtVariable);
         if (variable.getType() == Double.class) {
             if (isPrincess) {
                 throw new UnsupportedOperationException("Princess does not support variables from type: Double");
             }
-            return (NumeralFormula) formula.orElseGet(() -> newVariable(variable, currentRationalFormulaManager::makeVariable));
+            return (NumeralFormula) formula.orElseGet(
+                    () -> newVariable(variable, currentRationalFormulaManager::makeVariable).javaSmtVariable);
         } else if (variable.getType() == Long.class) {
-            return (NumeralFormula) formula.orElseGet(() -> newVariable(variable, currentIntegerFormulaManager::makeVariable));
+            return (NumeralFormula) formula.orElseGet(
+                    () -> newVariable(variable, currentIntegerFormulaManager::makeVariable).javaSmtVariable);
         } else {
             throw new UnsupportedOperationException("Unknown variable type: " + variable.getType());
         }
     }
 
     private BooleanFormula handleLiteralNode(Literal literal) {
-        final BooleanFormula variable = (BooleanFormula) Optional.ofNullable(variableMap.get((Variable) literal.getExpression()))
-                .orElseGet(() -> newVariable((Variable) literal.getExpression(), currentBooleanFormulaManager::makeVariable));
+        final VariableReference variableReference = Optional.ofNullable(
+                        variableMap.get(((Variable) literal.getExpression()).getName()))
+                .orElseGet(() ->
+                        newVariable((Variable) literal.getExpression(), currentBooleanFormulaManager::makeVariable));
+        BooleanFormula variable = (BooleanFormula) variableReference.javaSmtVariable;
         return literal.isPositive() ? variable : createNot(variable);
     }
 
-    private <T extends org.sosy_lab.java_smt.api.Formula> T newVariable(
-            final Variable variable, java.util.function.Function<String, T> variableCreator) {
+    private VariableReference newVariable(
+            final Variable variable, java.util.function.Function<String, ? extends Formula> variableCreator) {
         if (createVariables) {
-            final T newVariable = variableCreator.apply(variable.getName());
-            variableMap.put(variable, newVariable);
-            return newVariable;
+            final Formula newVariable = variableCreator.apply(variable.getName());
+            VariableReference variableReference = new VariableReference();
+            variableReference.index = variableMap.size();
+            variableReference.variable = variable;
+            variableReference.javaSmtVariable = newVariable;
+            variableMap.put(variable.getName(), variableReference);
+            return variableReference;
         } else {
             throw new RuntimeException(variable.getName());
         }
     }
 
+    public Optional<Integer> getVariableIndex(String name) {
+        return Optional.ofNullable(variableMap.get(name)).map(r -> r.index);
+    }
+
+    public Optional<org.sosy_lab.java_smt.api.Formula> getVariableFormula(String name) {
+        return Optional.ofNullable(variableMap.get(name)).map(r -> r.javaSmtVariable);
+    }
+
+    public Optional<Variable> getVariable(String name) {
+        return Optional.ofNullable(variableMap.get(name)).map(r -> r.variable);
+    }
+
     public List<org.sosy_lab.java_smt.api.Formula> getVariableFormulas() {
-        return new ArrayList<>(variableMap.values());
+        return variableMap.values().stream().map(r -> r.javaSmtVariable).collect(Collectors.toList());
     }
-    
+
     public List<Variable> getVariables() {
-        return new ArrayList<>(variableMap.keySet());
+        return variableMap.values().stream().map(r -> r.variable).collect(Collectors.toList());
     }
-    
 }

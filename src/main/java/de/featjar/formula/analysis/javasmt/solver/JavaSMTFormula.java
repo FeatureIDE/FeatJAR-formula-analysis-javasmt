@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Sebastian Krieter
+ * Copyright (C) 2023 FeatJAR-Development-Team
  *
  * This file is part of FeatJAR-formula-analysis-javasmt.
  *
@@ -16,34 +16,29 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with formula-analysis-javasmt. If not, see <https://www.gnu.org/licenses/>.
  *
- * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
+ * See <https://github.com/FeatJAR> for further information.
  */
 package de.featjar.formula.analysis.javasmt.solver;
 
-import org.sosy_lab.java_smt.api.BooleanFormula;
-import org.sosy_lab.java_smt.api.Formula;
-import org.sosy_lab.java_smt.api.SolverContext;
-
 import de.featjar.formula.structure.IExpression;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import org.sosy_lab.java_smt.api.BooleanFormula;
+import org.sosy_lab.java_smt.api.SolverContext;
 
 /**
  * Formula for {@link JavaSMTSolver}.
  *
  * @author Sebastian Krieter
  */
-public class JavaSmtFormula {
+public class JavaSMTFormula {
 
-	private final BooleanFormula formula;
-    private final List<Formula> variables;
+    private final BooleanFormula formula;
     private final FormulaToJavaSMT translator;
 
-    public JavaSmtFormula(SolverContext solverContext, IExpression expression) {
+    public JavaSMTFormula(SolverContext solverContext, IExpression expression) {
         translator = new FormulaToJavaSMT(solverContext);
         formula = translator.nodeToFormula(expression);
-        variables = translator.getVariableFormulas();
     }
 
     public FormulaToJavaSMT getTranslator() {
@@ -54,12 +49,8 @@ public class JavaSmtFormula {
         return formula;
     }
 
-    public List<Formula> getVariables() {
-        return variables;
-    }
-
     public List<BooleanFormula> getBooleanVariables() {
-        return variables.stream()
+        return translator.getVariableFormulas().stream()
                 .filter(f -> f instanceof BooleanFormula)
                 .map(f -> (BooleanFormula) f)
                 .collect(Collectors.toList());

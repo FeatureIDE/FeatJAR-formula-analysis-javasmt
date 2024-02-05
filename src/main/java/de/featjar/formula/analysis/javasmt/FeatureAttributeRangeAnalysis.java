@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Sebastian Krieter
+ * Copyright (C) 2023 FeatJAR-Development-Team
  *
  * This file is part of FeatJAR-formula-analysis-javasmt.
  *
@@ -16,19 +16,18 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with formula-analysis-javasmt. If not, see <https://www.gnu.org/licenses/>.
  *
- * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
+ * See <https://github.com/FeatJAR> for further information.
  */
 package de.featjar.formula.analysis.javasmt;
 
+import de.featjar.base.computation.Dependency;
 import de.featjar.base.computation.IComputation;
 import de.featjar.base.computation.Progress;
 import de.featjar.base.data.Result;
+import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
 import de.featjar.formula.structure.IExpression;
-import de.featjar.formula.structure.formula.predicate.Literal;
-
 import java.util.List;
-
-import org.sosy_lab.java_smt.api.NumeralFormula;
+import org.sosy_lab.java_smt.api.Formula;
 
 /**
  * Finds the minimum and maximum value of a Term. As example we have the
@@ -39,58 +38,35 @@ import org.sosy_lab.java_smt.api.NumeralFormula;
  * <br>
  *
  * If you want to evaluate the maximum and minimum value for the variable
- * <code>Price</code> you need to pass the {@link Literal} object to the
- * analysis. The variable of interest can be set via
- * {@link FeatureAttributeRangeAnalysis#setVariable(NumeralFormula)}.
+ * <code>Price</code> you need to pass the name of the variable to the
+ * analysis.
  *
  * @author Joshua Sprey
  * @author Sebastian Krieter
  */
-public class FeatureAttributeRangeAnalysis extends JavaSmtSolverAnalysis<Object[]> {
-	
-	public FeatureAttributeRangeAnalysis(IComputation<? extends IExpression> formula) {
-		super(formula);
-	}
+public class FeatureAttributeRangeAnalysis extends JavaSMTSolverAnalysis<Object[]> {
 
-	protected FeatureAttributeRangeAnalysis(JavaSmtSolverAnalysis<Object[]> other) {
-		super(other);
-	}
+    public static final Dependency<String> VARIABLE = Dependency.newDependency(String.class);
 
-	@Override
-	public Result<Object[]> compute(List<Object> dependencyList, Progress progress) {
-		throw new UnsupportedOperationException();
-	}
-	
-//    /** The variable of interest */
-//    private NumeralFormula variable;
-//
-//    @Override
-//    protected Object[] analyze(JavaSMTSolver solver, Progress progress) throws Exception {
-//        if (variable == null) {
-//            return null;
-//        }
-//        final Object[] result = new Object[2];
-//        solver.findSolution();
-//        result[0] = solver.minimize(variable);
-//        result[1] = solver.maximize(variable);
-//        return result;
-//    }
-//
-//    /**
-//     * Sets the variable of interest. As example we have the following
-//     * expression:<br>
-//     * <br>
-//     *
-//     * <code> (Price + 233) &gt; -17</code><br>
-//     * <br>
-//     *
-//     * If you want to evaluate the maximum and minimum value for the variable
-//     * <code>Price</code> you need to pass the Literal object for
-//     * <code>Price</code>.
-//     *
-//     * @param variable The variable to compute the maximum and minimum of.
-//     */
-//    public void setVariable(NumeralFormula variable) {
-//        this.variable = variable;
-//    }
+    public FeatureAttributeRangeAnalysis(IComputation<? extends IExpression> formula) {
+        super(formula);
+    }
+
+    protected FeatureAttributeRangeAnalysis(JavaSMTSolverAnalysis<Object[]> other) {
+        super(other);
+    }
+
+    @Override
+    public Result<Object[]> compute(List<Object> dependencyList, Progress progress) {
+        JavaSMTSolver solver = initializeSolver(dependencyList);
+        String variableName = VARIABLE.get(dependencyList);
+        final Object[] result = new Object[2];
+        Formula variable = solver.getSolverFormula()
+                .getTranslator()
+                .getVariableFormula(variableName)
+                .orElseThrow();
+        result[0] = solver.minimize(variable);
+        result[1] = solver.maximize(variable);
+        return Result.ofNullable(result);
+    }
 }
