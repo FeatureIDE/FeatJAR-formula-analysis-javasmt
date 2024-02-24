@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 FeatJAR-Development-Team
+ * Copyright (C) 2024 FeatJAR-Development-Team
  *
  * This file is part of FeatJAR-formula-analysis-javasmt.
  *
@@ -16,16 +16,16 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with formula-analysis-javasmt. If not, see <https://www.gnu.org/licenses/>.
  *
- * See <https://github.com/FeatJAR> for further information.
+ * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
  */
 package de.featjar.formula.analysis.javasmt;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import de.featjar.Common;
 import de.featjar.base.FeatJAR;
 import de.featjar.base.env.HostEnvironment;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.sosy_lab.common.ShutdownNotifier;
 import org.sosy_lab.common.configuration.Configuration;
@@ -35,12 +35,7 @@ import org.sosy_lab.java_smt.SolverContextFactory;
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 import org.sosy_lab.java_smt.api.SolverContext;
 
-public class TestSolvers { // TODO
-
-    @BeforeAll
-    public static void init() {
-        FeatJAR.initialize();
-    }
+public class TestSolvers extends Common { // TODO
 
     private void solversWindows() {
         testAvailability(Solvers.MATHSAT5);

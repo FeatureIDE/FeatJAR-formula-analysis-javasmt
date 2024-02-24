@@ -5,11 +5,11 @@ plugins {
 dependencies {
     api 'de.featjar:formula'
     api 'de.featjar:bin-javasmt'
+    implementation testFixtures('de.featjar:formula')
 }
 
 license {
     ext {
-        author = 'Sebastian Krieter'
-        url = 'https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt'
+        licence_url = 'https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt'
     }
 }
