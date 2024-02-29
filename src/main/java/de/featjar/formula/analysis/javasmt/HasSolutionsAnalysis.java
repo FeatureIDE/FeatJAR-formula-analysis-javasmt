@@ -31,7 +31,7 @@ import java.util.List;
  *
  * @author Sebastian Krieter
  */
-public class HasSolutionsAnalysis extends JavaSMTSolverAnalysis<Boolean> {
+public class HasSolutionsAnalysis extends AJavaSMTAnalysis<Boolean> {
 
     public HasSolutionsAnalysis(IComputation<? extends IExpression> formula) {
         super(formula);

@@ -23,6 +23,7 @@ package de.featjar.formula.analysis.javasmt;
 import de.featjar.base.computation.IComputation;
 import de.featjar.base.computation.Progress;
 import de.featjar.base.data.Result;
+import de.featjar.formula.analysis.value.ValueAssignment;
 import de.featjar.formula.structure.IExpression;
 import java.util.List;
 
@@ -31,7 +32,7 @@ import java.util.List;
  *
  * @author Sebastian Krieter
  */
-public class FindSolutionsAnalysis extends JavaSMTSolverAnalysis<Object[]> {
+public class FindSolutionsAnalysis extends AJavaSMTAnalysis<ValueAssignment> {
 
     public FindSolutionsAnalysis(IComputation<? extends IExpression> formula) {
         super(formula);
@@ -42,7 +43,7 @@ public class FindSolutionsAnalysis extends JavaSMTSolverAnalysis<Object[]> {
     }
 
     @Override
-    public Result<Object[]> compute(List<Object> dependencyList, Progress progress) {
+    public Result<ValueAssignment> compute(List<Object> dependencyList, Progress progress) {
         return initializeSolver(dependencyList).findSolution();
     }
 }

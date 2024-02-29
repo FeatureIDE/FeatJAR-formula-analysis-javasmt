@@ -37,15 +37,15 @@ import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
  * @author Joshua Sprey
  * @author Sebastian Krieter
  */
-public abstract class JavaSMTSolverAnalysis<T> extends AComputation<T> {
+public abstract class AJavaSMTAnalysis<T> extends AComputation<T> {
 
     public static final Dependency<IExpression> FORMULA = Dependency.newDependency(IExpression.class);
 
-    public JavaSMTSolverAnalysis(IComputation<? extends IExpression> formula, Object... computations) {
+    public AJavaSMTAnalysis(IComputation<? extends IExpression> formula, Object... computations) {
         super(formula, computations);
     }
 
-    protected JavaSMTSolverAnalysis(JavaSMTSolverAnalysis<T> other) {
+    protected AJavaSMTAnalysis(AJavaSMTAnalysis<T> other) {
         super(other);
     }
 

@@ -23,9 +23,9 @@ package de.featjar.formula.analysis.javasmt.solver;
 import de.featjar.base.FeatJAR;
 import de.featjar.base.data.Result;
 import de.featjar.formula.structure.IExpression;
-import de.featjar.formula.structure.term.value.Variable;
 import java.math.BigInteger;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -102,20 +102,15 @@ public class JavaSMTSolver {
         }
     }
 
-    public Object[] getSolution() {
+    public de.featjar.formula.analysis.value.ValueAssignment getSolution() {
         try (ProverEnvironment prover = context.newProverEnvironment()) {
             prover.addConstraint(formula.getFormula());
             if (!prover.isUnsat()) {
-                List<Variable> variables = formula.getTranslator().getVariables();
-                final Object[] solution = new Object[variables.size() + 1];
+                final LinkedHashMap<String, Object> solution = new LinkedHashMap<>();
                 for (ValueAssignment assignment : prover.getModel()) {
-                    solution[
-                                    formula.getTranslator()
-                                            .getVariableIndex(assignment.getName())
-                                            .get()] =
-                            assignment.getValue();
+                    solution.put(assignment.getName(), assignment.getValue());
                 }
-                return solution;
+                return new de.featjar.formula.analysis.value.ValueAssignment(solution);
             } else {
                 return null;
             }
@@ -126,7 +121,7 @@ public class JavaSMTSolver {
         }
     }
 
-    public Result<Object[]> findSolution() {
+    public Result<de.featjar.formula.analysis.value.ValueAssignment> findSolution() {
         return Result.ofNullable(getSolution());
     }
 

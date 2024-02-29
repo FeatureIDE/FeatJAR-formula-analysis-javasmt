@@ -32,7 +32,7 @@ import java.util.List;
  *
  * @author Sebastian Krieter
  */
-public class CountSolutionsAnalysis extends JavaSMTSolverAnalysis<BigInteger> {
+public class CountSolutionsAnalysis extends AJavaSMTAnalysis<BigInteger> {
 
     public CountSolutionsAnalysis(IComputation<? extends IExpression> formula) {
         super(formula);

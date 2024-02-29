@@ -44,7 +44,7 @@ import org.sosy_lab.java_smt.api.Formula;
  * @author Joshua Sprey
  * @author Sebastian Krieter
  */
-public class FeatureAttributeRangeAnalysis extends JavaSMTSolverAnalysis<Object[]> {
+public class FeatureAttributeRangeAnalysis extends AJavaSMTAnalysis<Object[]> {
 
     public static final Dependency<String> VARIABLE = Dependency.newDependency(String.class);
 
@@ -52,7 +52,7 @@ public class FeatureAttributeRangeAnalysis extends JavaSMTSolverAnalysis<Object[
         super(formula);
     }
 
-    protected FeatureAttributeRangeAnalysis(JavaSMTSolverAnalysis<Object[]> other) {
+    protected FeatureAttributeRangeAnalysis(AJavaSMTAnalysis<Object[]> other) {
         super(other);
     }
 
