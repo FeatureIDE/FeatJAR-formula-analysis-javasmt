@@ -18,23 +18,23 @@
  *
  * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
  */
-package de.featjar.formula.analysis.javasmt.solver;
+package de.featjar.analysis.javasmt.solver;
 
 import de.featjar.formula.structure.IExpression;
-import de.featjar.formula.structure.formula.connective.And;
-import de.featjar.formula.structure.formula.connective.BiImplies;
-import de.featjar.formula.structure.formula.connective.Implies;
-import de.featjar.formula.structure.formula.connective.Not;
-import de.featjar.formula.structure.formula.connective.Or;
-import de.featjar.formula.structure.formula.connective.Reference;
-import de.featjar.formula.structure.formula.predicate.Equals;
-import de.featjar.formula.structure.formula.predicate.False;
-import de.featjar.formula.structure.formula.predicate.GreaterEqual;
-import de.featjar.formula.structure.formula.predicate.GreaterThan;
-import de.featjar.formula.structure.formula.predicate.LessEqual;
-import de.featjar.formula.structure.formula.predicate.LessThan;
-import de.featjar.formula.structure.formula.predicate.Literal;
-import de.featjar.formula.structure.formula.predicate.True;
+import de.featjar.formula.structure.connective.And;
+import de.featjar.formula.structure.connective.BiImplies;
+import de.featjar.formula.structure.connective.Implies;
+import de.featjar.formula.structure.connective.Not;
+import de.featjar.formula.structure.connective.Or;
+import de.featjar.formula.structure.connective.Reference;
+import de.featjar.formula.structure.predicate.Equals;
+import de.featjar.formula.structure.predicate.False;
+import de.featjar.formula.structure.predicate.GreaterEqual;
+import de.featjar.formula.structure.predicate.GreaterThan;
+import de.featjar.formula.structure.predicate.LessEqual;
+import de.featjar.formula.structure.predicate.LessThan;
+import de.featjar.formula.structure.predicate.Literal;
+import de.featjar.formula.structure.predicate.True;
 import de.featjar.formula.structure.term.ITerm;
 import de.featjar.formula.structure.term.function.AAdd;
 import de.featjar.formula.structure.term.function.AMultiply;

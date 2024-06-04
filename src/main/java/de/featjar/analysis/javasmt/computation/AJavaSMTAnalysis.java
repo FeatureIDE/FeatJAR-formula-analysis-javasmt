@@ -18,13 +18,13 @@
  *
  * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
  */
-package de.featjar.formula.analysis.javasmt;
+package de.featjar.analysis.javasmt.computation;
 
+import de.featjar.analysis.javasmt.solver.JavaSMTSolver;
 import de.featjar.base.FeatJAR;
 import de.featjar.base.computation.AComputation;
 import de.featjar.base.computation.Dependency;
 import de.featjar.base.computation.IComputation;
-import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
 import de.featjar.formula.structure.IExpression;
 import java.util.List;
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;

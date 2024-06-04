@@ -18,7 +18,7 @@
  *
  * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
  */
-package de.featjar.formula.analysis.javasmt.solver;
+package de.featjar.analysis.javasmt.solver;
 
 import de.featjar.base.FeatJAR;
 import de.featjar.base.data.Result;
@@ -102,7 +102,7 @@ public class JavaSMTSolver {
         }
     }
 
-    public de.featjar.formula.analysis.value.ValueAssignment getSolution() {
+    public de.featjar.formula.assignment.ValueAssignment getSolution() {
         try (ProverEnvironment prover = context.newProverEnvironment()) {
             prover.addConstraint(formula.getFormula());
             if (!prover.isUnsat()) {
@@ -110,7 +110,7 @@ public class JavaSMTSolver {
                 for (ValueAssignment assignment : prover.getModel()) {
                     solution.put(assignment.getName(), assignment.getValue());
                 }
-                return new de.featjar.formula.analysis.value.ValueAssignment(solution);
+                return new de.featjar.formula.assignment.ValueAssignment(solution);
             } else {
                 return null;
             }
@@ -121,7 +121,7 @@ public class JavaSMTSolver {
         }
     }
 
-    public Result<de.featjar.formula.analysis.value.ValueAssignment> findSolution() {
+    public Result<de.featjar.formula.assignment.ValueAssignment> findSolution() {
         return Result.ofNullable(getSolution());
     }
 

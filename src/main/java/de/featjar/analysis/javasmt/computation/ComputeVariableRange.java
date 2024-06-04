@@ -18,13 +18,13 @@
  *
  * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
  */
-package de.featjar.formula.analysis.javasmt;
+package de.featjar.analysis.javasmt.computation;
 
+import de.featjar.analysis.javasmt.solver.JavaSMTSolver;
 import de.featjar.base.computation.Dependency;
 import de.featjar.base.computation.IComputation;
 import de.featjar.base.computation.Progress;
 import de.featjar.base.data.Result;
-import de.featjar.formula.analysis.javasmt.solver.JavaSMTSolver;
 import de.featjar.formula.structure.IExpression;
 import java.util.List;
 import org.sosy_lab.java_smt.api.Formula;
@@ -44,15 +44,15 @@ import org.sosy_lab.java_smt.api.Formula;
  * @author Joshua Sprey
  * @author Sebastian Krieter
  */
-public class FeatureAttributeRangeAnalysis extends AJavaSMTAnalysis<Object[]> {
+public class ComputeVariableRange extends AJavaSMTAnalysis<Object[]> {
 
     public static final Dependency<String> VARIABLE = Dependency.newDependency(String.class);
 
-    public FeatureAttributeRangeAnalysis(IComputation<? extends IExpression> formula) {
+    public ComputeVariableRange(IComputation<? extends IExpression> formula) {
         super(formula);
     }
 
-    protected FeatureAttributeRangeAnalysis(AJavaSMTAnalysis<Object[]> other) {
+    protected ComputeVariableRange(AJavaSMTAnalysis<Object[]> other) {
         super(other);
     }
 

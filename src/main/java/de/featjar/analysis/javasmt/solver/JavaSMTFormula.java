@@ -18,28 +18,41 @@
  *
  * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
  */
-package de.featjar.formula.analysis.javasmt;
+package de.featjar.analysis.javasmt.solver;
 
-import de.featjar.base.computation.IComputation;
-import de.featjar.base.computation.Progress;
-import de.featjar.base.data.Result;
 import de.featjar.formula.structure.IExpression;
-import java.math.BigInteger;
 import java.util.List;
+import java.util.stream.Collectors;
+import org.sosy_lab.java_smt.api.BooleanFormula;
+import org.sosy_lab.java_smt.api.SolverContext;
 
 /**
- * Counts the number of valid solutions to a formula.
+ * Formula for {@link JavaSMTSolver}.
  *
  * @author Sebastian Krieter
  */
-public class CountSolutionsAnalysis extends AJavaSMTAnalysis<BigInteger> {
+public class JavaSMTFormula {
 
-    public CountSolutionsAnalysis(IComputation<? extends IExpression> formula) {
-        super(formula);
+    private final BooleanFormula formula;
+    private final FormulaToJavaSMT translator;
+
+    public JavaSMTFormula(SolverContext solverContext, IExpression expression) {
+        translator = new FormulaToJavaSMT(solverContext);
+        formula = translator.nodeToFormula(expression);
     }
 
-    @Override
-    public Result<BigInteger> compute(List<Object> dependencyList, Progress progress) {
-        return initializeSolver(dependencyList).countSolutions();
+    public FormulaToJavaSMT getTranslator() {
+        return translator;
+    }
+
+    public BooleanFormula getFormula() {
+        return formula;
+    }
+
+    public List<BooleanFormula> getBooleanVariables() {
+        return translator.getVariableFormulas().stream()
+                .filter(f -> f instanceof BooleanFormula)
+                .map(f -> (BooleanFormula) f)
+                .collect(Collectors.toList());
     }
 }

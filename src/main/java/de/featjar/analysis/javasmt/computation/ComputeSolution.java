@@ -18,12 +18,12 @@
  *
  * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
  */
-package de.featjar.formula.analysis.javasmt;
+package de.featjar.analysis.javasmt.computation;
 
 import de.featjar.base.computation.IComputation;
 import de.featjar.base.computation.Progress;
 import de.featjar.base.data.Result;
-import de.featjar.formula.analysis.value.ValueAssignment;
+import de.featjar.formula.assignment.ValueAssignment;
 import de.featjar.formula.structure.IExpression;
 import java.util.List;
 
@@ -32,13 +32,13 @@ import java.util.List;
  *
  * @author Sebastian Krieter
  */
-public class FindSolutionsAnalysis extends AJavaSMTAnalysis<ValueAssignment> {
+public class ComputeSolution extends AJavaSMTAnalysis<ValueAssignment> {
 
-    public FindSolutionsAnalysis(IComputation<? extends IExpression> formula) {
+    public ComputeSolution(IComputation<? extends IExpression> formula) {
         super(formula);
     }
 
-    protected FindSolutionsAnalysis(FindSolutionsAnalysis other) {
+    protected ComputeSolution(ComputeSolution other) {
         super(other);
     }
 

@@ -18,12 +18,13 @@
  *
  * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
  */
-package de.featjar.formula.analysis.javasmt;
+package de.featjar.analysis.javasmt.computation;
 
 import de.featjar.base.computation.IComputation;
 import de.featjar.base.computation.Progress;
 import de.featjar.base.data.Result;
 import de.featjar.formula.structure.IExpression;
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -31,18 +32,14 @@ import java.util.List;
  *
  * @author Sebastian Krieter
  */
-public class HasSolutionsAnalysis extends AJavaSMTAnalysis<Boolean> {
+public class ComputeSolutionCount extends AJavaSMTAnalysis<BigInteger> {
 
-    public HasSolutionsAnalysis(IComputation<? extends IExpression> formula) {
+    public ComputeSolutionCount(IComputation<? extends IExpression> formula) {
         super(formula);
     }
 
-    protected HasSolutionsAnalysis(HasSolutionsAnalysis other) {
-        super(other);
-    }
-
     @Override
-    public Result<Boolean> compute(List<Object> dependencyList, Progress progress) {
-        return initializeSolver(dependencyList).hasSolution();
+    public Result<BigInteger> compute(List<Object> dependencyList, Progress progress) {
+        return initializeSolver(dependencyList).countSolutions();
     }
 }

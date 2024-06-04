@@ -18,11 +18,11 @@
  *
  * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
  */
-package de.featjar.formula.analysis.javasmt.solver;
+package de.featjar.analysis.javasmt.solver;
 
 import de.featjar.base.data.Problem;
 import de.featjar.formula.structure.IExpression;
-import de.featjar.formula.structure.formula.predicate.ProblemFormula;
+import de.featjar.formula.structure.predicate.ProblemFormula;
 import java.util.List;
 import org.sosy_lab.java_smt.api.BooleanFormula;
 import org.sosy_lab.java_smt.api.BooleanFormulaManager;
