@@ -3,8 +3,10 @@ plugins {
 }
 
 dependencies {
+    api 'de.featjar:base'
+    api 'org.sosy-lab:java-smt:3.12.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     api 'de.featjar:formula'
-    api 'de.featjar:bin-javasmt'
     implementation testFixtures('de.featjar:formula')
 }
 
