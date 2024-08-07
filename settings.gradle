@@ -7,4 +7,3 @@ plugins {
 }
 
 includeBuild '../formula'
-includeBuild '../bin-javasmt'

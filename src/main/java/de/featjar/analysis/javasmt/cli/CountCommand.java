@@ -31,7 +31,7 @@ public class CountCommand extends AJavasmtAnalysisCommand<BigInteger, BooleanAss
 
     @Override
     public Optional<String> getDescription() {
-        return Optional.of("Computes the number of solutions for a given formula using ddnnife");
+        return Optional.of("Computes the number of solutions for a given formula using javasmt");
     }
 
     @Override
