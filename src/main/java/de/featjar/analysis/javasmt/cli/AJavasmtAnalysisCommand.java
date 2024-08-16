@@ -37,16 +37,11 @@ public abstract class AJavasmtAnalysisCommand<T, U> extends AAnalysisCommand<T> 
     /**
      * Option for setting the seed for the pseudo random generator.
      */
-    public static final Option<Long> RANDOM_SEED_OPTION = new Option<>("seed", Option.LongParser) //
+    public static final Option<Long> RANDOM_SEED_OPTION = Option.newOption("seed", Option.LongParser) //
             .setDescription("Seed for the pseudo random generator") //
             .setDefaultValue(1L);
 
     protected IFormula inputFormula;
-
-    @Override
-    public List<Option<?>> getOptions() {
-        return ICommand.addOptions(super.getOptions(), RANDOM_SEED_OPTION);
-    }
 
     @Override
     protected IComputation<T> newComputation() {
