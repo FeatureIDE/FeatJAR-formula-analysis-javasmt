@@ -56,6 +56,22 @@ import org.sosy_lab.java_smt.api.SolverException;
  */
 public class JavaSMTSolver {
 
+    private static final class SatCallback implements AllSatCallback<Result<BigInteger>> {
+        BigInteger count = BigInteger.ZERO;
+
+        @Override
+        public void apply(List<BooleanFormula> model) {
+            if (!model.isEmpty()) {
+                count = count.add(BigInteger.ONE);
+            }
+        }
+
+        @Override
+        public Result<BigInteger> getResult() throws InterruptedException {
+            return Result.of(count);
+        }
+    }
+
     private JavaSMTFormula formula;
 
     /**
@@ -80,23 +96,7 @@ public class JavaSMTSolver {
     public Result<BigInteger> countSolutions() {
         try (ProverEnvironment prover = context.newProverEnvironment(ProverOptions.GENERATE_ALL_SAT)) {
             prover.addConstraint(formula.getFormula());
-            return prover.allSat(
-                    new AllSatCallback<>() {
-                        BigInteger count = BigInteger.ZERO;
-
-                        @Override
-                        public void apply(List<BooleanFormula> model) {
-                            if (!model.isEmpty()) {
-                                count = count.add(BigInteger.ONE);
-                            }
-                        }
-
-                        @Override
-                        public Result<BigInteger> getResult() throws InterruptedException {
-                            return Result.of(count);
-                        }
-                    },
-                    formula.getBooleanVariables());
+            return prover.allSat(new SatCallback(), formula.getBooleanVariables());
         } catch (final Exception e) {
             return Result.empty(e);
         }
