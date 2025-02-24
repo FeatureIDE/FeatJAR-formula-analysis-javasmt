@@ -40,7 +40,7 @@ public class SolutionCommand extends AJavasmtAnalysisCommand<ValueAssignment, Bo
     }
 
     @Override
-    public String serializeResult(ValueAssignment assignment) {
+    public String printResult(ValueAssignment assignment) {
         return assignment.print();
     }
 

@@ -40,7 +40,7 @@ public class CountCommand extends AJavasmtAnalysisCommand<BigInteger, BooleanAss
     }
 
     @Override
-    public String serializeResult(BigInteger count) {
+    public String printResult(BigInteger count) {
         return count.toString();
     }
 
