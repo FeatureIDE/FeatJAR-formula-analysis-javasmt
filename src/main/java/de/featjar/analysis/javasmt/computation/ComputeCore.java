@@ -47,6 +47,11 @@ public class ComputeCore extends AJavaSMTAnalysis<Map<Variable, Object>> {
         	return Result.empty(new UnsupportedOperationException(solverName + " does not support ComputeMaximalRanges."));
         }
         
+        List<String> variableNames = solver.getSolverFormula().getVariableMap().getVariableNames();
+        for (String variableName : variableNames) {
+        	System.out.println(variableName);
+        }
+        
         List<String> variablesOfInterest = VARIABLES_OF_INTEREST.get(dependencyList);
         List<VariableReference> variablesToJavaSMT = solver.getSolverFormula().getTranslator().getMappings(variablesOfInterest);
         

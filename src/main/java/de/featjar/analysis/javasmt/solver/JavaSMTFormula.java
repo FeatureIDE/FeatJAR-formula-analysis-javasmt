@@ -37,7 +37,7 @@ import org.sosy_lab.java_smt.api.SolverContext;
  */
 public class JavaSMTFormula {
 
-    private final BooleanFormula formula;
+    private BooleanFormula formula;
     private final FormulaToJavaSMT translator;
     private VariableMap variableMap;
     private SolverContext solverContext;
@@ -49,6 +49,10 @@ public class JavaSMTFormula {
         translator = new FormulaToJavaSMT(solverContext);
         formula = translator.nodeToFormula(expression);
         this.solverName = solverName;
+    }
+    
+    public void setFormula(BooleanFormula formula) {
+    	this.formula = formula;
     }
 
     public FormulaToJavaSMT getTranslator() {
