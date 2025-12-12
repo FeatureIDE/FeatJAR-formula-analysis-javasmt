@@ -17,6 +17,7 @@ import de.featjar.base.FeatJAR;
 import de.featjar.base.computation.Computations;
 import de.featjar.base.data.Problem;
 import de.featjar.base.data.Result;
+import de.featjar.formula.structure.IFormula;
 import de.featjar.formula.structure.connective.And;
 import de.featjar.formula.structure.predicate.GreaterThan;
 import de.featjar.formula.structure.predicate.LessThan;
@@ -50,10 +51,10 @@ public class MaximalVariableRangeAnalysisTest {
 //        solutionMaximalRanges.put(a, 2);
 //        solutionMaximalRanges.put(b, 6);
         
-        // IFormula cnf = formula.toCNF().orElseThrow();
-        final Result<Map<Variable, Object>> result = Computations.of(formula)
+        IFormula cnf = formula.toCNF().orElseThrow();
+        final Result<Map<Variable, Object>> result = Computations.of(cnf)
         		.map(ComputeJavaSMTFormula::new)
-        		.set(ComputeJavaSMTFormula.SOLVER, Solvers.MATHSAT5)
+        		.set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
         		.map(ComputeMaximalVariableRange::new)
         		.computeResult();
         		

@@ -1,37 +1,27 @@
 package de.featjar.analysis.javasmt;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.sosy_lab.common.rationals.Rational;
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 
-import de.featjar.analysis.javasmt.computation.ComputeAtomicSet;
-import de.featjar.analysis.javasmt.computation.ComputeCore;
 import de.featjar.analysis.javasmt.computation.ComputeJavaSMTFormula;
-import de.featjar.analysis.javasmt.computation.VariableNamesList;
+import de.featjar.analysis.javasmt.computation.ComputeRedundantClauses;
 import de.featjar.base.FeatJAR;
 import de.featjar.base.computation.Computations;
 import de.featjar.base.data.Problem;
 import de.featjar.base.data.Result;
 import de.featjar.formula.structure.IFormula;
 import de.featjar.formula.structure.connective.And;
-import de.featjar.formula.structure.connective.Not;
-import de.featjar.formula.structure.predicate.Equals;
-import de.featjar.formula.structure.predicate.NotEquals;
+import de.featjar.formula.structure.predicate.LessThan;
+import de.featjar.formula.structure.term.value.Constant;
 import de.featjar.formula.structure.term.value.Variable;
 
-public class ComputeAtomicSetTest {
+public class ComputeRedundantClausesTest {
 
     @BeforeAll
     public static void begin() {
@@ -44,7 +34,7 @@ public class ComputeAtomicSetTest {
     }
 
     @Test
-    public void formulaHasOneAtomicSet() {
+    public void formulaHasRedundantClauses() {
 		
 //		  final Variable a = new Variable("a", Double.class); final Variable b = new
 //		  Variable("b", Double.class); final Variable c = new Variable("c",
@@ -57,29 +47,24 @@ public class ComputeAtomicSetTest {
 //		  atomicSetAB = Arrays.asList(a, b); solutionAtomicSets.add(atomicSetAB);
 		 
         
-    	JavaSMTFormulaGenerator formulaGenerator = new JavaSMTFormulaGenerator(42);
-    	IFormula formula = formulaGenerator.generate(1000, 4000, 3);
-    	String formulaPrint = formula.printParseable();
-    	System.out.println(formulaPrint);
+    	final Variable a = new Variable("a", Double.class);
+        final Variable b = new Variable("b", Double.class);
+        final Constant constant3 = new Constant(3L);
+        final Constant constant7 = new Constant(7L);
         
-        long start = System.currentTimeMillis();
+        final LessThan lessThanA = new LessThan(a, constant3);
+        final LessThan lessThanB = new LessThan(b, constant7);
+        final And formula = new And(lessThanA, lessThanB);
      
         // IFormula cnf = formula.toCNF().orElseThrow();
         final Result<List<List<Variable>>> result = Computations.of(formula)
         		.map(ComputeJavaSMTFormula::new)
         		.set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
-        		.map(ComputeAtomicSet::new)
+        		.map(ComputeRedundantClauses::new)
         		.computeResult();
-
-        
-        long end = System.currentTimeMillis();
-        
-        long diff = end-start;
-        
-        System.out.println(diff / 1000.0);
         
         assertTrue(result.isPresent(), () -> Problem.printProblems(result.getProblems()));
-        List<List<Variable>> resultAtomicSets = result.get();
+        List<List<Variable>> resultRedundantClauses = result.get();
         
         //assertEquals(solutionAtomicSets, resultAtomicSets);
         

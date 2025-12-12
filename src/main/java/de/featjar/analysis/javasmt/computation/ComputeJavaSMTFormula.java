@@ -41,6 +41,8 @@ import de.featjar.base.computation.Progress;
 import de.featjar.base.data.Result;
 import de.featjar.formula.VariableMap;
 import de.featjar.formula.assignment.ComputeBooleanClauseList;
+import de.featjar.formula.computation.ComputeNNFFormula;
+import de.featjar.formula.structure.FormulaNormalForm;
 import de.featjar.formula.structure.IExpression;
 import de.featjar.formula.structure.IFormula;
 
@@ -57,16 +59,16 @@ public class ComputeJavaSMTFormula extends AComputation<JavaSMTFormula> {
 	        super(formula, Computations.of(""));
 	    }
 
-	    protected ComputeJavaSMTFormula(ComputeBooleanClauseList other) {
+	    protected ComputeJavaSMTFormula(ComputeJavaSMTFormula other) {
 	        super(other);
 	    }
 	    
 	    @Override
 	    public Result<JavaSMTFormula> compute(List<Object> dependencyList, Progress progress) {
-	        IFormula vp = (IFormula) FORMULA.get(dependencyList);
+	        IFormula originalFormula = (IFormula) FORMULA.get(dependencyList);
 	        Solvers solver = SOLVER.get(dependencyList);
 	        
-	        VariableMap variableMap = new VariableMap(vp);
+	        VariableMap variableMap = new VariableMap(originalFormula);
 	        
 	        JavaSMTFormula formula = null;
 	        SolverContext context;
@@ -79,7 +81,7 @@ public class ComputeJavaSMTFormula extends AComputation<JavaSMTFormula> {
 	            context =
 	                    SolverContextFactory.createSolverContext(config, logManager, shutdownManager.getNotifier(), solver);
 	           
-	            formula = new JavaSMTFormula(context, vp, variableMap, solver);
+	            formula = new JavaSMTFormula(context, originalFormula, variableMap, solver);
 	           
 	      
 	        } catch (final InvalidConfigurationException e) {

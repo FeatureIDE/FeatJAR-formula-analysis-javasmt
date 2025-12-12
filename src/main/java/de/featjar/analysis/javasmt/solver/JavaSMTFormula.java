@@ -22,6 +22,8 @@ package de.featjar.analysis.javasmt.solver;
 
 import de.featjar.formula.VariableMap;
 import de.featjar.formula.structure.IExpression;
+import de.featjar.formula.structure.IFormula;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +39,7 @@ import org.sosy_lab.java_smt.api.SolverContext;
  */
 public class JavaSMTFormula {
 
-    private BooleanFormula formula;
+    private IExpression originalFormula;
     private final FormulaToJavaSMT translator;
     private VariableMap variableMap;
     private SolverContext solverContext;
@@ -47,20 +49,16 @@ public class JavaSMTFormula {
     	this.solverContext = solverContext;
     	this.variableMap = variableMap;
         translator = new FormulaToJavaSMT(solverContext);
-        formula = translator.nodeToFormula(expression);
+        this.originalFormula = expression;
         this.solverName = solverName;
-    }
-    
-    public void setFormula(BooleanFormula formula) {
-    	this.formula = formula;
     }
 
     public FormulaToJavaSMT getTranslator() {
         return translator;
     }
 
-    public BooleanFormula getFormula() {
-        return formula;
+    public IExpression getOriginalFormula() {
+        return originalFormula;
     }
     
     public VariableMap getVariableMap() {

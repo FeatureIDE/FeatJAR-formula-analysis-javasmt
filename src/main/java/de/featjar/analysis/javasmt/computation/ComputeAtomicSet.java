@@ -21,6 +21,8 @@ import de.featjar.base.computation.IComputation;
 import de.featjar.base.computation.Progress;
 import de.featjar.base.data.Result;
 import de.featjar.base.data.SingleLexicographicIterator;
+import de.featjar.formula.structure.IExpression;
+import de.featjar.formula.structure.connective.And;
 import de.featjar.formula.structure.connective.Not;
 import de.featjar.formula.structure.predicate.Equals;
 import de.featjar.formula.structure.term.value.Variable;
@@ -50,42 +52,59 @@ public class ComputeAtomicSet extends AJavaSMTAnalysis<List<List<Variable>>> {
         // formula has to be satisfiable
         
         FormulaToJavaSMT translator = solver.getSolverFormula().getTranslator();
+        IExpression originalFormula = solver.getSolverFormula().getOriginalFormula();
         List<List<Variable>> atomicSets = new ArrayList<>();
    
         List<String> names = solver.getSolverFormula().getVariableMap().getVariableNames();
-		int[] index = IntStream.range(0, names.size()).toArray();
+		//int[] index = IntStream.range(0, names.size()).toArray();
+        int[] index = solver.getSolverFormula().getVariableMap()
+        		.getIndices()
+        		.stream()          
+                .mapToInt(i -> i)  
+                .toArray(); 
+        
+        ArrayList<ValueAssignment> solutions = new ArrayList<>();
         
         SingleLexicographicIterator.stream(index, 2)
         	.forEach(combination -> {
         		int[] indices = combination.indexElements();
         		
-        		ValueAssignment solution = solver.findSolution().get();
-        		Map<Integer, Object> valueAssignment = solution.getAll();
-        		
-        		Object valueA = valueAssignment.get(indices[0]);
-        	    Object valueB = valueAssignment.get(indices[1]);
-
-        	    if (valueA != null && !valueA.equals(valueB)) {
-        	        return; 
-        	    }
+				for (ValueAssignment valueAssignment : solutions) {
+	        		int keyA = index[indices[0]]; 
+	        		int keyB = index[indices[1]];
+	        		
+	        		Map<Integer, Object> all = valueAssignment.getAll();
+					Object valueA = all.get(keyA);
+	        	    Object valueB = all.get(keyB);
+	
+	        	    if (!valueA.equals(valueB)) {
+	        	        return; 
+	        	    }
+				}
         		
         		final Variable a = new Variable(names.get(indices[0]), Double.class);
     	        final Variable b = new Variable(names.get(indices[1]), Double.class);
     	        final Not not = new Not(new Equals(a, b));
     	        
     	        BooleanFormula notEqualsToJavaSMT = translator.nodeToFormula(not);
-    	        BooleanFormula originalFormula = solver.getSolverFormula().getFormula();
-    	        List<BooleanFormula> formulaParts = Arrays.asList(originalFormula, notEqualsToJavaSMT);
+    	        BooleanFormula javaSMTFormula = translator.nodeToFormula(originalFormula);
+    	        List<BooleanFormula> formulaParts = Arrays.asList(javaSMTFormula, notEqualsToJavaSMT);
     	        
     	        BooleanFormula formulaAndNotEquals = translator.createAnd(formulaParts); 
-    	        solver.getSolverFormula().setFormula(formulaAndNotEquals);
     	        
-    	        if (!solver.hasSolution().get()) {
+    	        //And formula = new And(originalFormula, not);
+    	        //solver.getSolverFormula().setFormula(formulaAndNotEquals);
+
+        		Result<ValueAssignment> findSolution = solver.findSolution();
+    	        if (findSolution.isEmpty()) {
     	        	List<Variable> atomicSet = Arrays.asList(a, b);
     	        	atomicSets.add(atomicSet);
+    	        } 
+    	        else {
+    	        	solutions.add(findSolution.get());
     	        }
     	        
-    	        solver.getSolverFormula().setFormula(originalFormula);
+    	        //solver.getSolverFormula().setFormula(originalFormula);
     	        
     	     });
         
