@@ -1,23 +1,3 @@
-/*
- * Copyright (C) 2025 FeatJAR-Development-Team
- *
- * This file is part of FeatJAR-formula-analysis-javasmt.
- *
- * formula-analysis-javasmt is free software: you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3.0 of the License,
- * or (at your option) any later version.
- *
- * formula-analysis-javasmt is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with formula-analysis-javasmt. If not, see <https://www.gnu.org/licenses/>.
- *
- * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
- */
 package de.featjar.analysis.javasmt.computation;
 
 import java.util.ArrayList;
@@ -25,34 +5,33 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
+import org.sosy_lab.java_smt.api.BooleanFormula;
+import org.sosy_lab.java_smt.api.BooleanFormulaManager;
 
+import de.featjar.analysis.javasmt.solver.FormulaToJavaSMT;
 import de.featjar.analysis.javasmt.solver.JavaSMTFormula;
 import de.featjar.analysis.javasmt.solver.JavaSMTSolver;
 import de.featjar.base.computation.IComputation;
 import de.featjar.base.computation.Progress;
 import de.featjar.base.data.Result;
+import de.featjar.formula.assignment.ValueAssignment;
 import de.featjar.formula.structure.IExpression;
 import de.featjar.formula.structure.IFormula;
-import de.featjar.formula.structure.FormulaNormalForm;
-import de.featjar.formula.structure.term.value.Variable;
+import de.featjar.formula.structure.connective.And;
+import de.featjar.formula.structure.connective.Not;
+import de.featjar.formula.structure.connective.Reference;
 
-/**
- * Computes redundant clauses.
- *
- * @author Sebastian Krieter
- */
-public class ComputeRedundantClauses extends AJavaSMTAnalysis<List<List<Variable>>> {
-
-    public ComputeRedundantClauses(IComputation<? extends JavaSMTFormula> formula) {
+public class ComputeRedundantClauses extends AJavaSMTAnalysis<List<IExpression>> {
+	public ComputeRedundantClauses(IComputation<? extends JavaSMTFormula> formula) {
         super(formula);
     }
 
-    protected ComputeRedundantClauses(ComputeRedundantClauses other) {
+    protected ComputeRedundantClauses(ComputeRedundantClausesIncrementally other) {
         super(other);
     }
 
     @Override
-    public Result<List<List<Variable>>> compute(List<Object> dependencyList, Progress progress) {
+    public Result<List<IExpression>> compute(List<Object> dependencyList, Progress progress) {
     	 JavaSMTSolver solver = initializeSolver(dependencyList);
     	
     	 List<Solvers> compatibleSolvers = Arrays.asList(Solvers.Z3, Solvers.SMTINTERPOL, Solvers.PRINCESS, Solvers.MATHSAT5);
@@ -62,25 +41,53 @@ public class ComputeRedundantClauses extends AJavaSMTAnalysis<List<List<Variable
          	return Result.empty(new UnsupportedOperationException(solverName + " does not support ComputeRedundantClauses."));
          }
          
-         // check for Reference 
-         // check for CNF 
-         IFormula formula = (IFormula) solver.getSolverFormula().getOriginalFormula();
+         List<IExpression> redundantClauses = new ArrayList<>();
          
-         boolean isNF = formula.isStrictNormalForm(FormulaNormalForm.CNF);
+         // access originalFormula
+         IExpression originalFormula = FORMULA.get(dependencyList).getOriginalFormula();
+         FormulaToJavaSMT translator = FORMULA.get(dependencyList).getTranslator();
+         // check for structure: Reference and And with children
+         if (originalFormula instanceof Reference) {
+        	 IExpression expression = originalFormula.getChildren().get(0);
+			if (expression instanceof And) {
+				// get children clauses of And
+				List<? extends IExpression> clausesToTest = expression.getChildren();
+				
+				// transform them to SMT clauses
+				List<BooleanFormula> SMTClausesToTest = new ArrayList<>();
+				for (IExpression clause : clausesToTest) {
+				    BooleanFormula SMTClause = translator.nodeToFormula(clause);
+				    SMTClausesToTest.add(SMTClause);
+				}
+				
+				// iterate through size of children clauses list 
+				for (int i = 0; i < SMTClausesToTest.size(); i++) {
+					// negate the clause at the current index
+					BooleanFormula currentClause = SMTClausesToTest.get(i);
+					BooleanFormula currentNegatedClause = translator.createNot(currentClause);
+					SMTClausesToTest.set(i, currentNegatedClause);
+					
+					// set the list of clauses to the new solver formula and solve
+					 BooleanFormula currentFormula = translator.createAnd(SMTClausesToTest);
+        			 solver.setFormula(currentFormula);
+        			 Result<ValueAssignment> findSolution = solver.findSolution();
+        			 if (findSolution.isPresent()) {
+        				 // restore SMTClausesToTest
+        				 SMTClausesToTest.set(i, currentClause);
+            		} else {
+            			// restore SMTClausesToTest and add clause to redundantClauses
+            			SMTClausesToTest.set(i, currentClause);
+            			redundantClauses.add(clausesToTest.get(i));
+            		}
+					
+				}
+        	 } else {
+        		 return Result.empty(new UnsupportedOperationException("Formula's structure is not supported."));
+        	 }
+         } else {
+        	 return Result.empty(new UnsupportedOperationException("Formula's structure is not supported. Reference is missing."));
+         }
          
-         // negate clause
-         // check for satisfiability 
-         // add/remove clause from formula
-         
-         
-         // test return value
-         final Variable a = new Variable("a", Double.class);
-	     final Variable b = new Variable("b", Double.class);
-         List<List<Variable>> redundantClauses = new ArrayList<>();
-         
-         List<Variable> redundantClause = Arrays.asList(a, b);
-         redundantClauses.add(redundantClause);
-        
-    	 return Result.of(redundantClauses);
+         return Result.ofNullable(redundantClauses);
     }
 }

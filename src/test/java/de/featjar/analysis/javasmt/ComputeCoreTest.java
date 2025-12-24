@@ -1,11 +1,9 @@
 package de.featjar.analysis.javasmt;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.AfterAll;
@@ -13,18 +11,17 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.sosy_lab.common.rationals.Rational;
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
+
 import de.featjar.analysis.javasmt.computation.ComputeCore;
 import de.featjar.analysis.javasmt.computation.ComputeJavaSMTFormula;
-import de.featjar.analysis.javasmt.computation.ComputeMaximalVariableRange;
 import de.featjar.analysis.javasmt.computation.VariableNamesList;
 import de.featjar.base.FeatJAR;
 import de.featjar.base.computation.Computations;
 import de.featjar.base.data.Problem;
 import de.featjar.base.data.Result;
+import de.featjar.formula.structure.IExpression;
 import de.featjar.formula.structure.connective.And;
-import de.featjar.formula.structure.predicate.LessThan;
 import de.featjar.formula.structure.predicate.GreaterEqual;
-import de.featjar.formula.structure.predicate.GreaterThan;
 import de.featjar.formula.structure.predicate.LessEqual;
 import de.featjar.formula.structure.term.value.Constant;
 import de.featjar.formula.structure.term.value.Variable;

@@ -51,8 +51,8 @@ public class MaximalVariableRangeAnalysisTest {
 //        solutionMaximalRanges.put(a, 2);
 //        solutionMaximalRanges.put(b, 6);
         
-        IFormula cnf = formula.toCNF().orElseThrow();
-        final Result<Map<Variable, Object>> result = Computations.of(cnf)
+        // IFormula cnf = formula.toCNF().orElseThrow();
+        final Result<Map<Variable, Object>> result = Computations.of(formula)
         		.map(ComputeJavaSMTFormula::new)
         		.set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
         		.map(ComputeMaximalVariableRange::new)

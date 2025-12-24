@@ -92,8 +92,8 @@ public class ComputeAtomicSet extends AJavaSMTAnalysis<List<List<Variable>>> {
     	        
     	        BooleanFormula formulaAndNotEquals = translator.createAnd(formulaParts); 
     	        
-    	        //And formula = new And(originalFormula, not);
-    	        //solver.getSolverFormula().setFormula(formulaAndNotEquals);
+    	        // And formula = new And(originalFormula, not);
+    	        solver.setFormula(formulaAndNotEquals);
 
         		Result<ValueAssignment> findSolution = solver.findSolution();
     	        if (findSolution.isEmpty()) {
@@ -104,7 +104,7 @@ public class ComputeAtomicSet extends AJavaSMTAnalysis<List<List<Variable>>> {
     	        	solutions.add(findSolution.get());
     	        }
     	        
-    	        //solver.getSolverFormula().setFormula(originalFormula);
+    	        solver.setFormula(javaSMTFormula);
     	        
     	     });
         

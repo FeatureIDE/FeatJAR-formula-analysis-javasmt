@@ -76,11 +76,9 @@ public class JavaSMTSolver {
         }
     }
 
-    private FormulaToJavaSMT translator;
     private JavaSMTFormula javaSMTFormula;
     private BooleanFormula formula;
     
-
     private VariableMap variableMap;
 
     /**
@@ -97,25 +95,21 @@ public class JavaSMTSolver {
             //context =
                     // SolverContextFactory.createSolverContext(config, logManager, shutdownManager.getNotifier(), solver);
             //this.formula = new JavaSMTFormula(context, expression);
-            IExpression originalFormula = javaSMTFormula.getOriginalFormula();
-            this.translator = javaSMTFormula.getTranslator();
-            this.formula = translator.nodeToFormula(originalFormula);
             this.javaSMTFormula = javaSMTFormula;
+            IExpression originalFormula = this.javaSMTFormula.getOriginalFormula();
+            FormulaToJavaSMT translator = this.javaSMTFormula.getTranslator();
+            this.formula = translator.nodeToFormula(originalFormula);
             this.context = javaSMTFormula.getContext();
             this.variableMap = javaSMTFormula.getVariableMap();
         } catch (final InvalidConfigurationException e) {
             FeatJAR.log().error(e);
         }
     }
-    
-    public void modifyFormula(IExpression newFormula) {
-    	this.formula = translator.nodeToFormula(newFormula);
-    }
 
     public Result<BigInteger> countSolutions() {
         try (ProverEnvironment prover = context.newProverEnvironment(ProverOptions.GENERATE_ALL_SAT)) {
-            prover.addConstraint(formula);
-            List<BooleanFormula> booleanVariables = translator.getVariableFormulas().stream()
+            prover.addConstraint(this.formula);
+            List<BooleanFormula> booleanVariables = this.javaSMTFormula.getTranslator().getVariableFormulas().stream()
                     .filter(f -> f instanceof BooleanFormula)
                     .map(f -> (BooleanFormula) f)
                     .collect(Collectors.toList());
@@ -127,7 +121,7 @@ public class JavaSMTSolver {
 
     public de.featjar.formula.assignment.ValueAssignment getSolution() {
         try (ProverEnvironment prover = context.newProverEnvironment(ProverOptions.GENERATE_MODELS)) {
-            prover.addConstraint(formula);
+            prover.addConstraint(this.formula);
             if (!prover.isUnsat()) {
                 final LinkedHashMap<Integer, Object> solution = new LinkedHashMap<>();
             	
@@ -179,7 +173,7 @@ public class JavaSMTSolver {
 
     public Result<Boolean> hasSolution() {
         try (ProverEnvironment prover = context.newProverEnvironment()) {
-            prover.addConstraint(formula);
+            prover.addConstraint(this.formula);
             return Result.of(!prover.isUnsat());
         } catch (final Exception e) {
             return Result.empty(e);
@@ -188,7 +182,7 @@ public class JavaSMTSolver {
 
     public List<BooleanFormula> getMinimalUnsatisfiableSubset() throws IllegalStateException {
         try (ProverEnvironment prover = context.newProverEnvironment()) {
-            prover.addConstraint(formula);
+            prover.addConstraint(this.formula);
             if (prover.isUnsat()) {
                 final List<BooleanFormula> formula = prover.getUnsatCore();
                 return formula.stream().filter(Objects::nonNull).collect(Collectors.toList());
@@ -203,8 +197,16 @@ public class JavaSMTSolver {
     public List<List<BooleanFormula>> getAllMinimalUnsatisfiableSubsets() throws IllegalStateException {
         return Collections.singletonList(getMinimalUnsatisfiableSubset());
     }
+    
+    public BooleanFormula getFormula() {
+    	return this.formula;
+    }
+    
+    public void setFormula(BooleanFormula formula) {
+    	this.formula = formula;
+    }
 
     public JavaSMTFormula getSolverFormula() {
-        return javaSMTFormula;
+        return this.javaSMTFormula;
     }
 }

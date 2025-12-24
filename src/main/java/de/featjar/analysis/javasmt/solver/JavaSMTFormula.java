@@ -45,10 +45,12 @@ public class JavaSMTFormula {
     private SolverContext solverContext;
     private Solvers solverName;
 
+    // maybe split JavaSMTFormula in two dependencies? 
+    // one for SolverContext, one for Expression
     public JavaSMTFormula(SolverContext solverContext, IExpression expression, VariableMap variableMap, Solvers solverName) {
     	this.solverContext = solverContext;
     	this.variableMap = variableMap;
-        translator = new FormulaToJavaSMT(solverContext);
+        this.translator = new FormulaToJavaSMT(solverContext);
         this.originalFormula = expression;
         this.solverName = solverName;
     }
