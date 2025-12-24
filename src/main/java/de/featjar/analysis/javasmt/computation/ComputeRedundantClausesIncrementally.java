@@ -39,17 +39,18 @@ import de.featjar.formula.structure.IFormula;
 import de.featjar.formula.structure.connective.And;
 import de.featjar.formula.structure.connective.Not;
 import de.featjar.formula.structure.connective.Reference;
-import de.featjar.formula.structure.predicate.GreaterEqual;
-import de.featjar.formula.structure.predicate.LessEqual;
 import de.featjar.formula.assignment.ValueAssignment;
-import de.featjar.formula.structure.FormulaNormalForm;
-import de.featjar.formula.structure.term.value.Constant;
-import de.featjar.formula.structure.term.value.Variable;
 
 /**
- * Computes redundant clauses.
+ * Finds redundant clauses with respect to a given formula. This
+ * analysis works by iteratively adding each clause to a solver. If a clause
+ * is implied by the current formula, it is marked as redundant and is removed
+ * from it. Otherwise it is kept as part of the formula for the
+ * remaining analysis. Clauses are added in the same order a they appear in the
+ * given clauses list.
  *
  * @author Sebastian Krieter
+ * @author Klara Surmeier
  */
 public class ComputeRedundantClausesIncrementally extends AJavaSMTAnalysis<List<IExpression>> {
 

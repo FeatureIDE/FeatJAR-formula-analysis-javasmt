@@ -22,14 +22,10 @@ package de.featjar.analysis.javasmt.computation;
 
 import de.featjar.analysis.javasmt.solver.JavaSMTFormula;
 import de.featjar.analysis.javasmt.solver.JavaSMTSolver;
-import de.featjar.base.computation.Computations;
-import de.featjar.base.computation.Dependency;
 import de.featjar.base.computation.IComputation;
 import de.featjar.base.computation.Progress;
 import de.featjar.base.data.Result;
-import de.featjar.formula.structure.IExpression;
 import java.math.BigInteger;
-import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 

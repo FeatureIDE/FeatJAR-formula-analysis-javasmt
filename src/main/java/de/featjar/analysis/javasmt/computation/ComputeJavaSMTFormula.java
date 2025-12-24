@@ -40,16 +40,13 @@ import de.featjar.base.computation.IComputation;
 import de.featjar.base.computation.Progress;
 import de.featjar.base.data.Result;
 import de.featjar.formula.VariableMap;
-import de.featjar.formula.assignment.ComputeBooleanClauseList;
-import de.featjar.formula.computation.ComputeNNFFormula;
-import de.featjar.formula.structure.FormulaNormalForm;
-import de.featjar.formula.structure.IExpression;
 import de.featjar.formula.structure.IFormula;
 
 /**
  * Transforms a formula into a {@link JavaSMTFormula}.
  *
  * @author Sebastian Krieter
+ * @author Klara Surmeier
  */
 public class ComputeJavaSMTFormula extends AComputation<JavaSMTFormula> {
 	public static final Dependency<IFormula> FORMULA = Dependency.newDependency(IFormula.class);

@@ -27,7 +27,6 @@ import de.featjar.base.computation.AComputation;
 import de.featjar.base.computation.Computations;
 import de.featjar.base.computation.Dependency;
 import de.featjar.base.computation.IComputation;
-import de.featjar.formula.structure.IExpression;
 
 import java.time.Duration;
 import java.util.List;
