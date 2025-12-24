@@ -1,34 +1,42 @@
+/*
+ * Copyright (C) 2025 FeatJAR-Development-Team
+ *
+ * This file is part of FeatJAR-formula-analysis-javasmt.
+ *
+ * formula-analysis-javasmt is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3.0 of the License,
+ * or (at your option) any later version.
+ *
+ * formula-analysis-javasmt is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with formula-analysis-javasmt. If not, see <https://www.gnu.org/licenses/>.
+ *
+ * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
+ */
+
 package de.featjar.analysis.javasmt;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.sosy_lab.common.rationals.Rational;
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 
 import de.featjar.analysis.javasmt.computation.ComputeAtomicSet;
-import de.featjar.analysis.javasmt.computation.ComputeCore;
 import de.featjar.analysis.javasmt.computation.ComputeJavaSMTFormula;
-import de.featjar.analysis.javasmt.computation.VariableNamesList;
 import de.featjar.base.FeatJAR;
 import de.featjar.base.computation.Computations;
 import de.featjar.base.data.Problem;
 import de.featjar.base.data.Result;
 import de.featjar.formula.structure.IFormula;
-import de.featjar.formula.structure.connective.And;
-import de.featjar.formula.structure.connective.Not;
-import de.featjar.formula.structure.predicate.Equals;
-import de.featjar.formula.structure.predicate.NotEquals;
 import de.featjar.formula.structure.term.value.Variable;
 
 public class ComputeAtomicSetTest {
@@ -45,19 +53,7 @@ public class ComputeAtomicSetTest {
 
     @Test
     public void formulaHasOneAtomicSet() {
-		
-//		  final Variable a = new Variable("a", Double.class); final Variable b = new
-//		  Variable("b", Double.class); final Variable c = new Variable("c",
-//		  Double.class); final Variable d = new Variable("d", Double.class);
-//		  
-//		  final Equals equalsAB = new Equals(a, b); final Equals equalsCD = new
-//		  Equals(c, d); final And formula = new And(equalsAB, new Not(equalsCD));
-//		  
-//		  List<List<Variable>> solutionAtomicSets = new ArrayList<>(); List<Variable>
-//		  atomicSetAB = Arrays.asList(a, b); solutionAtomicSets.add(atomicSetAB);
-		 
-        
-    	JavaSMTFormulaGenerator formulaGenerator = new JavaSMTFormulaGenerator(42);
+		JavaSMTFormulaGenerator formulaGenerator = new JavaSMTFormulaGenerator(42);
     	IFormula formula = formulaGenerator.generate(1000, 4000, 3);
     	String formulaPrint = formula.printParseable();
     	System.out.println(formulaPrint);

@@ -22,13 +22,9 @@ package de.featjar.analysis.javasmt;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyList;
 
-import de.featjar.Common;
 import de.featjar.analysis.javasmt.computation.ComputeJavaSMTFormula;
-import de.featjar.analysis.javasmt.computation.ComputeSatisfiability;
 import de.featjar.analysis.javasmt.computation.ComputeSolution;
-import de.featjar.analysis.javasmt.computation.ComputeSolutionCount;
 import de.featjar.analysis.javasmt.solver.JavaSMTFormula;
 import de.featjar.base.FeatJAR;
 import de.featjar.base.computation.Computations;
@@ -39,16 +35,11 @@ import de.featjar.formula.assignment.ValueAssignment;
 import de.featjar.formula.structure.Expressions;
 import de.featjar.formula.structure.IFormula;
 import de.featjar.formula.structure.connective.And;
-import de.featjar.formula.structure.connective.BiImplies;
-import de.featjar.formula.structure.connective.Implies;
-import de.featjar.formula.structure.connective.Or;
 import de.featjar.formula.structure.connective.Not;
 import de.featjar.formula.structure.predicate.Literal;
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.checkerframework.common.reflection.qual.NewInstance;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
