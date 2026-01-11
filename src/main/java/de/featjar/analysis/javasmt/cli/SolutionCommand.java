@@ -31,6 +31,8 @@ import de.featjar.formula.io.textual.ValueAssignmentFormat;
 import de.featjar.formula.structure.IFormula;
 import java.util.Optional;
 
+import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
+
 public class SolutionCommand extends AJavasmtAnalysisCommand<ValueAssignment> {
 
     @Override
@@ -39,8 +41,9 @@ public class SolutionCommand extends AJavasmtAnalysisCommand<ValueAssignment> {
     }
 
     @Override
-    public IComputation<ValueAssignment> newAnalysis(IComputation<IFormula> formula) {
+    public IComputation<ValueAssignment> newAnalysis(OptionList optionParser, IComputation<IFormula> formula) {
         return formula.map(ComputeJavaSMTFormula::new)
+        		.set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
                 .map(ComputeSolution::new);
     }
 

@@ -18,11 +18,10 @@
  *
  * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
  */
- 
+
 package de.featjar.analysis.javasmt;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
@@ -52,7 +51,7 @@ import de.featjar.formula.structure.predicate.LessThan;
 import de.featjar.formula.structure.term.value.Constant;
 import de.featjar.formula.structure.term.value.Variable;
 
-public class ComputeRedundantClausesTest {
+public class ComputeRedundantClausesIncrementallyTest {
 
     @BeforeAll
     public static void begin() {
@@ -76,7 +75,7 @@ public class ComputeRedundantClausesTest {
         final And and = new And(greaterEqualA, lessEqualA, redundantClause);
         final Reference formula = new Reference(and);
         
-        List<IExpression> expectedSolution = Arrays.asList(redundantClause); 
+        List<IExpression> expectedSolution = Arrays.asList(greaterEqualA, lessEqualA, redundantClause); 
      
         // IFormula cnf = formula.toCNF().orElseThrow();
         final Result<List<IExpression>> result = Computations.of(formula)
@@ -89,7 +88,7 @@ public class ComputeRedundantClausesTest {
         List<IExpression> solution = result.get();       
         System.out.println(solution);
         
-        //assertEquals(expectedSolution, solution);
+        assertEquals(expectedSolution, solution);
     }
     
     @Test
@@ -120,7 +119,7 @@ public class ComputeRedundantClausesTest {
         List<IExpression> solution = result.get();      
         
         System.out.println(solution);
-        //assertEquals(expectedSolution, solution);
+        assertEquals(expectedSolution, solution);
     }
     
     @Test
@@ -138,7 +137,7 @@ public class ComputeRedundantClausesTest {
         final And and = new And(greaterEqualA, lessEqualA, redundantClause1, greaterThanB, redundantClause2);
         final Reference formula = new Reference(and);
         
-        List<IExpression> expectedSolution = Arrays.asList(redundantClause1, redundantClause2); 
+        List<IExpression> expectedSolution = Arrays.asList(greaterEqualA, lessEqualA, redundantClause1, redundantClause2); 
         
         // IFormula cnf = formula.toCNF().orElseThrow();
         final Result<List<IExpression>> result = Computations.of(formula)
@@ -151,6 +150,6 @@ public class ComputeRedundantClausesTest {
         List<IExpression> solution = result.get();  
         
         System.out.println(solution);
-        //assertEquals(expectedSolution, solution);
+        assertEquals(expectedSolution, solution);
     }
 }

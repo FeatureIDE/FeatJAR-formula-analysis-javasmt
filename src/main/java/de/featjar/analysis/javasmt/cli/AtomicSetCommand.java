@@ -18,34 +18,45 @@
  *
  * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
  */
+
 package de.featjar.analysis.javasmt.cli;
 
-import de.featjar.analysis.javasmt.computation.ComputeJavaSMTFormula;
-import de.featjar.analysis.javasmt.computation.ComputeSolutionCount;
-import de.featjar.base.cli.OptionList;
-import de.featjar.base.computation.IComputation;
-import de.featjar.formula.structure.IFormula;
-import java.math.BigInteger;
+import java.util.List;
 import java.util.Optional;
 
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 
-public class CountCommand extends AJavasmtAnalysisCommand<BigInteger> {
+import de.featjar.analysis.javasmt.computation.ComputeJavaSMTFormula;
+import de.featjar.analysis.javasmt.computation.ComputeAtomicSet;
+import de.featjar.base.cli.OptionList;
+import de.featjar.base.computation.IComputation;
+import de.featjar.base.io.format.IFormat;
+import de.featjar.base.io.text.GenericTextFormat;
+import de.featjar.formula.structure.IFormula;
+import de.featjar.formula.structure.term.value.Variable;
 
+public class AtomicSetCommand extends AJavasmtAnalysisCommand<List<List<Variable>>> {
+	
     @Override
     public Optional<String> getDescription() {
-        return Optional.of("Computes the number of solutions for a given formula using javasmt");
+        return Optional.of("Computes atomic sets.");
     }
 
     @Override
-    public IComputation<BigInteger> newAnalysis(OptionList optionParser, IComputation<IFormula> formula) {
-        return formula.map(ComputeJavaSMTFormula::new)
-        .set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
-        .map(ComputeSolutionCount::new);
+    public IComputation<List<List<Variable>>> newAnalysis(OptionList optionParser, IComputation<IFormula> formula) {
+    	return formula.map(ComputeJavaSMTFormula::new)
+    			.set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
+                .map(ComputeAtomicSet::new);
+    	
+    }
+
+    @Override
+    protected IFormat<List<List<Variable>>> getOuputFormat(OptionList optionParser) {
+        return new GenericTextFormat<List<List<Variable>>>();
     }
 
     @Override
     public Optional<String> getShortName() {
-        return Optional.of("count-javasmt");
+        return Optional.of("atomic-sets-javasmt");
     }
 }

@@ -21,12 +21,15 @@
 package de.featjar.analysis.javasmt;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.sosy_lab.common.rationals.Rational;
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 
 import de.featjar.analysis.javasmt.computation.ComputeJavaSMTFormula;
@@ -63,10 +66,10 @@ public class MinimalVariableRangeAnalysisTest {
         final GreaterThan greaterThanB = new GreaterThan(b, constant7);
         final And formula = new And(greaterThanA, greaterThanB);
         
-//      Map<Variable, Object> solutionMinimalRanges = new HashMap<Variable, Object>();
-//      solutionMinimalRanges.put(a, new Rational(4));
-//      solutionMinimalRanges.put(b, 8);
-//        
+        Map<Variable, Object> solutionMinimalRanges = new HashMap<Variable, Object>();
+        solutionMinimalRanges.put(a, Rational.ofString("4"));
+        solutionMinimalRanges.put(b, Rational.ofString("8"));
+        
         // IFormula cnf = formula.toCNF().orElseThrow();
         final Result<Map<Variable, Object>> result = Computations.of(formula)
         		.map(ComputeJavaSMTFormula::new)
@@ -77,6 +80,8 @@ public class MinimalVariableRangeAnalysisTest {
         assertTrue(result.isPresent(), () -> Problem.printProblems(result.getProblems()));
         Map<Variable, Object> resultMinimalRanges = result.get();
         
-        //assertEquals(solutionMinimalRanges, resultMinimalRanges);
+        System.out.println(resultMinimalRanges);
+        
+        assertEquals(solutionMinimalRanges, resultMinimalRanges);
      }
 }

@@ -64,9 +64,9 @@ public class MaximalVariableRangeAnalysisTest {
         final LessThan lessThanB = new LessThan(b, constant7);
         final And formula = new And(lessThanA, lessThanB);
         
-//        Map<Variable, Object> solutionMaximalRanges = new HashMap<Variable, Object>();
-//        solutionMaximalRanges.put(a, 2);
-//        solutionMaximalRanges.put(b, 6);
+        // Map<Variable, Object> solutionMaximalRanges = new HashMap<Variable, Object>();
+        // solutionMaximalRanges.put(a, 2);
+        // solutionMaximalRanges.put(b, 6);
         
         // IFormula cnf = formula.toCNF().orElseThrow();
         final Result<Map<Variable, Object>> result = Computations.of(formula)
