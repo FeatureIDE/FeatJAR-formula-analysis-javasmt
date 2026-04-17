@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 FeatJAR-Development-Team
+ * Copyright (C) 2026 FeatJAR-Development-Team
  *
  * This file is part of FeatJAR-formula-analysis-javasmt.
  *
@@ -52,5 +52,5 @@ public abstract class AJavasmtAnalysisCommand<T> extends AAnalysisCommand<T> {
                 Computations.of(inputFormula).map(ComputeNNFFormula::new).map(ComputeCNFFormula::new));
     }
 
-    protected abstract IComputation<T> newAnalysis(OptionList optionParser, IComputation<IFormula> formula);
+    protected abstract IComputation<T> newAnalysis(OptionList optionParser, IComputation<? extends IFormula> formula);
 }

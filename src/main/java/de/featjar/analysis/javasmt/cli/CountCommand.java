@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 FeatJAR-Development-Team
+ * Copyright (C) 2026 FeatJAR-Development-Team
  *
  * This file is part of FeatJAR-formula-analysis-javasmt.
  *
@@ -38,7 +38,7 @@ public class CountCommand extends AJavasmtAnalysisCommand<BigInteger> {
     }
 
     @Override
-    public IComputation<BigInteger> newAnalysis(OptionList optionParser, IComputation<IFormula> formula) {
+    public IComputation<BigInteger> newAnalysis(OptionList optionParser, IComputation<? extends IFormula> formula) {
         return formula.map(ComputeJavaSMTFormula::new)
         .set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
         .map(ComputeSolutionCount::new);
