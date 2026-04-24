@@ -47,7 +47,7 @@ public class RedundantClausesCommand extends AJavasmtAnalysisCommand<List<IExpre
     }
 
     @Override
-    public IComputation<List<IExpression>> newAnalysis(OptionList optionParser, IComputation<IFormula> formula) {
+    public IComputation<List<IExpression>> newAnalysis(OptionList optionParser, IComputation<? extends IFormula> formula) {
     	Boolean remove = optionParser.get(REMOVE);
     	if (remove) {
     		return formula.map(ComputeJavaSMTFormula::new)

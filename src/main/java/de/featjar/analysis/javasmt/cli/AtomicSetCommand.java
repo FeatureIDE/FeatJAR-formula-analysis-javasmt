@@ -43,7 +43,7 @@ public class AtomicSetCommand extends AJavasmtAnalysisCommand<List<List<Variable
     }
 
     @Override
-    public IComputation<List<List<Variable>>> newAnalysis(OptionList optionParser, IComputation<IFormula> formula) {
+    public IComputation<List<List<Variable>>> newAnalysis(OptionList optionParser, IComputation<? extends IFormula> formula) {
     	return formula.map(ComputeJavaSMTFormula::new)
     			.set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
                 .map(ComputeAtomicSet::new);

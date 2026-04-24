@@ -43,7 +43,7 @@ public class CoreCommand extends AJavasmtAnalysisCommand<Map<Variable, Object>> 
     }
 
     @Override
-    public IComputation<Map<Variable, Object>> newAnalysis(OptionList optionParser, IComputation<IFormula> formula) {
+    public IComputation<Map<Variable, Object>> newAnalysis(OptionList optionParser, IComputation<? extends IFormula> formula) {
     	return formula.map(ComputeJavaSMTFormula::new)
 				.set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
                 .map(ComputeCore::new);
