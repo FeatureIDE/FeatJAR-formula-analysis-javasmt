@@ -86,10 +86,43 @@ public class CountSolutionsAnalysisTest extends Common {
         IFormula cnf = formula.toCNF().orElseThrow();
         final Result<BigInteger> result = Computations.of(cnf)
                 .map(ComputeJavaSMTFormula::new)
-                .set(ComputeJavaSMTFormula.SOLVER, Solvers.PRINCESS)
+                .set(ComputeJavaSMTFormula.SOLVER, Solvers.SMTINTERPOL)
                 .map(ComputeSolutionCount::new)
                 .computeResult();
         assertTrue(result.isPresent(), () -> Problem.printProblems(result.getProblems()));
         assertEquals(BigInteger.valueOf(count), result.get());
+    }
+
+    @Test
+    public void countDoesNotWorkWithPrincess() {
+        final Result<BigInteger> result = Computations.of(Expressions.literal("a"))
+                .map(ComputeJavaSMTFormula::new)
+                .set(ComputeJavaSMTFormula.SOLVER, Solvers.PRINCESS)
+                .map(ComputeSolutionCount::new)
+                .computeResult();
+        assertTrue(result.isEmpty());
+        assertEquals("PRINCESS is not supported.", result.getProblems().get(0).getMessage());
+    }
+
+    @Test
+    public void countDoesNotWorkWithZ3() {
+        final Result<BigInteger> result = Computations.of(Expressions.literal("a"))
+                .map(ComputeJavaSMTFormula::new)
+                .set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
+                .map(ComputeSolutionCount::new)
+                .computeResult();
+        assertTrue(result.isEmpty());
+        assertEquals("Z3 is not supported.", result.getProblems().get(0).getMessage());
+    }
+
+    @Test
+    public void countDoesWorkWithMATHSAT5() {
+        final Result<BigInteger> result = Computations.of(Expressions.literal("a"))
+                .map(ComputeJavaSMTFormula::new)
+                .set(ComputeJavaSMTFormula.SOLVER, Solvers.MATHSAT5)
+                .map(ComputeSolutionCount::new)
+                .computeResult();
+        assertTrue(result.isPresent(), () -> Problem.printProblems(result.getProblems()));
+        assertEquals(BigInteger.valueOf(1), result.get());
     }
 }
