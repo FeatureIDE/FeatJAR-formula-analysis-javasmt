@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 FeatJAR-Development-Team
+ * Copyright (C) 2026 FeatJAR-Development-Team
  *
  * This file is part of FeatJAR-formula-analysis-javasmt.
  *
@@ -20,24 +20,22 @@
  */
 package de.featjar.analysis.javasmt.computation;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
-import org.sosy_lab.java_smt.api.Formula;
-
+import de.featjar.analysis.javasmt.solver.FormulaToJavaSMT.VariableReference;
 import de.featjar.analysis.javasmt.solver.JavaSMTFormula;
 import de.featjar.analysis.javasmt.solver.JavaSMTSolver;
-import de.featjar.analysis.javasmt.solver.FormulaToJavaSMT.VariableReference;
 import de.featjar.base.computation.IComputation;
 import de.featjar.base.computation.Progress;
 import de.featjar.base.data.Result;
 import de.featjar.formula.structure.term.value.Variable;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
+import org.sosy_lab.java_smt.api.Formula;
 
 /**
- * Finds the maximal value for each numerical variable in a Term. As example we 
+ * Finds the maximal value for each numerical variable in a Term. As example we
  * have the following expression:<br>
  * <br>
  *
@@ -66,21 +64,23 @@ public class ComputeMaximalVariableRange extends AJavaSMTAnalysis<Map<Variable, 
     public Result<Map<Variable, Object>> compute(List<Object> dependencyList, Progress progress) {
         JavaSMTSolver solver = initializeSolver(dependencyList);
         Solvers solverName = solver.getSolverFormula().getSolverName();
-        
+
         List<Solvers> compatibleSolvers = Arrays.asList(Solvers.Z3);
-        
+
         if (!(compatibleSolvers.contains(solverName))) {
-        	return Result.empty(new UnsupportedOperationException(solverName + " does not support ComputeMaximalRanges."));
+            return Result.empty(
+                    new UnsupportedOperationException(solverName + " does not support ComputeMaximalRanges."));
         }
-        
-        List<VariableReference> variablesToJavaSMT = solver.getSolverFormula().getTranslator().getMappings();
+
+        List<VariableReference> variablesToJavaSMT =
+                solver.getSolverFormula().getTranslator().getMappings();
         Map<Variable, Object> variabelsToMaximalRanges = new HashMap<Variable, Object>();
         for (VariableReference variableToJavaSMT : variablesToJavaSMT) {
-        	Formula variableToMaximize = variableToJavaSMT.getJavaSmtVariable();
-        	Object maximalRange = solver.maximize(variableToJavaSMT.getJavaSmtVariable());
+            Formula variableToMaximize = variableToJavaSMT.getJavaSmtVariable();
+            Object maximalRange = solver.maximize(variableToJavaSMT.getJavaSmtVariable());
             variabelsToMaximalRanges.put(variableToJavaSMT.getVariable(), maximalRange);
         }
-        
+
         return Result.ofNullable(variabelsToMaximalRanges);
     }
 }

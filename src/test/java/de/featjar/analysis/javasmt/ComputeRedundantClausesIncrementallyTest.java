@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 FeatJAR-Development-Team
+ * Copyright (C) 2026 FeatJAR-Development-Team
  *
  * This file is part of FeatJAR-formula-analysis-javasmt.
  *
@@ -18,23 +18,13 @@
  *
  * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
  */
-
 package de.featjar.analysis.javasmt;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.featjar.analysis.javasmt.computation.ComputeJavaSMTFormula;
 import de.featjar.analysis.javasmt.computation.ComputeRedundantClauses;
-import de.featjar.analysis.javasmt.computation.ComputeRedundantClausesIncrementally;
 import de.featjar.base.FeatJAR;
 import de.featjar.base.computation.Computations;
 import de.featjar.base.data.Problem;
@@ -50,6 +40,12 @@ import de.featjar.formula.structure.predicate.LessEqual;
 import de.featjar.formula.structure.predicate.LessThan;
 import de.featjar.formula.structure.term.value.Constant;
 import de.featjar.formula.structure.term.value.Variable;
+import java.util.Arrays;
+import java.util.List;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 
 public class ComputeRedundantClausesIncrementallyTest {
 
@@ -57,7 +53,7 @@ public class ComputeRedundantClausesIncrementallyTest {
     public static void begin() {
         FeatJAR.testConfiguration().initialize();
     }
-    
+
     @AfterAll
     public static void end() {
         FeatJAR.deinitialize();
@@ -65,69 +61,69 @@ public class ComputeRedundantClausesIncrementallyTest {
 
     @Test
     public void formulaWithOneVariableHasOneRedundantClause() {
-    	final Variable a = new Variable("a", Double.class);
-    	final Variable b = new Variable("b", Double.class);
+        final Variable a = new Variable("a", Double.class);
+        final Variable b = new Variable("b", Double.class);
         final Constant constant3 = new Constant(3L);
-        
+
         final GreaterEqual greaterEqualA = new GreaterEqual(a, constant3);
         final LessEqual lessEqualA = new LessEqual(a, constant3);
         final Equals redundantClause = new Equals(a, constant3);
         final And and = new And(greaterEqualA, lessEqualA, redundantClause);
         final Reference formula = new Reference(and);
-        
-        List<IExpression> expectedSolution = Arrays.asList(greaterEqualA, lessEqualA, redundantClause); 
-     
+
+        List<IExpression> expectedSolution = Arrays.asList(greaterEqualA, lessEqualA, redundantClause);
+
         // IFormula cnf = formula.toCNF().orElseThrow();
         final Result<List<IExpression>> result = Computations.of(formula)
-        		.map(ComputeJavaSMTFormula::new)
-        		.set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
-        		.map(ComputeRedundantClauses::new)
-        		.computeResult();
-        
+                .map(ComputeJavaSMTFormula::new)
+                .set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
+                .map(ComputeRedundantClauses::new)
+                .computeResult();
+
         assertTrue(result.isPresent(), () -> Problem.printProblems(result.getProblems()));
-        List<IExpression> solution = result.get();       
+        List<IExpression> solution = result.get();
         System.out.println(solution);
-        
+
         assertEquals(expectedSolution, solution);
     }
-    
+
     @Test
     public void formulaWithTwoVariablesHasOneRedundantClause() {
-    	final Variable a = new Variable("a", Double.class);
-    	final Variable b = new Variable("b", Double.class);
-    	
-    	final Constant constant2 = new Constant(2L);
+        final Variable a = new Variable("a", Double.class);
+        final Variable b = new Variable("b", Double.class);
+
+        final Constant constant2 = new Constant(2L);
         final Constant constant3 = new Constant(3L);
-        
+
         final GreaterThan greaterThanA = new GreaterThan(a, constant3);
         final LessThan lessThanB = new LessThan(b, constant2);
         final Equals equalsAB = new Equals(a, b);
         final Not redundantClause = new Not(equalsAB);
         final And and = new And(greaterThanA, lessThanB, redundantClause);
         final Reference formula = new Reference(and);
-        
-        List<IExpression> expectedSolution = Arrays.asList(redundantClause); 
-        
+
+        List<IExpression> expectedSolution = Arrays.asList(redundantClause);
+
         // IFormula cnf = formula.toCNF().orElseThrow();
         final Result<List<IExpression>> result = Computations.of(formula)
-        		.map(ComputeJavaSMTFormula::new)
-        		.set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
-        		.map(ComputeRedundantClauses::new)
-        		.computeResult();
-        
+                .map(ComputeJavaSMTFormula::new)
+                .set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
+                .map(ComputeRedundantClauses::new)
+                .computeResult();
+
         assertTrue(result.isPresent(), () -> Problem.printProblems(result.getProblems()));
-        List<IExpression> solution = result.get();      
-        
+        List<IExpression> solution = result.get();
+
         System.out.println(solution);
         assertEquals(expectedSolution, solution);
     }
-    
+
     @Test
     public void formulaWithTwoVariablesHasTwoRedundantClauses() {
-    	final Variable a = new Variable("a", Double.class);
-    	final Variable b = new Variable("b", Double.class);
+        final Variable a = new Variable("a", Double.class);
+        final Variable b = new Variable("b", Double.class);
         final Constant constant3 = new Constant(3L);
-        
+
         final GreaterEqual greaterEqualA = new GreaterEqual(a, constant3);
         final LessEqual lessEqualA = new LessEqual(a, constant3);
         final Equals redundantClause1 = new Equals(a, constant3);
@@ -136,19 +132,20 @@ public class ComputeRedundantClausesIncrementallyTest {
         final Not redundantClause2 = new Not(equalsAB);
         final And and = new And(greaterEqualA, lessEqualA, redundantClause1, greaterThanB, redundantClause2);
         final Reference formula = new Reference(and);
-        
-        List<IExpression> expectedSolution = Arrays.asList(greaterEqualA, lessEqualA, redundantClause1, redundantClause2); 
-        
+
+        List<IExpression> expectedSolution =
+                Arrays.asList(greaterEqualA, lessEqualA, redundantClause1, redundantClause2);
+
         // IFormula cnf = formula.toCNF().orElseThrow();
         final Result<List<IExpression>> result = Computations.of(formula)
-        		.map(ComputeJavaSMTFormula::new)
-        		.set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
-        		.map(ComputeRedundantClauses::new)
-        		.computeResult();
-        
+                .map(ComputeJavaSMTFormula::new)
+                .set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
+                .map(ComputeRedundantClauses::new)
+                .computeResult();
+
         assertTrue(result.isPresent(), () -> Problem.printProblems(result.getProblems()));
-        List<IExpression> solution = result.get();  
-        
+        List<IExpression> solution = result.get();
+
         System.out.println(solution);
         assertEquals(expectedSolution, solution);
     }

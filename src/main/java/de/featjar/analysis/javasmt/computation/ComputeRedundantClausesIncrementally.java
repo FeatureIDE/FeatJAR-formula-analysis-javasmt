@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 FeatJAR-Development-Team
+ * Copyright (C) 2026 FeatJAR-Development-Team
  *
  * This file is part of FeatJAR-formula-analysis-javasmt.
  *
@@ -20,26 +20,24 @@
  */
 package de.featjar.analysis.javasmt.computation;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
-import org.sosy_lab.java_smt.api.BooleanFormula;
-import org.sosy_lab.java_smt.api.BooleanFormulaManager;
-
 import de.featjar.analysis.javasmt.solver.FormulaToJavaSMT;
 import de.featjar.analysis.javasmt.solver.JavaSMTFormula;
 import de.featjar.analysis.javasmt.solver.JavaSMTSolver;
 import de.featjar.base.computation.IComputation;
 import de.featjar.base.computation.Progress;
 import de.featjar.base.data.Result;
+import de.featjar.formula.assignment.ValueAssignment;
 import de.featjar.formula.structure.IExpression;
 import de.featjar.formula.structure.IFormula;
 import de.featjar.formula.structure.connective.And;
 import de.featjar.formula.structure.connective.Not;
 import de.featjar.formula.structure.connective.Reference;
-import de.featjar.formula.assignment.ValueAssignment;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
+import org.sosy_lab.java_smt.api.BooleanFormula;
+import org.sosy_lab.java_smt.api.BooleanFormulaManager;
 
 /**
  * Finds redundant clauses with respect to a given formula. This
@@ -64,77 +62,83 @@ public class ComputeRedundantClausesIncrementally extends AJavaSMTAnalysis<List<
 
     @Override
     public Result<List<IExpression>> compute(List<Object> dependencyList, Progress progress) {
-    	 JavaSMTSolver solver = initializeSolver(dependencyList);
-    	
-    	 List<Solvers> compatibleSolvers = Arrays.asList(Solvers.Z3, Solvers.SMTINTERPOL, Solvers.PRINCESS, Solvers.MATHSAT5);
-         
-         Solvers solverName = solver.getSolverFormula().getSolverName();
-         if (!(compatibleSolvers.contains(solverName))) {
-         	return Result.empty(new UnsupportedOperationException(solverName + " does not support ComputeRedundantClauses."));
-         }
-         
-         List<IExpression> redundantClauses = new ArrayList<>();
-         
-         // access originalFormula
-         IExpression originalFormula = FORMULA.get(dependencyList).getOriginalFormula();
-         FormulaToJavaSMT translator = FORMULA.get(dependencyList).getTranslator();
-         // check for structure: Reference and And with children
-         if (originalFormula instanceof Reference) {
-        	 IExpression expression = originalFormula.getChildren().get(0);
-			if (expression instanceof And) {
-        		 List<? extends IExpression> clausesToTest = expression.getChildren();
-        		 
-        		 // set formula of the solver to True
-        		 BooleanFormulaManager currentBooleanFormulaManager = FORMULA.get(dependencyList).getContext().getFormulaManager().getBooleanFormulaManager();
-        		 BooleanFormula initialClause = currentBooleanFormulaManager.makeTrue();
-        		 solver.setFormula(initialClause);
-        		 
-        		 // create a list to hold the clauses of the formula, initially containing True
-        		 List<BooleanFormula> clausesInFormula = new ArrayList<>();
-        		 clausesInFormula.add(initialClause);
-        		 
-        		 // for each clause: 
-        		 for (IExpression clause : clausesToTest) {
-        			 // 1. negate clause 
-        			 Not negatedClause = new Not((IFormula) clause);
-        			 BooleanFormula negatedSMTClause = translator.nodeToFormula(negatedClause);
-        			 
-                     // 2. save current formula
-        			 // BooleanFormula previousFormula = solver.getFormula();
-        			 
-                     // 3. add negated clause to formula
-        			 // add negated SMTClause to list and transform clauses in list to and, but rename the list!
-        			 // List<BooleanFormula> formulaAndNegatedClause = Arrays.asList(previousFormula, negatedSMTClause);
-        			 clausesInFormula.add(negatedSMTClause);
-        			 BooleanFormula currentFormula = translator.createAnd(clausesInFormula);
-        			 solver.setFormula(currentFormula);
-        			 
-                     // 4. solve: 
-        			 Result<ValueAssignment> findSolution = solver.findSolution();
-        			 // true: add unnegated clause to current formula and set the combination of both as the new formula
-        			 if (findSolution.isPresent()) {
-        				 // add clause to the original list and create an And
-        				 clausesInFormula.remove(clausesInFormula.size() - 1);
-        				 BooleanFormula SMTClause = translator.nodeToFormula(clause);
-        				 clausesInFormula.add(SMTClause);
-            			 BooleanFormula newFormula = translator.createAnd(clausesInFormula);
-            			 solver.setFormula(newFormula);
-            		// false: add clause to return list and set the originalFormula as the new formula
-            		} else {
-            			// set formula to originalList
-            			clausesInFormula.remove(clausesInFormula.size() - 1);
-            			redundantClauses.add(clause);
-            			BooleanFormula newFormula = translator.createAnd(clausesInFormula);
-           			    solver.setFormula(newFormula);
-            		}
-        		}        
-        	 } else {
-        		 return Result.empty(new UnsupportedOperationException("Formula's structure is not supported."));
-        	 }
-         } else {
-        	 return Result.empty(new UnsupportedOperationException("Formula's structure is not supported. Reference is missing."));
-         }
-         
-         return Result.ofNullable(redundantClauses);
+        JavaSMTSolver solver = initializeSolver(dependencyList);
+
+        List<Solvers> compatibleSolvers =
+                Arrays.asList(Solvers.Z3, Solvers.SMTINTERPOL, Solvers.PRINCESS, Solvers.MATHSAT5);
+
+        Solvers solverName = solver.getSolverFormula().getSolverName();
+        if (!(compatibleSolvers.contains(solverName))) {
+            return Result.empty(
+                    new UnsupportedOperationException(solverName + " does not support ComputeRedundantClauses."));
+        }
+
+        List<IExpression> redundantClauses = new ArrayList<>();
+
+        // access originalFormula
+        IExpression originalFormula = FORMULA.get(dependencyList).getOriginalFormula();
+        FormulaToJavaSMT translator = FORMULA.get(dependencyList).getTranslator();
+        // check for structure: Reference and And with children
+        if (originalFormula instanceof Reference) {
+            IExpression expression = originalFormula.getChildren().get(0);
+            if (expression instanceof And) {
+                List<? extends IExpression> clausesToTest = expression.getChildren();
+
+                // set formula of the solver to True
+                BooleanFormulaManager currentBooleanFormulaManager = FORMULA.get(dependencyList)
+                        .getContext()
+                        .getFormulaManager()
+                        .getBooleanFormulaManager();
+                BooleanFormula initialClause = currentBooleanFormulaManager.makeTrue();
+                solver.setFormula(initialClause);
+
+                // create a list to hold the clauses of the formula, initially containing True
+                List<BooleanFormula> clausesInFormula = new ArrayList<>();
+                clausesInFormula.add(initialClause);
+
+                // for each clause:
+                for (IExpression clause : clausesToTest) {
+                    // 1. negate clause
+                    Not negatedClause = new Not((IFormula) clause);
+                    BooleanFormula negatedSMTClause = translator.nodeToFormula(negatedClause);
+
+                    // 2. save current formula
+                    // BooleanFormula previousFormula = solver.getFormula();
+
+                    // 3. add negated clause to formula
+                    // add negated SMTClause to list and transform clauses in list to and, but rename the list!
+                    // List<BooleanFormula> formulaAndNegatedClause = Arrays.asList(previousFormula, negatedSMTClause);
+                    clausesInFormula.add(negatedSMTClause);
+                    BooleanFormula currentFormula = translator.createAnd(clausesInFormula);
+                    solver.setFormula(currentFormula);
+
+                    // 4. solve:
+                    Result<ValueAssignment> findSolution = solver.findSolution();
+                    // true: add unnegated clause to current formula and set the combination of both as the new formula
+                    if (findSolution.isPresent()) {
+                        // add clause to the original list and create an And
+                        clausesInFormula.remove(clausesInFormula.size() - 1);
+                        BooleanFormula SMTClause = translator.nodeToFormula(clause);
+                        clausesInFormula.add(SMTClause);
+                        BooleanFormula newFormula = translator.createAnd(clausesInFormula);
+                        solver.setFormula(newFormula);
+                        // false: add clause to return list and set the originalFormula as the new formula
+                    } else {
+                        // set formula to originalList
+                        clausesInFormula.remove(clausesInFormula.size() - 1);
+                        redundantClauses.add(clause);
+                        BooleanFormula newFormula = translator.createAnd(clausesInFormula);
+                        solver.setFormula(newFormula);
+                    }
+                }
+            } else {
+                return Result.empty(new UnsupportedOperationException("Formula's structure is not supported."));
+            }
+        } else {
+            return Result.empty(
+                    new UnsupportedOperationException("Formula's structure is not supported. Reference is missing."));
+        }
+
+        return Result.ofNullable(redundantClauses);
     }
 }

@@ -37,7 +37,6 @@ import org.sosy_lab.common.configuration.InvalidConfigurationException;
 import org.sosy_lab.common.log.BasicLogManager;
 import org.sosy_lab.common.log.LogManager;
 import org.sosy_lab.common.rationals.Rational;
-import org.sosy_lab.java_smt.SolverContextFactory;
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 import org.sosy_lab.java_smt.api.BasicProverEnvironment.AllSatCallback;
 import org.sosy_lab.java_smt.api.BooleanFormula;
@@ -48,9 +47,6 @@ import org.sosy_lab.java_smt.api.OptimizationProverEnvironment.OptStatus;
 import org.sosy_lab.java_smt.api.ProverEnvironment;
 import org.sosy_lab.java_smt.api.SolverContext;
 import org.sosy_lab.java_smt.api.SolverContext.ProverOptions;
-
-import ap.parser.Environment.Variable;
-
 import org.sosy_lab.java_smt.api.SolverException;
 
 /**
@@ -78,7 +74,7 @@ public class JavaSMTSolver {
 
     private JavaSMTFormula javaSMTFormula;
     private BooleanFormula formula;
-    
+
     private VariableMap variableMap;
 
     /**
@@ -92,9 +88,9 @@ public class JavaSMTSolver {
             final Configuration config = Configuration.defaultConfiguration();
             final LogManager logManager = BasicLogManager.create(config);
             final ShutdownManager shutdownManager = ShutdownManager.create();
-            //context =
-                    // SolverContextFactory.createSolverContext(config, logManager, shutdownManager.getNotifier(), solver);
-            //this.formula = new JavaSMTFormula(context, expression);
+            // context =
+            // SolverContextFactory.createSolverContext(config, logManager, shutdownManager.getNotifier(), solver);
+            // this.formula = new JavaSMTFormula(context, expression);
             this.javaSMTFormula = javaSMTFormula;
             IExpression originalFormula = this.javaSMTFormula.getOriginalFormula();
             FormulaToJavaSMT translator = this.javaSMTFormula.getTranslator();
@@ -124,7 +120,7 @@ public class JavaSMTSolver {
             prover.addConstraint(this.formula);
             if (!prover.isUnsat()) {
                 final LinkedHashMap<Integer, Object> solution = new LinkedHashMap<>();
-            	
+
                 for (ValueAssignment assignment : prover.getModel()) {
                     solution.put(variableMap.get(assignment.getName()).orElseThrow(), assignment.getValue());
                 }
@@ -197,13 +193,13 @@ public class JavaSMTSolver {
     public List<List<BooleanFormula>> getAllMinimalUnsatisfiableSubsets() throws IllegalStateException {
         return Collections.singletonList(getMinimalUnsatisfiableSubset());
     }
-    
+
     public BooleanFormula getFormula() {
-    	return this.formula;
+        return this.formula;
     }
-    
+
     public void setFormula(BooleanFormula formula) {
-    	this.formula = formula;
+        this.formula = formula;
     }
 
     public JavaSMTFormula getSolverFormula() {

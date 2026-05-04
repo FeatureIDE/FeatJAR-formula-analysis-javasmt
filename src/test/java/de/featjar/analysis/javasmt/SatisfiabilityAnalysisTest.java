@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 FeatJAR-Development-Team
+ * Copyright (C) 2026 FeatJAR-Development-Team
  *
  * This file is part of FeatJAR-formula-analysis-javasmt.
  *
@@ -64,13 +64,14 @@ public class SatisfiabilityAnalysisTest {
         final BiImplies equals = new BiImplies(a, b);
         final And and = new And(equals, c);
         final Implies formula = new Implies(or, and);
-        
+
         IFormula cnf = formula.toCNF().orElseThrow();
         final Result<Boolean> result = Computations.of(cnf)
-        		.map(ComputeJavaSMTFormula::new)
-        		.set(ComputeJavaSMTFormula.SOLVER, Solvers.PRINCESS)
-        		.map(ComputeSatisfiability::new).computeResult();
+                .map(ComputeJavaSMTFormula::new)
+                .set(ComputeJavaSMTFormula.SOLVER, Solvers.PRINCESS)
+                .map(ComputeSatisfiability::new)
+                .computeResult();
         assertTrue(result.isPresent(), () -> Problem.printProblems(result.getProblems()));
         assertEquals(true, result.get());
-   }
+    }
 }

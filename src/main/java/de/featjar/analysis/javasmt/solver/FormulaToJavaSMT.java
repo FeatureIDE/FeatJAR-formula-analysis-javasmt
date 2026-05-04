@@ -41,7 +41,6 @@ import de.featjar.formula.structure.term.function.AMultiply;
 import de.featjar.formula.structure.term.function.IFunction;
 import de.featjar.formula.structure.term.value.Constant;
 import de.featjar.formula.structure.term.value.Variable;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -81,24 +80,30 @@ public class FormulaToJavaSMT {
         private int index;
         private Variable variable;
         private Formula javaSmtVariable;
-		public int getIndex() {
-			return index;
-		}
-		public void setIndex(int index) {
-			this.index = index;
-		}
-		public Variable getVariable() {
-			return variable;
-		}
-		public void setVariable(Variable variable) {
-			this.variable = variable;
-		}
-		public Formula getJavaSmtVariable() {
-			return javaSmtVariable;
-		}
-		public void setJavaSmtVariable(Formula javaSmtVariable) {
-			this.javaSmtVariable = javaSmtVariable;
-		}
+
+        public int getIndex() {
+            return index;
+        }
+
+        public void setIndex(int index) {
+            this.index = index;
+        }
+
+        public Variable getVariable() {
+            return variable;
+        }
+
+        public void setVariable(Variable variable) {
+            this.variable = variable;
+        }
+
+        public Formula getJavaSmtVariable() {
+            return javaSmtVariable;
+        }
+
+        public void setJavaSmtVariable(Formula javaSmtVariable) {
+            this.javaSmtVariable = javaSmtVariable;
+        }
     }
 
     public FormulaToJavaSMT(SolverContext context) {
@@ -116,21 +121,20 @@ public class FormulaToJavaSMT {
             isPrincess = true;
         }
     }
-    
+
     public List<VariableReference> getMappings() {
         return new ArrayList<>(variableMap.values());
     }
-    
+
     public List<VariableReference> getMappings(List<String> variables) {
-    	List<VariableReference> variableReferences = new ArrayList<VariableReference>();
-    	
-    	for (String variable : variables) {
-    		VariableReference variableReference = variableMap.get(variable);
-    		variableReferences.add(variableReference);
-    	}
-    	
-    	return variableReferences;
-    	
+        List<VariableReference> variableReferences = new ArrayList<VariableReference>();
+
+        for (String variable : variables) {
+            VariableReference variableReference = variableMap.get(variable);
+            variableReferences.add(variableReference);
+        }
+
+        return variableReferences;
     }
 
     public BooleanFormula nodeToFormula(IExpression expression) {

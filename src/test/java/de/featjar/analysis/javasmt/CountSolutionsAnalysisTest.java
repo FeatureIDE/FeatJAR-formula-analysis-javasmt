@@ -82,14 +82,13 @@ public class CountSolutionsAnalysisTest extends Common {
         checkCount(formula, 7);
     }
 
-
     private void checkCount(final IFormula formula, int count) {
         IFormula cnf = formula.toCNF().orElseThrow();
-        final Result<BigInteger> result =
-                Computations.of(cnf)
+        final Result<BigInteger> result = Computations.of(cnf)
                 .map(ComputeJavaSMTFormula::new)
                 .set(ComputeJavaSMTFormula.SOLVER, Solvers.PRINCESS)
-                .map(ComputeSolutionCount::new).computeResult();
+                .map(ComputeSolutionCount::new)
+                .computeResult();
         assertTrue(result.isPresent(), () -> Problem.printProblems(result.getProblems()));
         assertEquals(BigInteger.valueOf(count), result.get());
     }

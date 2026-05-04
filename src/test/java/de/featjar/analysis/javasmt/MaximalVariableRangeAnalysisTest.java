@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 FeatJAR-Development-Team
+ * Copyright (C) 2026 FeatJAR-Development-Team
  *
  * This file is part of FeatJAR-formula-analysis-javasmt.
  *
@@ -18,17 +18,9 @@
  *
  * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
  */
-
 package de.featjar.analysis.javasmt;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Map;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 
 import de.featjar.analysis.javasmt.computation.ComputeJavaSMTFormula;
 import de.featjar.analysis.javasmt.computation.ComputeMaximalVariableRange;
@@ -40,6 +32,11 @@ import de.featjar.formula.structure.connective.And;
 import de.featjar.formula.structure.predicate.LessThan;
 import de.featjar.formula.structure.term.value.Constant;
 import de.featjar.formula.structure.term.value.Variable;
+import java.util.Map;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 
 public class MaximalVariableRangeAnalysisTest {
 
@@ -47,7 +44,7 @@ public class MaximalVariableRangeAnalysisTest {
     public static void begin() {
         FeatJAR.testConfiguration().initialize();
     }
-    
+
     @AfterAll
     public static void end() {
         FeatJAR.deinitialize();
@@ -59,26 +56,26 @@ public class MaximalVariableRangeAnalysisTest {
         final Variable b = new Variable("b", Double.class);
         final Constant constant3 = new Constant(3L);
         final Constant constant7 = new Constant(7L);
-        
+
         final LessThan lessThanA = new LessThan(a, constant3);
         final LessThan lessThanB = new LessThan(b, constant7);
         final And formula = new And(lessThanA, lessThanB);
-        
+
         // Map<Variable, Object> solutionMaximalRanges = new HashMap<Variable, Object>();
         // solutionMaximalRanges.put(a, 2);
         // solutionMaximalRanges.put(b, 6);
-        
+
         // IFormula cnf = formula.toCNF().orElseThrow();
         final Result<Map<Variable, Object>> result = Computations.of(formula)
-        		.map(ComputeJavaSMTFormula::new)
-        		.set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
-        		.map(ComputeMaximalVariableRange::new)
-        		.computeResult();
-        		
+                .map(ComputeJavaSMTFormula::new)
+                .set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
+                .map(ComputeMaximalVariableRange::new)
+                .computeResult();
+
         assertTrue(result.isPresent(), () -> Problem.printProblems(result.getProblems()));
         Map<Variable, Object> resultMaximalRanges = result.get();
-        
-//        assertEquals(solutionMaximalRanges, resultMaximalRanges);
-        
+
+        //        assertEquals(solutionMaximalRanges, resultMaximalRanges);
+
     }
 }

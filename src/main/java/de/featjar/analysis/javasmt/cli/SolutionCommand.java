@@ -22,7 +22,6 @@ package de.featjar.analysis.javasmt.cli;
 
 import de.featjar.analysis.javasmt.computation.ComputeJavaSMTFormula;
 import de.featjar.analysis.javasmt.computation.ComputeSolution;
-import de.featjar.analysis.javasmt.computation.ComputeSolutionCount;
 import de.featjar.base.cli.OptionList;
 import de.featjar.base.computation.IComputation;
 import de.featjar.base.io.format.IFormat;
@@ -30,7 +29,6 @@ import de.featjar.formula.assignment.ValueAssignment;
 import de.featjar.formula.io.textual.ValueAssignmentFormat;
 import de.featjar.formula.structure.IFormula;
 import java.util.Optional;
-
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 
 public class SolutionCommand extends AJavasmtAnalysisCommand<ValueAssignment> {
@@ -41,9 +39,10 @@ public class SolutionCommand extends AJavasmtAnalysisCommand<ValueAssignment> {
     }
 
     @Override
-    public IComputation<ValueAssignment> newAnalysis(OptionList optionParser, IComputation<? extends IFormula> formula) {
+    public IComputation<ValueAssignment> newAnalysis(
+            OptionList optionParser, IComputation<? extends IFormula> formula) {
         return formula.map(ComputeJavaSMTFormula::new)
-        		.set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
+                .set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
                 .map(ComputeSolution::new);
     }
 

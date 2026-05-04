@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 FeatJAR-Development-Team
+ * Copyright (C) 2026 FeatJAR-Development-Team
  *
  * This file is part of FeatJAR-formula-analysis-javasmt.
  *
@@ -20,11 +20,6 @@
  */
 package de.featjar.analysis.javasmt.cli;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
-
 import de.featjar.analysis.javasmt.computation.ComputeJavaSMTFormula;
 import de.featjar.analysis.javasmt.computation.ComputeRedundantClauses;
 import de.featjar.analysis.javasmt.computation.ComputeRedundantClausesIncrementally;
@@ -32,32 +27,36 @@ import de.featjar.base.cli.Option;
 import de.featjar.base.cli.OptionList;
 import de.featjar.base.computation.IComputation;
 import de.featjar.base.io.format.IFormat;
-import de.featjar.base.io.text.GenericTextFormat;
 import de.featjar.formula.structure.IExpression;
 import de.featjar.formula.structure.IFormula;
+import java.util.List;
+import java.util.Optional;
+import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 
 public class RedundantClausesCommand extends AJavasmtAnalysisCommand<List<IExpression>> {
-	
-	public static final Option<Boolean> REMOVE = Option.newFlag("remove")
-			.setDescription("Finds redundant clauses by iteratively removing clauses from the formula.");
+
+    public static final Option<Boolean> REMOVE = Option.newFlag("remove")
+            .setDescription("Finds redundant clauses by iteratively removing clauses from the formula.");
 
     @Override
     public Optional<String> getDescription() {
-        return Optional.of("Computes redundant clauses either by iteratively adding clauses to the formula or by removing them.");
+        return Optional.of(
+                "Computes redundant clauses either by iteratively adding clauses to the formula or by removing them.");
     }
 
     @Override
-    public IComputation<List<IExpression>> newAnalysis(OptionList optionParser, IComputation<? extends IFormula> formula) {
-    	Boolean remove = optionParser.get(REMOVE);
-    	if (remove) {
-    		return formula.map(ComputeJavaSMTFormula::new)
-    				.set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
+    public IComputation<List<IExpression>> newAnalysis(
+            OptionList optionParser, IComputation<? extends IFormula> formula) {
+        Boolean remove = optionParser.get(REMOVE);
+        if (remove) {
+            return formula.map(ComputeJavaSMTFormula::new)
+                    .set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
                     .map(ComputeRedundantClauses::new);
-    	} else {
-    		return formula.map(ComputeJavaSMTFormula::new)
-    				.set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
+        } else {
+            return formula.map(ComputeJavaSMTFormula::new)
+                    .set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
                     .map(ComputeRedundantClausesIncrementally::new);
-    	}
+        }
     }
 
     @Override

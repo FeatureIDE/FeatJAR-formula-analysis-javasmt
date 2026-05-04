@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 FeatJAR-Development-Team
+ * Copyright (C) 2026 FeatJAR-Development-Team
  *
  * This file is part of FeatJAR-formula-analysis-javasmt.
  *
@@ -18,17 +18,9 @@
  *
  * See <https://github.com/FeatureIDE/FeatJAR-formula-analysis-javasmt> for further information.
  */
-
 package de.featjar.analysis.javasmt;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 
 import de.featjar.analysis.javasmt.computation.ComputeAtomicSet;
 import de.featjar.analysis.javasmt.computation.ComputeJavaSMTFormula;
@@ -38,6 +30,11 @@ import de.featjar.base.data.Problem;
 import de.featjar.base.data.Result;
 import de.featjar.formula.structure.IFormula;
 import de.featjar.formula.structure.term.value.Variable;
+import java.util.List;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 
 public class ComputeAtomicSetTest {
 
@@ -45,7 +42,7 @@ public class ComputeAtomicSetTest {
     public static void begin() {
         FeatJAR.testConfiguration().initialize();
     }
-    
+
     @AfterAll
     public static void end() {
         FeatJAR.deinitialize();
@@ -53,31 +50,30 @@ public class ComputeAtomicSetTest {
 
     @Test
     public void formulaHasOneAtomicSet() {
-		JavaSMTFormulaGenerator formulaGenerator = new JavaSMTFormulaGenerator(42);
-    	IFormula formula = formulaGenerator.generate(1000, 4000, 3);
-    	String formulaPrint = formula.printParseable();
-    	System.out.println(formulaPrint);
-        
+        JavaSMTFormulaGenerator formulaGenerator = new JavaSMTFormulaGenerator(42);
+        IFormula formula = formulaGenerator.generate(1000, 4000, 3);
+        String formulaPrint = formula.printParseable();
+        System.out.println(formulaPrint);
+
         long start = System.currentTimeMillis();
-     
+
         // IFormula cnf = formula.toCNF().orElseThrow();
         final Result<List<List<Variable>>> result = Computations.of(formula)
-        		.map(ComputeJavaSMTFormula::new)
-        		.set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
-        		.map(ComputeAtomicSet::new)
-        		.computeResult();
+                .map(ComputeJavaSMTFormula::new)
+                .set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
+                .map(ComputeAtomicSet::new)
+                .computeResult();
 
-        
         long end = System.currentTimeMillis();
-        
-        long diff = end-start;
-        
+
+        long diff = end - start;
+
         System.out.println(diff / 1000.0);
-        
+
         assertTrue(result.isPresent(), () -> Problem.printProblems(result.getProblems()));
         List<List<Variable>> resultAtomicSets = result.get();
-        
-        //assertEquals(solutionAtomicSets, resultAtomicSets);
-        
+
+        // assertEquals(solutionAtomicSets, resultAtomicSets);
+
     }
 }

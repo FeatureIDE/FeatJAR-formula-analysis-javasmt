@@ -22,11 +22,8 @@ package de.featjar.analysis.javasmt.solver;
 
 import de.featjar.formula.VariableMap;
 import de.featjar.formula.structure.IExpression;
-import de.featjar.formula.structure.IFormula;
-
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 import org.sosy_lab.java_smt.api.BooleanFormula;
 import org.sosy_lab.java_smt.api.NumeralFormula;
@@ -45,11 +42,12 @@ public class JavaSMTFormula {
     private SolverContext solverContext;
     private Solvers solverName;
 
-    // maybe split JavaSMTFormula in two dependencies? 
+    // maybe split JavaSMTFormula in two dependencies?
     // one for SolverContext, one for Expression
-    public JavaSMTFormula(SolverContext solverContext, IExpression expression, VariableMap variableMap, Solvers solverName) {
-    	this.solverContext = solverContext;
-    	this.variableMap = variableMap;
+    public JavaSMTFormula(
+            SolverContext solverContext, IExpression expression, VariableMap variableMap, Solvers solverName) {
+        this.solverContext = solverContext;
+        this.variableMap = variableMap;
         this.translator = new FormulaToJavaSMT(solverContext);
         this.originalFormula = expression;
         this.solverName = solverName;
@@ -62,26 +60,26 @@ public class JavaSMTFormula {
     public IExpression getOriginalFormula() {
         return originalFormula;
     }
-    
+
     public VariableMap getVariableMap() {
         return variableMap;
     }
-    
+
     public SolverContext getContext() {
         return solverContext;
     }
-    
+
     public Solvers getSolverName() {
-    	return solverName;
+        return solverName;
     }
-    
+
     public List<BooleanFormula> getBooleanVariables() {
         return translator.getVariableFormulas().stream()
                 .filter(f -> f instanceof BooleanFormula)
                 .map(f -> (BooleanFormula) f)
                 .collect(Collectors.toList());
     }
-    
+
     public List<NumeralFormula> getNumeralVariables() {
         return translator.getVariableFormulas().stream()
                 .filter(f -> f instanceof NumeralFormula)
