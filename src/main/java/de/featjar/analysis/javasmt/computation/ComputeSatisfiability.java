@@ -25,7 +25,6 @@ import de.featjar.analysis.javasmt.solver.JavaSMTSolver;
 import de.featjar.base.computation.IComputation;
 import de.featjar.base.computation.Progress;
 import de.featjar.base.data.Result;
-import java.util.Arrays;
 import java.util.List;
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 
@@ -46,17 +45,7 @@ public class ComputeSatisfiability extends AJavaSMTAnalysis<Boolean> {
 
     @Override
     public Result<Boolean> compute(List<Object> dependencyList, Progress progress) {
-        JavaSMTSolver solver = initializeSolver(dependencyList);
-
-        List<Solvers> compatibleSolvers =
-                Arrays.asList(Solvers.Z3, Solvers.SMTINTERPOL, Solvers.PRINCESS, Solvers.MATHSAT5);
-
-        Solvers solverName = solver.getSolverFormula().getSolverName();
-        if (!(compatibleSolvers.contains(solverName))) {
-            return Result.empty(
-                    new UnsupportedOperationException(solverName + " does not support ComputeSatisfiability."));
-        }
-
-        return initializeSolver(dependencyList).hasSolution();
+        return getCompatibleSolver(dependencyList, Solvers.Z3, Solvers.SMTINTERPOL, Solvers.PRINCESS, Solvers.MATHSAT5)
+                .mapResult(JavaSMTSolver::hasSolution);
     }
 }

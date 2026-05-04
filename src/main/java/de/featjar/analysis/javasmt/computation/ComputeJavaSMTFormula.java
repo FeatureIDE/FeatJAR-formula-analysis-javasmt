@@ -51,7 +51,7 @@ public class ComputeJavaSMTFormula extends AComputation<JavaSMTFormula> {
     public static final Dependency<Solvers> SOLVER = Dependency.newDependency(Solvers.class);
 
     public ComputeJavaSMTFormula(IComputation<? extends IFormula> formula) {
-        super(formula, Computations.of(""));
+        super(formula, Computations.of(Solvers.Z3));
     }
 
     protected ComputeJavaSMTFormula(ComputeJavaSMTFormula other) {

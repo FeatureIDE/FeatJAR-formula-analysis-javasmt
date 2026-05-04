@@ -26,8 +26,6 @@ import de.featjar.analysis.javasmt.computation.ComputeMinimalVariableRange;
 import de.featjar.base.cli.Option;
 import de.featjar.base.cli.OptionList;
 import de.featjar.base.computation.IComputation;
-import de.featjar.base.io.format.IFormat;
-import de.featjar.base.io.text.GenericTextFormat;
 import de.featjar.formula.structure.IFormula;
 import de.featjar.formula.structure.term.value.Variable;
 import java.util.Map;
@@ -57,11 +55,6 @@ public class VariableRangesCommand extends AJavasmtAnalysisCommand<Map<Variable,
                     .set(ComputeJavaSMTFormula.SOLVER, Solvers.Z3)
                     .map(ComputeMaximalVariableRange::new);
         }
-    }
-
-    @Override
-    protected IFormat<Map<Variable, Object>> getOuputFormat(OptionList optionParser) {
-        return new GenericTextFormat<Map<Variable, Object>>();
     }
 
     @Override

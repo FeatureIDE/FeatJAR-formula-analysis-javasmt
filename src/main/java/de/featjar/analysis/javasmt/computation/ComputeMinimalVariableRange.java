@@ -27,12 +27,10 @@ import de.featjar.base.computation.IComputation;
 import de.featjar.base.computation.Progress;
 import de.featjar.base.data.Result;
 import de.featjar.formula.structure.term.value.Variable;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
-import org.sosy_lab.java_smt.api.Formula;
 
 /**
  * Finds the minimal value for each numerical variable in a Term. As example we
@@ -62,21 +60,16 @@ public class ComputeMinimalVariableRange extends AJavaSMTAnalysis<Map<Variable, 
 
     @Override
     public Result<Map<Variable, Object>> compute(List<Object> dependencyList, Progress progress) {
-        JavaSMTSolver solver = initializeSolver(dependencyList);
-        Solvers solverName = solver.getSolverFormula().getSolverName();
-
-        List<Solvers> compatibleSolvers = Arrays.asList(Solvers.Z3);
-
-        if (!(compatibleSolvers.contains(solverName))) {
-            return Result.empty(
-                    new UnsupportedOperationException(solverName + " does not support ComputeMinimalRanges."));
+        Result<JavaSMTSolver> solverResult = getCompatibleSolver(dependencyList, Solvers.Z3);
+        if (solverResult.isEmpty()) {
+            return solverResult.nullify();
         }
+        JavaSMTSolver solver = solverResult.get();
 
         List<VariableReference> variablesToJavaSMT =
                 solver.getSolverFormula().getTranslator().getMappings();
         Map<Variable, Object> variabelsToMinimalRanges = new HashMap<Variable, Object>();
         for (VariableReference variableToJavaSMT : variablesToJavaSMT) {
-            Formula variableToMinimize = variableToJavaSMT.getJavaSmtVariable();
             Object minimalRange = solver.minimize(variableToJavaSMT.getJavaSmtVariable());
             variabelsToMinimalRanges.put(variableToJavaSMT.getVariable(), minimalRange);
         }

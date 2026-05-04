@@ -33,7 +33,6 @@ import de.featjar.formula.structure.connective.And;
 import de.featjar.formula.structure.connective.Not;
 import de.featjar.formula.structure.connective.Reference;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 import org.sosy_lab.java_smt.api.BooleanFormula;
@@ -62,16 +61,12 @@ public class ComputeRedundantClausesIncrementally extends AJavaSMTAnalysis<List<
 
     @Override
     public Result<List<IExpression>> compute(List<Object> dependencyList, Progress progress) {
-        JavaSMTSolver solver = initializeSolver(dependencyList);
-
-        List<Solvers> compatibleSolvers =
-                Arrays.asList(Solvers.Z3, Solvers.SMTINTERPOL, Solvers.PRINCESS, Solvers.MATHSAT5);
-
-        Solvers solverName = solver.getSolverFormula().getSolverName();
-        if (!(compatibleSolvers.contains(solverName))) {
-            return Result.empty(
-                    new UnsupportedOperationException(solverName + " does not support ComputeRedundantClauses."));
+        Result<JavaSMTSolver> solverResult = getCompatibleSolver(
+                dependencyList, Solvers.Z3, Solvers.SMTINTERPOL, Solvers.PRINCESS, Solvers.MATHSAT5);
+        if (solverResult.isEmpty()) {
+            return solverResult.nullify();
         }
+        JavaSMTSolver solver = solverResult.get();
 
         List<IExpression> redundantClauses = new ArrayList<>();
 

@@ -57,17 +57,12 @@ public class ComputeAtomicSet extends AJavaSMTAnalysis<List<List<Variable>>> {
 
     @Override
     public Result<List<List<Variable>>> compute(List<Object> dependencyList, Progress progress) {
-        JavaSMTSolver solver = initializeSolver(dependencyList);
-
-        List<Solvers> compatibleSolvers =
-                Arrays.asList(Solvers.Z3, Solvers.SMTINTERPOL, Solvers.PRINCESS, Solvers.MATHSAT5);
-
-        Solvers solverName = solver.getSolverFormula().getSolverName();
-        if (!(compatibleSolvers.contains(solverName))) {
-            return Result.empty(new UnsupportedOperationException(solverName + " does not support ComputeAtomicSet."));
+        Result<JavaSMTSolver> solverResult = getCompatibleSolver(
+                dependencyList, Solvers.Z3, Solvers.SMTINTERPOL, Solvers.PRINCESS, Solvers.MATHSAT5);
+        if (solverResult.isEmpty()) {
+            return solverResult.nullify();
         }
-
-        // formula has to be satisfiable
+        JavaSMTSolver solver = solverResult.get();
 
         FormulaToJavaSMT translator = solver.getSolverFormula().getTranslator();
         IExpression originalFormula = solver.getSolverFormula().getOriginalFormula();

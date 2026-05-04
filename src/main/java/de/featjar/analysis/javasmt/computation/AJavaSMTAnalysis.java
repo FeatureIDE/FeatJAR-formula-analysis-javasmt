@@ -27,8 +27,10 @@ import de.featjar.base.computation.AComputation;
 import de.featjar.base.computation.Computations;
 import de.featjar.base.computation.Dependency;
 import de.featjar.base.computation.IComputation;
+import de.featjar.base.data.Result;
 import java.time.Duration;
 import java.util.List;
+import java.util.Set;
 import org.sosy_lab.java_smt.SolverContextFactory.Solvers;
 
 /**
@@ -54,17 +56,17 @@ public abstract class AJavaSMTAnalysis<T> extends AComputation<T> {
     }
 
     protected JavaSMTSolver newSolver(JavaSMTFormula formula) {
-        return new JavaSMTSolver(formula, Solvers.SMTINTERPOL);
+        return new JavaSMTSolver(formula);
     }
 
-    public JavaSMTSolver initializeSolver(List<Object> dependencyList, boolean empty) {
+    protected Result<JavaSMTSolver> getCompatibleSolver(List<Object> dependencyList, Solvers... compatibleSolvers) {
         JavaSMTFormula formula = FORMULA.get(dependencyList);
-        FeatJAR.log().debug("initializing JavaSmt");
+        Solvers solverName = formula.getSolverName();
+        if (!Set.of(compatibleSolvers).contains(solverName)) {
+            return Result.empty(new IllegalArgumentException(String.format("%s is not supported.", solverName)));
+        }
+        FeatJAR.log().debug("Initializing JavaSmt with %s", solverName);
         FeatJAR.log().debug(formula);
-        return newSolver(formula);
-    }
-
-    public JavaSMTSolver initializeSolver(List<Object> dependencyList) {
-        return initializeSolver(dependencyList, false);
+        return Result.of(newSolver(formula));
     }
 }

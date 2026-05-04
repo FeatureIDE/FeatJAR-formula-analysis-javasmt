@@ -27,4 +27,7 @@ import java.util.ArrayList;
  *
  * @author Sebastian Krieter
  */
-public class VariableNamesList extends ArrayList<String> {}
+public class VariableNamesList extends ArrayList<String> {
+
+    private static final long serialVersionUID = 1L;
+}

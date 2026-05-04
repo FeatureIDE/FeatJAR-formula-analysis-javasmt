@@ -29,7 +29,6 @@ import de.featjar.base.computation.IComputation;
 import de.featjar.base.computation.Progress;
 import de.featjar.base.data.Result;
 import de.featjar.formula.structure.term.value.Variable;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,15 +55,11 @@ public class ComputeCore extends AJavaSMTAnalysis<Map<Variable, Object>> {
 
     @Override
     public Result<Map<Variable, Object>> compute(List<Object> dependencyList, Progress progress) {
-        JavaSMTSolver solver = initializeSolver(dependencyList);
-        Solvers solverName = solver.getSolverFormula().getSolverName();
-
-        List<Solvers> compatibleSolvers = Arrays.asList(Solvers.Z3);
-
-        if (!(compatibleSolvers.contains(solverName))) {
-            return Result.empty(
-                    new UnsupportedOperationException(solverName + " does not support ComputeMaximalRanges."));
+        Result<JavaSMTSolver> solverResult = getCompatibleSolver(dependencyList, Solvers.Z3);
+        if (solverResult.isEmpty()) {
+            return solverResult.nullify();
         }
+        JavaSMTSolver solver = solverResult.get();
 
         List<String> variableNames = solver.getSolverFormula().getVariableMap().getVariableNames();
         for (String variableName : variableNames) {

@@ -34,13 +34,14 @@ import org.sosy_lab.java_smt.api.SolverContext;
  *
  * @author Sebastian Krieter
  */
+// TODO rename
 public class JavaSMTFormula {
 
-    private IExpression originalFormula;
+    private final IExpression originalFormula;
     private final FormulaToJavaSMT translator;
-    private VariableMap variableMap;
-    private SolverContext solverContext;
-    private Solvers solverName;
+    private final VariableMap variableMap;
+    private final SolverContext solverContext;
+    private final Solvers solverName;
 
     // maybe split JavaSMTFormula in two dependencies?
     // one for SolverContext, one for Expression

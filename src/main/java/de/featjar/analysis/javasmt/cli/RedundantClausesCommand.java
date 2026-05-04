@@ -27,6 +27,7 @@ import de.featjar.base.cli.Option;
 import de.featjar.base.cli.OptionList;
 import de.featjar.base.computation.IComputation;
 import de.featjar.base.io.format.IFormat;
+import de.featjar.formula.io.textual.ExpressionListStringFormat;
 import de.featjar.formula.structure.IExpression;
 import de.featjar.formula.structure.IFormula;
 import java.util.List;
@@ -61,7 +62,7 @@ public class RedundantClausesCommand extends AJavasmtAnalysisCommand<List<IExpre
 
     @Override
     protected IFormat<List<IExpression>> getOuputFormat(OptionList optionParser) {
-        return new ExpressionTextFormat<List<IExpression>>();
+        return new ExpressionListStringFormat();
     }
 
     @Override
